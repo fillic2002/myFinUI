@@ -1,0 +1,33 @@
+.rcorners1 {
+    border-radius: 25px;
+    background: #d47ed0;
+    padding: 20px;
+    width: 80px;
+    height: 80px;
+    text-align: center;   
+    box-shadow: 10px 10px 5px #888888;   
+  }
+  
+   
+  .button:hover {
+     background: #ccc;
+     cursor: pointer;  
+     color: black;
+  }
+  .button {
+    display:inline-block; 
+    margin-left: 40px;
+    border-radius: 20px;
+    background: #ddd;
+    width: 100px;
+    height: 65px;
+    text-align: center;
+    padding-top:35px ;
+    box-shadow: 10px 10px 5px #888888;
+    color: rgba(0, 0, 0, 0.575);
+    
+     
+  
+  }
+  
+ 
