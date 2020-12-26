@@ -16,4 +16,13 @@ export class SharesService {
   getTransaction():Observable<ITransaction[]>{
     return this.client.get<ITransaction[]>("http://localhost:59921/transaction")  
   }
+
+  postTransaction():Observable<any>{
+    return this.client.post("http://localhost:59921/transaction",{ equityid: 123,
+    price: 165.50,
+    equityName:"ITC",
+    qty:25
+    })  
+  }
+
 }

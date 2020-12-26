@@ -17,4 +17,11 @@ export class TransactionComponent implements OnInit {
     .subscribe(data => this.equitytransaction = data);
   }
 
+  OnAddTransaction():void  {
+   this._eqTransaction.postTransaction()
+    .subscribe(datan => {
+                         console.log(datan);
+                         
+    })
+  }
 }
