@@ -1,0 +1,17 @@
+.header1 {
+  display:inline-flex;     
+  background: rgb(97, 93, 93);    
+  height: 26px;      
+  color: #ddd;
+  font-weight: bold;
+}
+.header2 {
+    display:inline-flex;     
+    background: #ddd;    
+    height: 22px;      
+    color: rgba(0, 0, 0, 0.575);    
+  }
+  .cell{    
+    width: 100px;
+    margin-left: 5px;
+  }

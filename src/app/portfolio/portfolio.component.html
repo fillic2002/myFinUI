@@ -1,0 +1,16 @@
+<h1>Portfolio</h1>
+<div class="header1">
+    <div class="cell">Equity Name</div>
+    <div class="cell">ID</div>
+    <div class="cell">Avg Price</div>
+    <div class="cell">Total Quantity</div>
+</div><br>
+ <span *ngFor="let p of portfolio">
+    <div class="header2">
+        <div class="cell">{{p.equityname}}</div>
+        <div class="cell">{{p.id}}</div>
+        <div class="cell">{{p.avgprice}}</div>
+        <div class="cell">{{p.qty}}</div>
+    </div>
+</span>
+

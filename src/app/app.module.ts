@@ -1,22 +1,22 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-import { AppRoutingModule } from './app-routing.module';
+import { AppRoutingModule, routingComp } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { OptionComponent } from './option/option.component';
-import { SharesdetailComponent } from './sharesdetail/sharesdetail.component';
+import { SharesService } from './shares.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     OptionComponent,
-    SharesdetailComponent
+    routingComp
   ],
   imports: [
     BrowserModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [SharesService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

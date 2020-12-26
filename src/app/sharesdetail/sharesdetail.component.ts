@@ -9,7 +9,7 @@ import {ActivatedRoute} from '@angular/router'
 })
 export class SharesdetailComponent implements OnInit {
 
-  public opt;
+  public opt:any;
   public sh = [] as any;
   constructor(private _sharesDetail:SharesService,private route:ActivatedRoute) {  }
 

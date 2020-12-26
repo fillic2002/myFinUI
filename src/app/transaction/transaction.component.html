@@ -1,0 +1,15 @@
+<h1>Transaction Detail</h1>
+<div class="header1">
+    <div class="cell">Equity Name</div>
+    <div class="cell">Transaction Date</div>
+    <div class="cell">Purchase Price</div>
+    <div class="cell">Quantity</div>
+</div><br>
+ <span *ngFor="let t of equitytransaction">
+    <div class="header2">
+        <div class="cell">{{t.equityName}}</div>
+        <div class="cell">{{t.tranDate|date}}</div>
+        <div class="cell">{{t.price}}</div>
+        <div class="cell">{{t.qty}}</div>
+    </div><br>
+</span>
