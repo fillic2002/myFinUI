@@ -18,7 +18,7 @@ export class SharesdetailComponent implements OnInit {
     let opts =this.route.snapshot.paramMap.get('id');
     this.opt=opts;
     console.log(this.opt)
-    this.sh = this._sharesDetail.getShares();
+    //this.sh = this._sharesDetail.getShares();
   }
 
 }
