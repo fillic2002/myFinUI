@@ -5,13 +5,14 @@ import { OptionComponent } from './option/option.component';
 import { SharesdetailComponent } from './sharesdetail/sharesdetail.component';
 import { PortfolioComponent } from './portfolio/portfolio.component';
 import { TransactionComponent } from './transaction/transaction.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 const routes: Routes = [
   {path:'', component:OptionComponent},
   {path:'shares',component:SharesdetailComponent},
   {path:'portfolio',component:PortfolioComponent},
   {path:'transaction',component:TransactionComponent},
-  
+  {path:'dashboard',component:DashboardComponent},  
 ];
 
 @NgModule({

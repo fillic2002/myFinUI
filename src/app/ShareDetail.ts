@@ -19,3 +19,9 @@ export interface ITransaction
     qty:number
     tranDate:Date
 }
+export interface IDashboard
+{
+     Id:Number
+     assetName:string
+     total:string
+}

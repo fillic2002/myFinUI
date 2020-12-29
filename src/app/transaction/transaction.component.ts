@@ -17,11 +17,20 @@ export class TransactionComponent implements OnInit {
     .subscribe(data => this.equitytransaction = data);
   }
 
-  OnAddTransaction():void  {
-   this._eqTransaction.postTransaction()
-    .subscribe(datan => {
-                         console.log(datan);
+  AddTransaction():void  {
+
+    //alert(document.getElementById('txtname'));
+   this._eqTransaction.postTransaction(document.getElementById('txtname'))
+    .subscribe(data => {
+                         console.log(data);
                          
     })
   }
+  add(){ 
+    /*let row = document.createElement('div');   
+      row.className = 'row'; 
+      row.innerHTML = '<div class="addtran"><div>Name:</div><input id="txtname" type="text"><div>Quantity:</div><input id="txtQty" type="text"><div>Price:</div><input id="txtPrice" type="text"><div>Date:</div><input id="txtDt" type="date"><input type="button" value="Save" (click)="AddTransaction()"></div>';        
+      const menu=document.querySelector('.AddTransaction')?.appendChild(row);*/
+      alert("asd");
+  } 
 }

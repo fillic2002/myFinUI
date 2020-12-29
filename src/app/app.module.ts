@@ -8,6 +8,7 @@ import { SharesService } from './shares.service';
 import {HttpClientModule} from '@angular/common/http'
 import { PortfolioComponent } from './portfolio/portfolio.component';
 import { TransactionComponent } from './transaction/transaction.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
  
 
 @NgModule({
@@ -16,7 +17,8 @@ import { TransactionComponent } from './transaction/transaction.component';
     OptionComponent,
     PortfolioComponent,
     TransactionComponent,
-    routingComp
+    routingComp,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,

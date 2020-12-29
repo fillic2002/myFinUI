@@ -1,5 +1,12 @@
 <h1>Transaction Detail</h1>
-<div (click)="OnAddTransaction()">Add Transaction</div>
+<div class="AddTransaction"></div>
+<div class="addtran">
+    <div>Name:</div><input id="txtname" ref-name type="text"><div>Quantity:</div>
+    <input id="txtQty" type="text"><div>Price:</div><input id="txtPrice" type="text">
+    <div>Date:</div><input id="txtDt" type="date">
+    <input type="button" value="Save" (click)="AddTransaction()">
+</div>
+<div (click)="add()">Add Transaction</div>
 <div class="header1">
     <div class="cell">Equity Name</div>
     <div class="cell">Transaction Date</div>
