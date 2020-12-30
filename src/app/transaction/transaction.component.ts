@@ -20,7 +20,12 @@ export class TransactionComponent implements OnInit {
   AddTransaction():void  {
 
     //alert(document.getElementById('txtname'));
-   this._eqTransaction.postTransaction(document.getElementById('txtname'))
+   this._eqTransaction.postTransaction(document.getElementById('txtPrice'),
+   document.getElementById('txtName'),
+   document.getElementById('txtQty'),
+   document.getElementById('txtDt')
+   
+   )
     .subscribe(data => {
                          console.log(data);
                          

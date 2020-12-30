@@ -1,8 +1,9 @@
 <h1>Transaction Detail</h1>
 <div class="AddTransaction"></div>
 <div class="addtran">
-    <div>Name:</div><input id="txtname" ref-name type="text"><div>Quantity:</div>
-    <input id="txtQty" type="text"><div>Price:</div><input id="txtPrice" type="text">
+    <div>Name:</div><input id="txtName" ref-sname type="text">
+    <div>Quantity:</div><input id="txtQty" type="text">
+    <div>Price:</div><input id="txtPrice" type="text">
     <div>Date:</div><input id="txtDt" type="date">
     <input type="button" value="Save" (click)="AddTransaction()">
 </div>
@@ -12,6 +13,8 @@
     <div class="cell">Transaction Date</div>
     <div class="cell">Purchase Price</div>
     <div class="cell">Quantity</div>
+    <div class="cell">Total Investment</div>
+    <div class="cell">Transation Type</div>
 </div><br>
  <span *ngFor="let t of equitytransaction">
     <div class="header2">
@@ -19,5 +22,7 @@
         <div class="cell">{{t.tranDate|date}}</div>
         <div class="cell">{{t.price}}</div>
         <div class="cell">{{t.qty}}</div>
-    </div><br>
+        <div class="cell">{{t.qty*t.price}}</div>
+        <div class="cell">{{t.tranType}}</div>
+    </div>
 </span>

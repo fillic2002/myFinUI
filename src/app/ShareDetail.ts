@@ -6,18 +6,19 @@ export interface IShareDetail
 }
 export interface IPortfolio
 {
-    id: Int32Array
+    trasactionId: Number
     avgprice: Number
     equityname:string
     qty:number
 }
 export interface ITransaction
 {
-    equityid: Int32Array
+    equityid: Number
     price: Number
     equityName:string
     qty:number
     tranDate:Date
+    tranType:string
 }
 export interface IDashboard
 {
