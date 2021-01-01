@@ -26,3 +26,8 @@ export interface IDashboard
      assetName:string
      total:string
 }
+export interface IFolio
+{
+    folioID:Number
+     folioName:string     
+}

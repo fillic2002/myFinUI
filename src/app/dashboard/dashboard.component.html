@@ -1,11 +1,12 @@
 <h1>Dashboard</h1>
-<div class="header1">
+<div (click)="showTotal()" class="header1">
     <div class="cell">Content Type</div>
     <div class="cell">Total Asset Size</div>    
 </div><br>
  <span *ngFor ="let d of dbDetail">
     <div class="header2">
         <div class="cell">{{d.assetName}}</div>
-        <div class="cell">{{d.total|number : '1.2-2'}}</div>
-    </div>
-</span>
+        <div class="amt">{{d.total|number : '1.2-2'}}</div>
+    </div><br>
+</span><br>
+<div >Total : {{total}}</div>

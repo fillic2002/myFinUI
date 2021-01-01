@@ -1,12 +1,24 @@
 <h1>Transaction Detail</h1>
+<div id="status">{{status}}</div>
 <div class="AddTransaction"></div>
+<span class="addtran">
 <div class="addtran">
-    <div>Name:</div><input id="txtName" ref-sname type="text">
-    <div>Quantity:</div><input id="txtQty" type="text">
-    <div>Price:</div><input id="txtPrice" type="text">
-    <div>Date:</div><input id="txtDt" type="date">
+    <div>PortFolio:</div>
+    <select id="portfolio">
+           <option value=1 >Fillic_gov</option>
+           <option value=2>Renuka</option>
+           <option value=3>Fillic</option>
+           <option value=4>Naitik</option>
+           <option value=5>Kedar</option> 
+    </select> 
+    
+    <br>
+    <span>Name:</span><input id="txtName" ref-sname type="text">
+    <span>Quantity:</span><input id="txtQty" type="text">
+    <span>Price:</span><input id="txtPrice" type="text">
+    <span>Date:</span><input id="txtDt" type="date">
     <input type="button" value="Save" (click)="AddTransaction()">
-</div>
+</div></span>
 <div (click)="add()">Add Transaction</div>
 <div class="header1">
     <div class="cell">Equity Name</div>
@@ -20,9 +32,9 @@
     <div class="header2">
         <div class="cell">{{t.equityName}}</div>
         <div class="cell">{{t.tranDate|date}}</div>
-        <div class="cell">{{t.price}}</div>
-        <div class="cell">{{t.qty}}</div>
-        <div class="cell">{{t.qty*t.price}}</div>
+        <div class="amt">{{t.price|number : '1.2-2'}}</div>
+        <div class="amt">{{t.qty}}</div>
+        <div class="amt">{{t.qty*t.price|number : '1.2-2'}}</div>
         <div class="cell">{{t.tranType}}</div>
     </div><br>
 </span>

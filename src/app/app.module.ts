@@ -9,6 +9,7 @@ import {HttpClientModule} from '@angular/common/http'
 import { PortfolioComponent } from './portfolio/portfolio.component';
 import { TransactionComponent } from './transaction/transaction.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { BankdetailComponent } from './bankdetail/bankdetail.component';
  
 
 @NgModule({
@@ -18,7 +19,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     PortfolioComponent,
     TransactionComponent,
     routingComp,
-    DashboardComponent
+    DashboardComponent,
+    BankdetailComponent
   ],
   imports: [
     BrowserModule,

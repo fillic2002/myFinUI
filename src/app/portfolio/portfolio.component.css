@@ -12,7 +12,11 @@
     color: rgba(0, 0, 0, 0.575);    
   }
   .cell{    
-    width: 100px;
+    width: 140px;
     margin-left: 5px;
-    
+   }
+   .amt{    
+    width: 140px;
+    margin-left: 5px;
+    text-align: right;      
   }

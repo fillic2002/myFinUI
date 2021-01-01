@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SharesService } from '../shares.service';
 import {ActivatedRoute} from '@angular/router'
+import { IFolio } from '../ShareDetail';
 
 @Component({
   selector: 'app-transaction',
@@ -10,11 +11,14 @@ import {ActivatedRoute} from '@angular/router'
 export class TransactionComponent implements OnInit {
 
   public equitytransaction =[] as any;
+  public folio =[] as any;
+  public status=[];
   constructor(private _eqTransaction:SharesService,private route:ActivatedRoute) { }
 
   ngOnInit(): void {
     this._eqTransaction.getTransaction()
     .subscribe(data => this.equitytransaction = data);
+     
   }
 
   AddTransaction():void  {
@@ -27,9 +31,12 @@ export class TransactionComponent implements OnInit {
    
    )
     .subscribe(data => {
-                         console.log(data);
+     // var status= document.getElementById('status')
+     // status=data;
                          
     })
+
+    
   }
   add(){ 
     /*let row = document.createElement('div');   
@@ -37,5 +44,8 @@ export class TransactionComponent implements OnInit {
       row.innerHTML = '<div class="addtran"><div>Name:</div><input id="txtname" type="text"><div>Quantity:</div><input id="txtQty" type="text"><div>Price:</div><input id="txtPrice" type="text"><div>Date:</div><input id="txtDt" type="date"><input type="button" value="Save" (click)="AddTransaction()"></div>';        
       const menu=document.querySelector('.AddTransaction')?.appendChild(row);*/
       alert("asd");
+      this._eqTransaction.getAllfolio()
+    .subscribe(datan => this.folio = datan);
+    alert(this.folio);
   } 
 }
