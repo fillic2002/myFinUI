@@ -17,8 +17,7 @@ export class TransactionComponent implements OnInit {
 
   ngOnInit(): void {
     this._eqTransaction.getTransaction()
-    .subscribe(data => this.equitytransaction = data);
-     
+    .subscribe(data => this.equitytransaction = data);     
   }
 
   AddTransaction():void  {

@@ -31,3 +31,12 @@ export interface IFolio
     folioID:Number
      folioName:string     
 }
+export interface IBankAcDetail
+{
+    acctId:Number
+    amt:Number
+    roi:Number 
+    transactionDate:Date
+    acctName:string
+    acctType:string
+}

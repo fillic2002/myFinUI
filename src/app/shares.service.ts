@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { IPortfolio, ITransaction,IDashboard,IFolio } from './ShareDetail';
+import { IPortfolio, ITransaction,IDashboard,IFolio,IBankAcDetail } from './ShareDetail';
 
 @Injectable({
   providedIn: 'root'
@@ -31,8 +31,29 @@ export class SharesService {
     tranType:"B"
     })  
   }
+  postAcTransaction(userid:any,Id:any,roi:any,amt:any,dt:any):Observable<any>{
+    //var trandata =new ITransaction();
+    console.log(dt.value);
+    return this.client.post("http://localhost:59921/BankAsset/SaveAcctStatus",{ 
+      userid:parseInt(userid.value),
+      acctId: parseFloat( Id.value),
+      amt:parseFloat(amt.value),
+      roi:parseFloat(roi.value),
+      transactionDate:new Date(Date.parse(dt.value))
+      
+    })  
+  }
+
   getDashBoard():Observable<IDashboard[]>{
     return this.client.get<IDashboard[]>("http://localhost:59921/dashboard")  
+  }
+
+  getBankAcTotal():Observable<IBankAcDetail[]>{
+    return this.client.get<IBankAcDetail[]>("http://localhost:59921/bankasset/GetTotalAmt")  
+  }
+
+  getBankAcDetails():Observable<IBankAcDetail[]>{
+    return this.client.get<IBankAcDetail[]>("http://localhost:59921/bankasset/GetDetailedAmt")  
   }
 
 }

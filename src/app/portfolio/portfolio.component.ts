@@ -15,8 +15,7 @@ export class PortfolioComponent implements OnInit {
   
   constructor(private _portfolio:SharesService,private route:ActivatedRoute) { }
 
-  ngOnInit(): void {
-    
+  ngOnInit(): void {    
      this._portfolio.getPortfolio()
      .subscribe(data => this.portfolio = data);
   }

@@ -12,6 +12,7 @@ import { ActivatedRoute } from '@angular/router';
 export class DashboardComponent implements OnInit {
 
   public dbDetail = [] as any;
+  public bankAmt: any;
   public total: any;
   constructor(private _dashbrd:SharesService,private route:ActivatedRoute) { }
 
@@ -19,16 +20,19 @@ export class DashboardComponent implements OnInit {
     this._dashbrd.getDashBoard()
     .subscribe(data=>this.dbDetail = data);
 
+    this._dashbrd.getBankAcTotal()
+    .subscribe(data => this.bankAmt = data);
+
   }
   showTotal():void{
     var to:number;
     to=0;
     for (var i = 0; i < this.dbDetail.length; i++) {
-      console.log(parseInt( this.dbDetail[i].total));
-       to= to + parseFloat(this.dbDetail[i].total);
-       
-  }
-  this.total=to.toFixed(2);
+       to= to + parseFloat(this.dbDetail[i].total);       
+    }
+    console.log(Number(this.bankAmt.amt));
+    to= to + Number(this.bankAmt.amt);
+    this.total=to.toFixed(2);
 }
 
 }
