@@ -1,5 +1,7 @@
+ <input type="button" class="btnHome" value="Home" (click)="onSelect(option)">
 <h1>Portfolio</h1>
-<select id="portfolio">
+
+<select id="portfolio" (change)="changeFolio($event)">
     <option value=1 >Fillic_gov</option>
     <option value=2>Renuka</option>
     <option value=3>Fillic</option>
@@ -7,18 +9,22 @@
     <option value=5>Kedar</option> 
 </select> 
 <br>
+<h4>Total Amount: {{total}}</h4>
+<div>Total No of Share:{{portfolio.length}}</div>
 <div class="header1">
     <div class="cell">ID</div>
     <div class="cell">Equity Name</div>
     <div class="cell">Avg Price</div>
     <div class="cell">Total Quantity</div>
+    <div class="cell">Investment</div>
 </div><br>
  <span *ngFor ="let p of portfolio">
     <div class="header2">
         <div class="cell">{{p.trasactionId}}</div>
         <div class="cell">{{p.equityname}}</div>
         <div class="amt">{{p.avgprice|number : '1.2-2'}}</div>
-        <div class="amt">{{p.qty.toFixed(3)}}</div>
+        <div class="amt">{{p.qty.toFixed(2)}}</div>
+        <div class="amt">{{p.qty*p.avgprice|number:'1.2-2'}}</div>
     </div><br>
 </span>
 

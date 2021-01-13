@@ -1,9 +1,11 @@
+<input type="button" class="btnHome" value="Home" (click)="onSelect(option)">
 <h1>Transaction Detail</h1>
 <div id="status">{{status}}</div>
 <div class="AddTransaction"></div>
 <span class="addtran">
+ 
 <div class="addtran">
-    <div>PortFolio:</div>
+    <span>PortFolio:</span>
     <select id="portfolio">
            <option value=1 >Fillic_gov</option>
            <option value=2>Renuka</option>
@@ -20,9 +22,11 @@
     <input type="button" value="Save" (click)="AddTransaction()">
 </div></span>
 <div (click)="add()">Add Transaction</div>
+<h4>Total Amount: {{total}}</h4>
 <div class="header1">
-    <div class="cell">Equity Name</div>
     <div class="cell">Transaction Date</div>
+    <div class="cell">Equity Name</div>
+    <div class="cell">Equity ID</div>
     <div class="cell">Purchase Price</div>
     <div class="cell">Quantity</div>
     <div class="cell">Total Investment</div>
@@ -30,8 +34,9 @@
 </div><br>
  <span *ngFor="let t of equitytransaction">
     <div class="header2">
-        <div class="cell">{{t.equityName}}</div>
         <div class="cell">{{t.tranDate|date}}</div>
+        <div class="cell">{{t.equityName}}</div>
+        <div class="cell">{{t.equityId}}</div>
         <div class="amt">{{t.price|number : '1.2-2'}}</div>
         <div class="amt">{{t.qty}}</div>
         <div class="amt">{{t.qty*t.price|number : '1.2-2'}}</div>

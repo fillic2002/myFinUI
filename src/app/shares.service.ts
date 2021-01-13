@@ -10,8 +10,9 @@ export class SharesService {
  
   constructor(private client:HttpClient) { }
 
-  getPortfolio():Observable<IPortfolio[]>{
-    return this.client.get<IPortfolio[]>("http://localhost:59921/portfolio/Getfolio")  
+  getPortfolio(id:number):Observable<IPortfolio[]>{
+    console.log(id);
+    return this.client.get<IPortfolio[]>("http://localhost:59921/portfolio/Getfolio/"+id)  
   }
   getAllfolio():Observable<IFolio[]>{
     return this.client.get<IFolio[]>("http://localhost:59921/portfolio/GetAllfolio")  
@@ -20,15 +21,16 @@ export class SharesService {
     return this.client.get<ITransaction[]>("http://localhost:59921/transaction")  
   }
 
-  postTransaction(price:any,name:any,qty:any,dt:any):Observable<any>{
+  postTransaction(price:any,name:any,qty:any,dt:any,folioId: any):Observable<any>{
     //var trandata =new ITransaction();
-    console.log(dt.value);
+    console.log(folioId);
     return this.client.post("http://localhost:59921/transaction",{ 
     price: parseFloat( price.value),
     equityId:name.value,
     qty:parseFloat(qty.value),
     tranDate:new Date(Date.parse(dt.value)),
-    tranType:"B"
+    tranType:"B",
+    portfolioId:parseFloat(folioId)
     })  
   }
   postAcTransaction(userid:any,Id:any,roi:any,amt:any,dt:any):Observable<any>{
