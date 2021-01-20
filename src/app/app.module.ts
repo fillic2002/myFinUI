@@ -10,7 +10,8 @@ import { PortfolioComponent } from './portfolio/portfolio.component';
 import { TransactionComponent } from './transaction/transaction.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { BankdetailComponent } from './bankdetail/bankdetail.component';
- 
+import { ChartModule,AccumulationChartModule } from '@syncfusion/ej2-angular-charts';
+import { TaxcompuComponent } from './taxcompu/taxcompu.component';
 
 @NgModule({
   declarations: [
@@ -20,12 +21,15 @@ import { BankdetailComponent } from './bankdetail/bankdetail.component';
     TransactionComponent,
     routingComp,
     DashboardComponent,
-    BankdetailComponent
+    BankdetailComponent,
+    TaxcompuComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule, 
+    ChartModule,
+    AccumulationChartModule
   ],
   providers: [SharesService],
   bootstrap: [AppComponent]

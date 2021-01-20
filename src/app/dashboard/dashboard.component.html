@@ -1,6 +1,8 @@
+<input type="button" class="btnHome" value="Home" (click)="onSelect(option)">
 <h1>Dashboard</h1>
+
 <div (click)="showTotal()" class="header1">
-    <div class="cell">Content Type</div>
+    <div class="cell">Asset Type</div>
     <div class="cell">Total Asset Size</div>    
 </div><br>
  <span *ngFor ="let d of dbDetail">
@@ -13,4 +15,4 @@
 <div class="cell">Bank</div>
 <div class="amt">{{bankAmt.amt|number : '1.2-2'}}</div>
 </div>
-<h3 >Total : {{total|currency}}</h3>
+<h3 >Total : {{total|number:'1.2-2'}}</h3>

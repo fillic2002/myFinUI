@@ -24,6 +24,7 @@ export class OptionComponent implements OnInit {
   ngOnInit(): void {
   }
   
+  
   public onSelect(option:any)
   {    
     if(option.id==1){this.router.navigate(['/dashboard'])}

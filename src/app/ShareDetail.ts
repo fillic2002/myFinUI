@@ -3,6 +3,7 @@ export interface IShareDetail
     id: Int32Array
     shortName: string
     fullName:string
+    livePrice:Number
 }
 export interface IPortfolio
 {

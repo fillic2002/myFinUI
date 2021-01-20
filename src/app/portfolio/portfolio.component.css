@@ -1,25 +1,7 @@
-.header1 {
-  display:inline-flex;     
-  background: rgb(97, 93, 93);    
-  height: 26px;      
-  color: #ddd;
-  font-weight: bold;
-}
-.header2 {
-    display:inline-flex;     
-    background: #ddd;    
-    height: 22px;      
-    color: rgba(0, 0, 0, 0.575);    
+  
+  .bold{
+    font-weight: bold;
   }
-  .cell{    
-    width: 140px;
-    margin-left: 5px;
-   }
-   .amt{    
-    width: 140px;
-    margin-left: 5px;
-    text-align: right;      
-  }
-  .btnHome{
-    height: 50px;
+  .space{
+    margin-right: 200px;
   }

@@ -7,6 +7,7 @@ import { PortfolioComponent } from './portfolio/portfolio.component';
 import { TransactionComponent } from './transaction/transaction.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { BankdetailComponent } from './bankdetail/bankdetail.component';
+import { TaxcompuComponent } from './taxcompu/taxcompu.component';
 
 const routes: Routes = [
   {path:'', component:OptionComponent},
@@ -14,7 +15,8 @@ const routes: Routes = [
   {path:'portfolio',component:PortfolioComponent},
   {path:'transaction',component:TransactionComponent},
   {path:'dashboard',component:DashboardComponent},  
-  {path:'bankdetail',component:BankdetailComponent},  
+  {path:'bankdetail',component:BankdetailComponent},
+  {path:'tax',component:TaxcompuComponent},  
 ];
 
 @NgModule({

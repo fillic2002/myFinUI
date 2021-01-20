@@ -1,6 +1,6 @@
 <input type="button" class="btnHome" value="Home" (click)="onSelect(option)">
 <h1>Transaction Detail</h1>
-<div id="status">{{status}}</div>
+<div class="status" id="status">{{status}}</div>
 <div class="AddTransaction"></div>
 <span class="addtran">
  
@@ -19,7 +19,7 @@
     <span>Quantity:</span><input id="txtQty" type="text">
     <span>Price:</span><input id="txtPrice" type="text">
     <span>Date:</span><input id="txtDt" type="date">
-    <input type="button" value="Save" (click)="AddTransaction()">
+    <input class="savebtn" type="button" value="Save" (click)="AddTransaction()">
 </div></span>
 <div (click)="add()">Add Transaction</div>
 <h4>Total Amount: {{total}}</h4>

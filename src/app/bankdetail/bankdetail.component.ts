@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SharesService } from '../shares.service';
 import { registerLocaleData } from '@angular/common';
 import localeIn from '@angular/common/locales/en-IN';
@@ -17,7 +17,7 @@ export class BankdetailComponent implements OnInit {
   public accDetail =[] as any;
   public at:  any;
    
-  constructor(private _acct:SharesService, private route:ActivatedRoute) { }
+  constructor(private _acct:SharesService, private route:ActivatedRoute,private router:Router) { }
 
   ngOnInit(): void {
     this._acct.getBankAcDetails()
@@ -48,6 +48,10 @@ export class BankdetailComponent implements OnInit {
       //status=data;
                          
     })    
+  }
+  public onSelect(option:any)
+  {    
+    this.router.navigate(['/']);
   }
 
 }

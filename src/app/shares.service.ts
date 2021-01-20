@@ -1,17 +1,15 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { IPortfolio, ITransaction,IDashboard,IFolio,IBankAcDetail } from './ShareDetail';
+import { IPortfolio, ITransaction,IDashboard,IFolio,IBankAcDetail, IShareDetail } from './ShareDetail';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SharesService {
- 
-  constructor(private client:HttpClient) { }
+   constructor(private client:HttpClient) { }
 
-  getPortfolio(id:number):Observable<IPortfolio[]>{
-    console.log(id);
+  getPortfolio(id:number):Observable<IPortfolio[]>{    
     return this.client.get<IPortfolio[]>("http://localhost:59921/portfolio/Getfolio/"+id)  
   }
   getAllfolio():Observable<IFolio[]>{
@@ -57,5 +55,7 @@ export class SharesService {
   getBankAcDetails():Observable<IBankAcDetail[]>{
     return this.client.get<IBankAcDetail[]>("http://localhost:59921/bankasset/GetDetailedAmt")  
   }
-
+ getlivePrice():Observable<IShareDetail[]>{
+    return this.client.get<IShareDetail[]>("http://localhost:59921/Shares/GetLivePrice")  
+ }
 }

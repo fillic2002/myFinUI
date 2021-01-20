@@ -13,7 +13,7 @@ export class TransactionComponent implements OnInit {
 
   public equitytransaction =[] as any;
   public folio =[] as any;
-  public status=[];
+  public status :string;
   public total:any;
   constructor(private _eqTransaction:SharesService,private route:ActivatedRoute,private  router:Router) { }
 
@@ -44,9 +44,9 @@ export class TransactionComponent implements OnInit {
    )
     .subscribe(data => {
      // var status= document.getElementById('status')
-     // status=data;
+     this.status="Record added Successfully: "+ document.getElementById('txtQty').value +" of "+document.getElementById('txtName').value;
      this.ngOnInit();
-
+      
     })
 
   }
