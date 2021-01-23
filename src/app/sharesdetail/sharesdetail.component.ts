@@ -13,8 +13,7 @@ export class SharesdetailComponent implements OnInit {
   public sh = [] as any;
   constructor(private _sharesDetail:SharesService,private route:ActivatedRoute) {  }
 
-  ngOnInit( ) {
-   
+  ngOnInit( ) {    
     let opts =this.route.snapshot.paramMap.get('id');
     this.opt=opts;
     console.log(this.opt)

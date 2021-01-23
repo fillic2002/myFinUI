@@ -23,10 +23,11 @@
  <span *ngFor ="let p of portfolio">
     <div class="header2">
         <div class="cell">{{p.trasactionId}}</div>
-        <div class="cell bold">{{p.equityname}}</div>
+        <div class="cell bold">{{p.equityName}}</div>
         <div class="amt">{{p.avgprice|number : '1.2-2'}}</div>
         <div class="amt">{{p.qty.toFixed(2)}}</div>
         <div class="amt">{{p.qty*p.avgprice|number:'1.2-2'}}</div>
+        <div class="amt">{{p.livePrice|number:'1.2-2'}}</div>
     </div><br>
 </span>
 

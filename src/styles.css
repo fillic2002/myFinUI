@@ -50,7 +50,7 @@ html { background-color: rgba(0, 0, 0, 0.007); }
     color: rgb(97, 96, 96);
     background-color: rgb(197, 196, 196);
     font-weight: bold;
-    
+    cursor: pointer;    
   }
   .cell{    
     width: 140px;
@@ -65,4 +65,9 @@ html { background-color: rgba(0, 0, 0, 0.007); }
   
   .btnHome{
     height: 50px;
+  }
+  .naming{
+    font-weight: bold;
+    padding-left: 5px;
+    padding-right: 2px;
   }

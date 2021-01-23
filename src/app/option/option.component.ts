@@ -12,7 +12,7 @@ export class OptionComponent implements OnInit {
   public options=[
     {"name":"Dashboard","id":1},
     {"name":"Portfolio","id":2}, 
-    {"name":"Market","id":4},
+    {"name":"Transaction","id":4},
     {"name":"Tax","id":3},
     {"name":"BankAcDetail","id":5}
 

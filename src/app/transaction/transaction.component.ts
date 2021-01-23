@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { SharesService } from '../shares.service';
-import {ActivatedRoute} from '@angular/router'
-import { IFolio } from '../ShareDetail';
 import {Router} from '@angular/router';
 
 @Component({
@@ -13,8 +12,9 @@ export class TransactionComponent implements OnInit {
 
   public equitytransaction =[] as any;
   public folio =[] as any;
-  public status :string;
+  public status!: string;
   public total:any;
+  public selectedLevel:any;
   constructor(private _eqTransaction:SharesService,private route:ActivatedRoute,private  router:Router) { }
 
   ngOnInit(): void {
@@ -40,13 +40,12 @@ export class TransactionComponent implements OnInit {
    document.getElementById('txtName'),
    document.getElementById('txtQty'),
    document.getElementById('txtDt'),
-   document.getElementById('portfolio').value
+   1
    )
     .subscribe(data => {
      // var status= document.getElementById('status')
-     this.status="Record added Successfully: "+ document.getElementById('txtQty').value +" of "+document.getElementById('txtName').value;
-     this.ngOnInit();
-      
+     //this.status="Record added Successfully: "+ document.getElementById('txtQty').value +" of "+document.getElementById('txtName').value;
+     this.ngOnInit();      
     })
 
   }
@@ -66,5 +65,8 @@ export class TransactionComponent implements OnInit {
   public onSelect(option:any)
   {    
     this.router.navigate(['/']);
+  }
+  selected(){
+    console.log(this.selectedLevel)
   }
 }

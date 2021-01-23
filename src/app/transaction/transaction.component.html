@@ -1,11 +1,11 @@
 <input type="button" class="btnHome" value="Home" (click)="onSelect(option)">
 <h1>Transaction Detail</h1>
 <div class="status" id="status">{{status}}</div>
-<div class="AddTransaction"></div>
+
 <span class="addtran">
  
 <div class="addtran">
-    <span>PortFolio:</span>
+    <span class="naming">PortFolio:</span>
     <select id="portfolio">
            <option value=1 >Fillic_gov</option>
            <option value=2>Renuka</option>
@@ -15,13 +15,12 @@
     </select> 
     
     <br>
-    <span>Name:</span><input id="txtName" ref-sname type="text">
-    <span>Quantity:</span><input id="txtQty" type="text">
-    <span>Price:</span><input id="txtPrice" type="text">
-    <span>Date:</span><input id="txtDt" type="date">
+    <span class="naming">Name:</span><input id="txtName" ref-sname type="text">
+    <span class="naming">Quantity:</span><input id="txtQty" type="text">
+    <span class="naming">Price:</span><input id="txtPrice" type="text">
+    <span class="naming">Date:</span><input id="txtDt" type="date">
     <input class="savebtn" type="button" value="Save" (click)="AddTransaction()">
 </div></span>
-<div (click)="add()">Add Transaction</div>
 <h4>Total Amount: {{total}}</h4>
 <div class="header1">
     <div class="cell">Transaction Date</div>

@@ -9,8 +9,9 @@ export interface IPortfolio
 {
     trasactionId: Number
     avgprice: Number
-    equityname:string
+    Equityname:string
     qty:number
+    livePrice:Number
 }
 export interface ITransaction
 {
@@ -20,6 +21,7 @@ export interface ITransaction
     qty:number
     tranDate:Date
     tranType:string
+     
 }
 export interface IDashboard
 {
@@ -30,7 +32,7 @@ export interface IDashboard
 export interface IFolio
 {
     folioID:Number
-     folioName:string     
+    folioName:string     
 }
 export interface IBankAcDetail
 {
