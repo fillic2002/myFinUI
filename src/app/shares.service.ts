@@ -9,16 +9,15 @@ import { IPortfolio, ITransaction,IDashboard,IFolio,IBankAcDetail, IShareDetail 
 export class SharesService {
    constructor(private client:HttpClient) { }
 
-  getPortfolio(id:number):Observable<IPortfolio[]>{    
+  getPortfolio(id:number):Observable<IPortfolio[]>{
     return this.client.get<IPortfolio[]>("http://localhost:59921/portfolio/Getfolio/"+id)  
   }
   getAllfolio():Observable<IFolio[]>{
     return this.client.get<IFolio[]>("http://localhost:59921/portfolio/GetAllfolio")  
   }
-  getTransaction():Observable<ITransaction[]>{
-    return this.client.get<ITransaction[]>("http://localhost:59921/transaction")  
+  getTransaction(id:Number):Observable<ITransaction[]>{
+    return this.client.get<ITransaction[]>("http://localhost:59921/transaction/"+id)  
   }
-
   postTransaction(price:any,name:any,qty:any,dt:any,folioId: any):Observable<any>{
     //var trandata =new ITransaction();
     console.log(folioId);
@@ -29,7 +28,7 @@ export class SharesService {
     tranDate:new Date(Date.parse(dt.value)),
     tranType:"B",
     portfolioId:parseFloat(folioId)
-    })  
+    }) 
   }
   postAcTransaction(userid:any,Id:any,roi:any,amt:any,dt:any):Observable<any>{
     //var trandata =new ITransaction();

@@ -9,7 +9,7 @@ export interface IPortfolio
 {
     trasactionId: Number
     avgprice: Number
-    Equityname:string
+    equityname:string
     qty:number
     livePrice:Number
 }

@@ -18,7 +18,7 @@ export class TransactionComponent implements OnInit {
   constructor(private _eqTransaction:SharesService,private route:ActivatedRoute,private  router:Router) { }
 
   ngOnInit(): void {
-    this._eqTransaction.getTransaction()
+    this._eqTransaction.getTransaction(1)
     .subscribe(data =>{
 
      this.equitytransaction = data
@@ -68,5 +68,18 @@ export class TransactionComponent implements OnInit {
   }
   selected(){
     console.log(this.selectedLevel)
+  }
+  changeFolio(e :any) {
+    this._eqTransaction.getTransaction(1)
+    .subscribe(data =>{
+
+     this.equitytransaction = data
+     var to:number;
+     to=0;
+     for (var i = 0; i < this.equitytransaction.length; i++) {
+       to= to + parseFloat(this.equitytransaction[i].price)*parseFloat(this.equitytransaction[i].qty);        
+     }
+     this.total=to.toFixed(2);
+    });
   }
 }
