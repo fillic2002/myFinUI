@@ -15,12 +15,17 @@ export class TransactionComponent implements OnInit {
   public status!: string;
   public total:any;
   public selectedLevel:any;
+  public selectedfolio: any;
+  public purchaseOption: any="B";
+  isShown: boolean = true;
+  public assetType!: Number;
+  public assetId: any;
+
   constructor(private _eqTransaction:SharesService,private route:ActivatedRoute,private  router:Router) { }
 
   ngOnInit(): void {
-    this._eqTransaction.getTransaction(1)
+    this._eqTransaction.getTransaction(this.selectedfolio)
     .subscribe(data =>{
-
      this.equitytransaction = data
      var to:number;
      to=0;
@@ -28,37 +33,38 @@ export class TransactionComponent implements OnInit {
        to= to + parseFloat(this.equitytransaction[i].price)*parseFloat(this.equitytransaction[i].qty);        
      }
      this.total=to.toFixed(2);
+     
     }); 
-
   }
 
   AddTransaction():void  {
-
-    
+  if(document.getElementById('txtName') == null)
+  {
+    this.assetId =""
+  }
+  else{
+    this.assetId = document.getElementById('txtName');
+  }
+     console.log( this.selectedfolio);
    this._eqTransaction.postTransaction(
    document.getElementById('txtPrice'),
-   document.getElementById('txtName'),
+   this.assetId,
    document.getElementById('txtQty'),
    document.getElementById('txtDt'),
-   1
+   this.selectedfolio,
+   this.purchaseOption,
+   this.assetType
    )
     .subscribe(data => {
-     // var status= document.getElementById('status')
-     //this.status="Record added Successfully: "+ document.getElementById('txtQty').value +" of "+document.getElementById('txtName').value;
+      var status= document.getElementById('status')
+    // this.status="Record added Successfully: "+ document.getElementById('txtQty').value +" of "+document.getElementById('txtName').value;
      this.ngOnInit();      
     })
-
   }
   add(){ 
-    /*let row = document.createElement('div');   
-      row.className = 'row'; 
-      row.innerHTML = '<div class="addtran"><div>Name:</div><input id="txtname" type="text"><div>Quantity:</div><input id="txtQty" type="text"><div>Price:</div><input id="txtPrice" type="text"><div>Date:</div><input id="txtDt" type="date"><input type="button" value="Save" (click)="AddTransaction()"></div>';        
-      const menu=document.querySelector('.AddTransaction')?.appendChild(row);*/
-     
       this._eqTransaction.getAllfolio()
     .subscribe(datan =>{ 
       this.folio = datan;
-     
     });
    
   } 
@@ -70,7 +76,8 @@ export class TransactionComponent implements OnInit {
     console.log(this.selectedLevel)
   }
   changeFolio(e :any) {
-    this._eqTransaction.getTransaction(1)
+    this.selectedfolio=e.target.value;
+    this._eqTransaction.getTransaction(e.target.value)
     .subscribe(data =>{
 
      this.equitytransaction = data
@@ -81,5 +88,22 @@ export class TransactionComponent implements OnInit {
      }
      this.total=to.toFixed(2);
     });
+  }
+  selectOption(e:any)
+  {
+    this.purchaseOption = e.target.value;
+  }
+  changeAsset(e:any)
+  {
+    this.assetType =e.target.value;
+     if(e.target.value==12)
+      {
+        console.log(e.target.value);        
+        this.isShown = ! this.isShown;
+      }
+     else
+     {
+       this.isShown =true;
+     }
   }
 }

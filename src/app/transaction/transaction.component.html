@@ -5,8 +5,8 @@
 <span class="addtran">
  
 <div class="addtran">
-    <span class="naming" (change)="changeFolio($event)">PortFolio:</span>
-    <select id="portfolio">
+    <span class="naming" >PortFolio:</span>
+    <select id="portfolio" (change)="changeFolio($event)">
            <option value=1 >Fillic_gov</option>
            <option value=2>Renuka</option>
            <option value=3>Fillic</option>
@@ -14,23 +14,29 @@
            <option value=5>Kedar</option> 
     </select> 
     <span class="naming">Asset Type:</span>
-    <select id="portfolio">
+    <select id="portfolio" (change)="changeAsset($event)">
            <option value=1 >Shares</option>
            <option value=2>Equity MF</option>
            <option value=3>PF</option>
            <option value=4>PPF</option>
-           <option value=5>Debt MF</option> 
-           
+           <option value=5>Debt MF</option>           
            <option value=8>Flat</option> 
            <option value=12>Gold</option> 
            <option value=7>Plot</option> 
            <option value=6>Bank</option> 
-    </select> 
+    </select>
+      
     <br>
-    <span class="naming">Name:</span><input id="txtName" ref-sname type="text">
+    <span *ngIf="isShown" class="naming">Name:</span><input *ngIf="isShown" id="txtName" type="text">
+    <span class="naming">Date:</span><input id="txtDt" type="date">
     <span class="naming">Quantity:</span><input id="txtQty" type="text">
     <span class="naming">Price:</span><input id="txtPrice" type="text">
-    <span class="naming">Date:</span><input id="txtDt" type="date">
+    <span class="naming" >Option:
+        <select id="option" (change)="selectOption($event)"> 
+        <option value="B">Buy</option> 
+        <option value="S">Sell</option>
+    </select>
+    </span>
     <input class="savebtn" type="button" value="Save" (click)="AddTransaction()">
 </div></span>
 <h4>Total Amount: {{total}}</h4>

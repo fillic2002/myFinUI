@@ -16,18 +16,19 @@ export class SharesService {
     return this.client.get<IFolio[]>("http://localhost:59921/portfolio/GetAllfolio")  
   }
   getTransaction(id:Number):Observable<ITransaction[]>{
-    return this.client.get<ITransaction[]>("http://localhost:59921/transaction/"+id)  
+    return this.client.get<ITransaction[]>("http://localhost:59921/transaction/getfolio/"+id)  
   }
-  postTransaction(price:any,name:any,qty:any,dt:any,folioId: any):Observable<any>{
-    //var trandata =new ITransaction();
-    console.log(folioId);
-    return this.client.post("http://localhost:59921/transaction",{ 
-    price: parseFloat( price.value),
+  postTransaction(price:any,name:any,qty:any,dt:any,folioId: any,option:any,assetType:any):Observable<any>{
+    console.log(option);
+    //return this.client.post("http://localhost:59921/transaction/Getall",{ 
+    return this.client.post("http://localhost:59921/transaction/updatefolio",{ 
+    price: parseFloat(price.value),
     equityId:name.value,
     qty:parseFloat(qty.value),
     tranDate:new Date(Date.parse(dt.value)),
-    tranType:"B",
-    portfolioId:parseFloat(folioId)
+    tranType: option,
+    portfolioId:parseInt(folioId),
+    typeAsset:parseInt(assetType)
     }) 
   }
   postAcTransaction(userid:any,Id:any,roi:any,amt:any,dt:any):Observable<any>{
