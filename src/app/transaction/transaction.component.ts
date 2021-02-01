@@ -24,7 +24,7 @@ export class TransactionComponent implements OnInit {
   constructor(private _eqTransaction:SharesService,private route:ActivatedRoute,private  router:Router) { }
 
   ngOnInit(): void {
-    this._eqTransaction.getTransaction(this.selectedfolio)
+    this._eqTransaction.getTransaction(1)
     .subscribe(data =>{
      this.equitytransaction = data
      var to:number;
@@ -57,7 +57,7 @@ export class TransactionComponent implements OnInit {
    )
     .subscribe(data => {
       var status= document.getElementById('status')
-    // this.status="Record added Successfully: "+ document.getElementById('txtQty').value +" of "+document.getElementById('txtName').value;
+     this.status="Record added Successfully: "+this.assetType +" of "+   this.assetId;
      this.ngOnInit();      
     })
   }
@@ -96,7 +96,7 @@ export class TransactionComponent implements OnInit {
   changeAsset(e:any)
   {
     this.assetType =e.target.value;
-     if(e.target.value==12)
+     if(e.target.value==12 || e.target.value==7|| e.target.value==8)
       {
         console.log(e.target.value);        
         this.isShown = ! this.isShown;

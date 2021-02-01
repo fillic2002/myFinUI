@@ -1,6 +1,6 @@
 <input type="button" class="btnHome" value="Home" (click)="onSelect(option)">
 <h1>Dashboard</h1>
-
+<h3 >Total : {{total|number : '1.2-2'}}</h3>
 <div (click)="showTotal()" class="header1">
     <div class="cell">Asset Type</div>
     <div class="cell">Total Asset Size</div>    
@@ -11,8 +11,4 @@
         <div class="amt">{{d.total|number : '1.2-2'}}</div>
     </div><br>    
 </span>
-<div class="header2">
-<div class="cell">Bank</div>
-<div class="amt">{{bankAmt.amt|number : '1.2-2'}}</div>
-</div>
-<h3 >Total : {{total}}</h3>
+ 

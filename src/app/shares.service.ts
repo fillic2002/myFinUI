@@ -20,7 +20,6 @@ export class SharesService {
   }
   postTransaction(price:any,name:any,qty:any,dt:any,folioId: any,option:any,assetType:any):Observable<any>{
     console.log(option);
-    //return this.client.post("http://localhost:59921/transaction/Getall",{ 
     return this.client.post("http://localhost:59921/transaction/updatefolio",{ 
     price: parseFloat(price.value),
     equityId:name.value,
@@ -29,7 +28,7 @@ export class SharesService {
     tranType: option,
     portfolioId:parseInt(folioId),
     typeAsset:parseInt(assetType)
-    }) 
+    })
   }
   postAcTransaction(userid:any,Id:any,roi:any,amt:any,dt:any):Observable<any>{
     //var trandata =new ITransaction();

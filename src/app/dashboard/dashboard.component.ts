@@ -28,9 +28,20 @@ export class DashboardComponent implements OnInit {
  
   ngOnInit(): void {
     this._dashbrd.getDashBoard()
-    .subscribe(data=>this.dbDetail = data);
+    .subscribe(data=>{
+        this.dbDetail = data;
+        var to:number;
+        to=0;
+        for (var i = 0; i < this.dbDetail.length; i++) {
+          to= to + parseFloat(this.dbDetail[i].total);       
+        }
+        console.log(to);
+       // to= to + Number(this.dbDetail.total);
+        this.total=to.toFixed(2);
+    
+      });
 
-    this._dashbrd.getBankAcTotal()
+  /*  this._dashbrd.getBankAcTotal()
     .subscribe(data =>{ 
       this.bankAmt = data;
       var to:number;
@@ -43,7 +54,7 @@ export class DashboardComponent implements OnInit {
       this.total=to.toFixed(2);
 
     });
-
+*/
   }
   public onSelect(option:any)
   {    
