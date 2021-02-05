@@ -38,8 +38,7 @@ export class SharesService {
       acctId: parseFloat( Id.value),
       amt:parseFloat(amt.value),
       roi:parseFloat(roi.value),
-      transactionDate:new Date(Date.parse(dt.value))
-      
+      transactionDate:new Date(Date.parse(dt.value))      
     })  
   }
 

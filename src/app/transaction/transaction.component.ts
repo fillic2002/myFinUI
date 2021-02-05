@@ -98,12 +98,22 @@ export class TransactionComponent implements OnInit {
     this.assetType =e.target.value;
      if(e.target.value==12 || e.target.value==7|| e.target.value==8)
       {
-        console.log(e.target.value);        
         this.isShown = ! this.isShown;
       }
      else
      {
        this.isShown =true;
      }
+     this._eqTransaction.getTransaction(this.selectedfolio)
+    .subscribe(data =>{
+
+     this.equitytransaction = data
+     var to:number;
+     to=0;
+     for (var i = 0; i < this.equitytransaction.length; i++) {
+       to= to + parseFloat(this.equitytransaction[i].price)*parseFloat(this.equitytransaction[i].qty);        
+     }
+     this.total=to.toFixed(2);
+    });
   }
 }

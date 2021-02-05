@@ -7,11 +7,13 @@ export interface IShareDetail
 }
 export interface IPortfolio
 {
-    trasactionId: Number
-    avgprice: Number
+    trasactionId: number
+    avgprice: number
     equityname:string
     qty:number
-    livePrice:Number
+    livePrice:number
+    profit:number
+    percentage:number
 }
 export interface ITransaction
 {

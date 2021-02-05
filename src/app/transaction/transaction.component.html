@@ -1,9 +1,8 @@
 <input type="button" class="btnHome" value="Home" (click)="onSelect(option)">
+<input type="image" name="home >" src="C:\Users\fillic\Documents\github\home.PNG"  alt="text">
 <h1>Transaction Detail</h1>
-<div class="status" id="status">{{status}}</div>
 
-<span class="addtran">
- 
+<span class="addtran"> 
 <div class="addtran">
     <span class="naming" >PortFolio:</span>
     <select id="portfolio" (change)="changeFolio($event)">
@@ -40,23 +39,26 @@
     <input class="savebtn" type="button" value="Save" (click)="AddTransaction()">
 </div></span>
 <h4>Total Amount: {{total}}</h4>
-<div class="header1">
-    <div class="cell">Transaction Date</div>
-    <div class="cell">Equity Name</div>
-    <div class="cell">Equity ID</div>
-    <div class="cell">Purchase Price</div>
-    <div class="cell">Quantity</div>
-    <div class="cell">Total Investment</div>
-    <div class="cell">Transation Type</div>
-</div><br>
+<table >
+    <tr class="header1">
+        <td class="headername">Date of Purchase</td>
+        <td class="headername">Equity Name</td>
+        <td class="headeramt"> ID</td>
+        <td class="headeramt">Purchase Price</td>
+        <td class="headeramt">Quantity</td>
+        <td class="headeramt">Invested amt</td>
+        <td class="headeramt">Transation Type</td>
+    </tr>
+
  <span *ngFor="let t of equitytransaction">
-    <div class="header2">
-        <div class="cell">{{t.tranDate|date}}</div>
-        <div class="cell">{{t.equityName}}</div>
-        <div class="cell">{{t.equityId}}</div>
-        <div class="amt">{{t.price|number : '1.2-2'}}</div>
-        <div class="amt">{{t.qty}}</div>
-        <div class="amt">{{t.qty*t.price|number : '1.2-2'}}</div>
-        <div class="cell">{{t.tranType}}</div>
-    </div><br>
+    <tr>
+        <td class="naming">{{t.tranDate|date}}</td>
+        <td class="naming">{{t.equityName}}</td>
+        <td class="amt">{{t.equityId}}</td>
+        <td class="amt">{{t.price|number : '1.2-2'}}</td>
+        <td class="amt">{{t.qty}}</td>
+        <td class="amt">{{t.qty*t.price|number : '1.2-2'}}</td>
+        <td class="amt">{{t.tranType}}</td>
+    </tr>
 </span>
+</table>

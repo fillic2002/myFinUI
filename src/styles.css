@@ -13,31 +13,42 @@ html { background-color: rgba(0, 0, 0, 0.007); }
     color: rgba(0, 0, 0, 0.575);
     font-size: medium;
   }
+  .status {
+    display:inline-block; 
+    margin-right: 15px;
+    border-radius: 20px;
+    background: #ddd;
+    width: 150px;
+    height: 100px;
+    text-align: center;    
+    box-shadow: 10px 10px 5px #888888;
+    color: rgba(0, 0, 0, 0.575);
+    font-size: medium;
+  }
+.shatusContent{
+  font:500 12px "Open Sans", Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  padding-top: 2px;
+}
+
   .header1 {
     display:inline-flex;     
     background: rgb(170, 58, 58);    
-    height: 30px;      
+    height: 40px;      
     color: rgb(226, 225, 225);
-    font-weight: bold;    
-    border-width: 1px;
-    border-color: rgb(248, 248, 248);
-    text-align: center;
-    vertical-align: middle;
-    border-style: solid;
+    font-weight: bold;   
+    text-align: center;  
   }
   .header2 {
     display:inline-flex;     
     background: rgb(240, 240, 243);    
-    height: 27px;      
-    color: rgb(22, 22, 24);
-    border: rgb(187, 181, 181);
-    border-width: 1px;
-    border-style: dotted;
-    border-color: black;    
+    height: 25px;      
+    color:#666;     
+    font:600 13px "Open Sans", Arial, Helvetica, sans-serif;
   }
   .savebtn{
     background-color: rgb(192, 192, 192);
-    height: 30px;
+    height: 20px;
     width:90px;
     margin-left: 20px;
     border-radius: 4px;
@@ -52,22 +63,31 @@ html { background-color: rgba(0, 0, 0, 0.007); }
     font-weight: bold;
     cursor: pointer;    
   }
-  .cell{    
-    width: 140px;
-    margin-left: 5px;      
+  .cellrow{
+    background-color: rgb(197, 196, 196);
+    border-spacing: 0px;
+    border-collapse: collapse;
   }
-   
+  .headeramt{    
+    width: 100px;
+         
+  }
+  .headername{    
+    width: 170px;
+ 
+  }
+  .naming{    
+    width: 170px;    
+    font-weight: bold;
+    font-size: 11px; 
+  }
   .amt{    
-    width: 140px;
-    margin-left: 5px;
-    text-align: right;      
+    width: 100px;    
+    text-align: right;  
+    font:500 12px "Open Sans", Arial, Helvetica, sans-serif;
   }
   
   .btnHome{
     height: 50px;
   }
-  .naming{
-    font-weight: bold;
-    padding-left: 5px;
-    padding-right: 2px;
-  }
+ 
