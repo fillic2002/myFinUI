@@ -13,13 +13,15 @@ export class TransactionComponent implements OnInit {
   public equitytransaction =[] as any;
   public folio =[] as any;
   public status!: string;
-  public total:any;
+  public eqtotal:any;
+  public mftotal:any;
   public selectedLevel:any;
   public selectedfolio: any;
   public purchaseOption: any="B";
   isShown: boolean = true;
   public assetType!: Number;
   public assetId: any;
+  
 
   constructor(private _eqTransaction:SharesService,private route:ActivatedRoute,private  router:Router) { }
 
@@ -32,7 +34,7 @@ export class TransactionComponent implements OnInit {
      for (var i = 0; i < this.equitytransaction.length; i++) {
        to= to + parseFloat(this.equitytransaction[i].price)*parseFloat(this.equitytransaction[i].qty);        
      }
-     this.total=to.toFixed(2);
+     this.eqtotal=to.toFixed(2);
      
     }); 
   }
@@ -45,19 +47,18 @@ export class TransactionComponent implements OnInit {
   else{
     this.assetId = document.getElementById('txtName');
   }
-     console.log( this.selectedfolio);
-   this._eqTransaction.postTransaction(
-   document.getElementById('txtPrice'),
-   this.assetId,
-   document.getElementById('txtQty'),
-   document.getElementById('txtDt'),
-   this.selectedfolio,
-   this.purchaseOption,
-   this.assetType
-   )
+    
+   this._eqTransaction.postTransaction(document.getElementById('txtPrice'),
+          this.assetId,
+          document.getElementById('txtQty'),
+          document.getElementById('txtDt'),
+          this.selectedfolio,
+          this.purchaseOption,
+          this.assetType
+      )
     .subscribe(data => {
       var status= document.getElementById('status')
-     this.status="Record added Successfully: "+this.assetType +" of "+   this.assetId;
+     this.status="Record added Successfully: "+this.assetType +" of "+this.assetId;
      this.ngOnInit();      
     })
   }
@@ -81,13 +82,25 @@ export class TransactionComponent implements OnInit {
     .subscribe(data =>{
 
      this.equitytransaction = data
-     var to:number;
-     to=0;
+     var eqto:number;
+     var mfto:number;
+     eqto=0;
+     mfto=0;
      for (var i = 0; i < this.equitytransaction.length; i++) {
-       to= to + parseFloat(this.equitytransaction[i].price)*parseFloat(this.equitytransaction[i].qty);        
+       if(this.equitytransaction.equityType=1){
+        eqto= eqto + parseFloat(this.equitytransaction[i].price)*parseFloat(this.equitytransaction[i].qty);        
+       }
+       else
+       {
+        mfto= mfto + parseFloat(this.equitytransaction[i].price)*parseFloat(this.equitytransaction[i].qty);        
+       }
      }
-     this.total=to.toFixed(2);
+     this.eqtotal=eqto.toFixed(2);
+     this.mftotal=mfto.toFixed(2);
     });
+  }
+  changeDate(e:any){
+    this.status="";
   }
   selectOption(e:any)
   {
@@ -113,7 +126,7 @@ export class TransactionComponent implements OnInit {
      for (var i = 0; i < this.equitytransaction.length; i++) {
        to= to + parseFloat(this.equitytransaction[i].price)*parseFloat(this.equitytransaction[i].qty);        
      }
-     this.total=to.toFixed(2);
+     this.eqtotal=to.toFixed(2);
     });
   }
 }

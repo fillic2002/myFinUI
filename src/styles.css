@@ -3,7 +3,7 @@ html { background-color: rgba(0, 0, 0, 0.007); }
 .button {
     display:inline-block; 
     margin-left: 40px;
-    border-radius: 20px;
+    border-radius: 15px;
     background: #ddd;
     width: 120px;
     height: 65px;
@@ -21,33 +21,34 @@ html { background-color: rgba(0, 0, 0, 0.007); }
     width: 150px;
     height: 100px;
     text-align: center;    
-    box-shadow: 10px 10px 5px #888888;
+    box-shadow: 5px -3px 5px #888888;
     color: rgba(0, 0, 0, 0.575);
     font-size: medium;
   }
 .shatusContent{
-  font:500 12px "Open Sans", Arial, Helvetica, sans-serif;
+  font:500 14px "Open Sans", Arial, Helvetica, sans-serif;
   font-weight: bold;
-  padding-top: 2px;
+  padding-top: 6px;
+  color:rgb(5, 168, 26);
 }
 
-  .header1 {
-    display:inline-flex;     
+  .header1 { 
     background: rgb(170, 58, 58);    
     height: 40px;      
     color: rgb(226, 225, 225);
-    font-weight: bold;   
+    font-size: 12px;
+    font-weight: 550;   
     text-align: center;  
   }
-  .header2 {
-    display:inline-flex;     
+  .header2 {  
     background: rgb(240, 240, 243);    
     height: 25px;      
-    color:#666;     
+    color:#666;
     font:600 13px "Open Sans", Arial, Helvetica, sans-serif;
+    border-bottom: "1px solid #ddd"
   }
   .savebtn{
-    background-color: rgb(192, 192, 192);
+    background-color: rgb(240, 240, 240);
     height: 20px;
     width:90px;
     margin-left: 20px;
@@ -58,8 +59,8 @@ html { background-color: rgba(0, 0, 0, 0.007); }
     border-color: rgba(128, 128, 128, 0.719);
   }
   .savebtn:hover{
-    color: rgb(97, 96, 96);
-    background-color: rgb(197, 196, 196);
+    color: rgb(58, 48, 39);
+    background-color: rgb(252, 133, 36);
     font-weight: bold;
     cursor: pointer;    
   }
@@ -73,21 +74,31 @@ html { background-color: rgba(0, 0, 0, 0.007); }
          
   }
   .headername{    
-    width: 170px;
- 
+    width: 170px; 
   }
   .naming{    
     width: 170px;    
     font-weight: bold;
-    font-size: 11px; 
+    font-size: 11px;
+    
+    color: #000000c2;
+    
   }
   .amt{    
-    width: 100px;    
+    width: 100px;
+    color: grey;
     text-align: right;  
-    font:500 12px "Open Sans", Arial, Helvetica, sans-serif;
+    font:550 12px "Open Sans", Arial, Helvetica, sans-serif;
   }
   
   .btnHome{
-    height: 50px;
+    height: 25px;
   }
- 
+ .title{
+  font:500 26px "bold", "Open Sans", Arial, Helvetica, sans-serif;
+  padding-left: 30%;
+  color: #d27c19;
+ }
+ td {
+  vertical-align: middle;
+}

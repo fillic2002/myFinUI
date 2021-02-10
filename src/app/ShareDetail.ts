@@ -14,6 +14,7 @@ export interface IPortfolio
     livePrice:number
     profit:number
     percentage:number
+    equityType:number
 }
 export interface ITransaction
 {

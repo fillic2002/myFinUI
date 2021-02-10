@@ -26,10 +26,10 @@
     </select>
       
     <br>
-    <span *ngIf="isShown" class="naming">Name:</span><input *ngIf="isShown" id="txtName" type="text">
-    <span class="naming">Date:</span><input id="txtDt" type="date">
-    <span class="naming">Quantity:</span><input id="txtQty" type="text">
-    <span class="naming">Price:</span><input id="txtPrice" type="text">
+    <span *ngIf="isShown" class="naming">Name:</span><input *ngIf="isShown" id="txtName" class="headeramt" type="text">
+    <span class="naming">Date:</span><input id="txtDt" type="date" (change)="changeDate($event)">
+    <span class="naming">Quantity:</span><input id="txtQty" class="headeramt" type="text">
+    <span class="naming">Price:</span><input id="txtPrice" class="headeramt" type="text">
     <span class="naming" >Option:
         <select id="option" (change)="selectOption($event)"> 
         <option value="B">Buy</option> 
@@ -38,6 +38,7 @@
     </span>
     <input class="savebtn" type="button" value="Save" (click)="AddTransaction()">
 </div></span>
+<div id="comment">{{status}}</div>
 <h4>Total Amount: {{total}}</h4>
 <table >
     <tr class="header1">
