@@ -1,30 +1,55 @@
-<input type="button" class="btnHome" value="Home" (click)="onSelect(option)">
-<h2>Bank Account Balance</h2>
-<h3>Add Transaction</h3>
-<span class="naming">User Id:</span><input id="txtUserId" class="headeramt" ref-sname type="text">
-<span class="naming">Acct Id:</span><input id="txtId" class="headeramt" ref-sname type="text">
-<span class="naming">ROI:</span><input id="txtRoi" class="headeramt" type="text">
-<span class="naming">Total Amt:</span><input id="txtAmt" class="headeramt" type="text">
-<span class="naming">Date of Update:</span><input id="txtDt"  type="date">
-<input class="savebtn" type="button" value="Save" (click)="AddTransaction()">
-<h3>Renuka Account</h3>
-<h3>Gaurav Account</h3>
-<h4>Total Amount:{{at|number : '1.2-2'}}</h4>
-<table> 
+<div>
+    <span><input type="button" class="btnHome" value="<<" (click)="onSelect(option)"></span>
+    <span class="title" style="padding-left: 30%;" (click)="onClick($event)">Bank Account Details</span>
+    <span style="padding-left: 30%;"><input type="button" class="btnHome" value=">>" (click)="onSelect(option)"></span>
+</div>
+<div (click)="showTrans(option)" class="dml">Add ></div>
+<br>
+<ng-container *ngIf="show"> <div> 
+<span class="naming">User Id:</span>
+    <input id="txtUserId" class="headeramt" ref-sname type="text" (blur)="onChange('userid',$event)">
+<span class="naming">Acct Id:
+      </span><input id="txtId" class="headeramt" ref-sname type="text" (blur)="onChange('id',$event)">
+<span class="naming">ROI:</span><input id="txtRoi" class="headeramt" type="text" (blur)="onChange('roi',$event)">
+<span class="naming">Total Amt:</span><input id="txtAmt" class="headeramt" type="text" (blur)="onChange('amt',$event)">
+<span class="naming">Date of Update:</span><input id="txtDt"  type="date" (blur)="onChange('dt',$event)">
+<input class="savebtn" type="button" value="Save" (click)="AddTransaction()"></div></ng-container><br>
+
+<div class="status"><div class="naming">Renuka</div>
+    <div class="amt">Cash  : <span class="shatusContent">{{rcash|number:'1.2-2'}}</span></div>
+    <div class="amt">PF   :<span class="shatusContent"> {{rpf|number:'1.2-2'}}</span></div>
+    <div class="amt">PPF  :<span class="shatusContent">{{rppf|number:'1.2-2'}}</span></div>
+</div>
+
+<div class="status"><div class="naming">Gaurav</div>
+    <div class="amt">Cash : <span class="shatusContent">{{gcash|number:'1.2-2'}}</span></div>
+    <div class="amt">PF   : <span class="shatusContent">{{gpf|number:'1.2-2'}}</span></div>
+    <div class="amt">PPF  : <span class="shatusContent">{{gppf|number:'1.2-2'}}</span></div>
+</div>
+ 
+<table>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        
+        <td class="amt" >Total Amount:</td>
+        <td class="amt" >{{at|number:'1.2-2'}}</td>
+    </tr> 
   <tr class="header1"> 
-    <td class="headeramt">Accout Id</td>
+    <td class="headeramt">UserId</td>
+    <!--<td class="headeramt">Accout Id</td>-->
     <td class="headeramt">Acct Name</td>
     <td class="headeramt">Accout Type</td>       
     <td class="headeramt">Rate Of Intreset</td>
-    <td class="headeramt">Accout Balance</td>  
-    
+    <td class="headeramt">Accout Balance</td>      
 </tr>
-<tr class="header2" *ngFor ="let p of accDetail">
-    
-        <td class="amt">{{p.acctId}}</td>        
+<tr class="header2" *ngFor ="let p of accDetail;  let acctId = index">
+    <td class="amt">{{p.userid}}</td>        
+        <!--<td class="amt">{{p.acctId}}</td>        -->
         <td class="amt">{{p.acctName}}</td>
         <td class="amt">{{p.acctType}}</td>
-        <td class="amt">{{p.roi|number:'1.1-2'}}%</td>
-        <td class="amt">{{p.amt|number:'1.2-2'}}</td>
+        <td contenteditable="true" (keyup)="changeValue(roi, 'roi', $event)" (blur)="updateList(acctId, 'roi', $event)" class="amt">{{p.roi|number:'1.1-2'}}%</td>
+        <td contenteditable="true" (keyup)="changeValue(amt, 'amt', $event)" (blur)="updateList(acctId, 'amt', $event)" class="amt">{{p.amt|number:'1.2-2'}}</td>
     
 </tr></table>

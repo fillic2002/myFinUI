@@ -18,8 +18,8 @@ export class SharesService {
   getTransaction(id:Number):Observable<ITransaction[]>{
     return this.client.get<ITransaction[]>("http://localhost:59921/transaction/getfolio/"+id)  
   }
-  postTransaction(price:any,name:any,qty:any,dt:any,folioId: any,option:any,assetType:any):Observable<any>{
-    console.log(option);
+
+  postTransaction(price:any,name:any,qty:any,dt:any,folioId: any,option:any,assetType:any):Observable<any>{   
     return this.client.post("http://localhost:59921/transaction/updatefolio",{ 
     price: parseFloat(price.value),
     equityId:name.value,
@@ -31,14 +31,20 @@ export class SharesService {
     })
   }
   postAcTransaction(userid:any,Id:any,roi:any,amt:any,dt:any):Observable<any>{
-    //var trandata =new ITransaction();
-    console.log(dt.value);
+    //console.log("AMT::"+parseFloat(amt));
+    
+    if(dt == null)
+    {
+     // console.log("Date:"+dt);
+      dt= new Date();
+    }
+    //console.log("Date:"+Date.parse(dt));
     return this.client.post("http://localhost:59921/BankAsset/SaveAcctStatus",{ 
-      userid:parseInt(userid.value),
-      acctId: parseFloat( Id.value),
-      amt:parseFloat(amt.value),
-      roi:parseFloat(roi.value),
-      transactionDate:new Date(Date.parse(dt.value))      
+      userid:parseInt(userid),
+      acctId: parseFloat(Id),
+      amt:parseFloat(amt),
+      roi:parseFloat(roi),
+      transactionDate:new Date(Date.parse(dt))      
     })  
   }
 
@@ -56,4 +62,7 @@ export class SharesService {
  getlivePrice():Observable<IShareDetail[]>{
     return this.client.get<IShareDetail[]>("http://localhost:59921/Shares/GetLivePrice")  
  }
+ getShare(name:string):Observable<IShareDetail[]>{
+  return this.client.get<IShareDetail[]>("http://localhost:59921/Shares/search/"+name)  
+}
 }

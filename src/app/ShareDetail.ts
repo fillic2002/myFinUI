@@ -45,4 +45,5 @@ export interface IBankAcDetail
     transactionDate:Date
     acctName:string
     acctType:string
+    userid:number
 }

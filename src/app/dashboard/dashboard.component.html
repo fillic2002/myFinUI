@@ -1,4 +1,4 @@
-<input type="button" class="btnHome" value="Home" (click)="onSelect(option)">
+<input type="button" class="btnHome" value="H" (click)="onSelect(option)">
 <h1>Dashboard</h1>
 <h3 >Total : {{total|number : '1.2-2'}}</h3>
 <table> 
@@ -6,11 +6,11 @@
     <td class="headername">Asset Type</td>
     <td class="headeramt">Asset Size</td>    
 </tr>
- <div *ngFor ="let d of dbDetail">
-    <tr class="header2">
+ <tr class="header2" *ngFor ="let d of dbDetail">
+ 
         <td class="naming">{{d.assetName}}</td>
         <td class="amt">{{d.total|number : '1.2-2'}}</td>
-    </tr>
-</div>
+     
+</tr>
 </table>
  

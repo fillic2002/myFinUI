@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { SharesService } from '../shares.service';
 import {Router} from '@angular/router';
-import { containsRect } from '@syncfusion/ej2-angular-charts';
+import { containsRect, Double } from '@syncfusion/ej2-angular-charts';
 
 
 @Component({
@@ -14,14 +14,16 @@ import { containsRect } from '@syncfusion/ej2-angular-charts';
 export class PortfolioComponent implements OnInit {
 
   public portfolio =[] as any;
-  public eqtotal:any;
-  public mftotal:any;
+  public sharecount:number=0;
+  public eqInvstVal:number=0;
+  public eqCurrVal:number=0;
+  public mfInvstVal:number=0;
   public share=[] as any;
   public pfcount:any;
-  public pfActTotal:any;
-  
-  
-  
+  public mfCurrVal:number=0;  
+  public mfPLPercent:number=0;
+  public eqPLPercent:number=0;
+
   
   constructor(private _portfolio:SharesService,private route:ActivatedRoute,private router:Router) { }
 
@@ -39,8 +41,7 @@ export class PortfolioComponent implements OnInit {
      .subscribe(data =>{
       data.forEach(element => {
         element.profit= element.qty*(element.livePrice - element.avgprice);
-        element.percentage = (element.livePrice - element.avgprice)*100/element.avgprice;
-        
+        element.percentage = (element.livePrice - element.avgprice)*100/element.avgprice;        
       });
     this.portfolio = data;
         
@@ -55,7 +56,8 @@ export class PortfolioComponent implements OnInit {
        if(this.portfolio[i].equityType==1)
        {
         eto= eto + parseFloat(this.portfolio[i].avgprice)*parseFloat(this.portfolio[i].qty);        
-        eato= eato + parseFloat(this.portfolio[i].livePrice)*parseFloat(this.portfolio[i].qty);     
+        eato= eato + parseFloat(this.portfolio[i].livePrice)*parseFloat(this.portfolio[i].qty);
+        this.sharecount +=1; 
        }
        else
        {
@@ -63,34 +65,43 @@ export class PortfolioComponent implements OnInit {
         mato= mato + parseFloat(this.portfolio[i].livePrice)*parseFloat(this.portfolio[i].qty);
        }
      }
-     this.eqtotal=eto.toFixed(2);
-     this.mftotal=mto.toFixed(2);    
-     this.pfActTotal =mato.toFixed(2);  
+     this.eqInvstVal=eto;
+     this.eqCurrVal = eato;
+     this.eqPLPercent = (eato-eto)*100/eto;
+     this.mfInvstVal=mto;    
+     this.mfCurrVal =mato; 
+     this.mfPLPercent = (this.mfCurrVal-this.mfInvstVal)*100/this.mfInvstVal;
+     //console.log("Percent:"+this.eqPLPercent);
     });
   }
   onClick(option:any)
   {
     this._portfolio.getlivePrice()
     .subscribe(data => {
-      this.share = data;     
+      this.share = data;    
      });
   } 
   public onSelect(option:any)
   {    
     this.router.navigate(['/']);   
   }
+  public selectnext(option:any)
+  {    
+    this.router.navigate(['/transaction']);  
+  }
   public selecttype(option:any)
   {    
     for (var i = 0; i < this.portfolio.length; i++) {
-      console.log(this.portfolio[i].avgprice)
+      //console.log(this.portfolio[i].avgprice)
     }   
   }
   public getTrColor(x:any):string
   {
-    console.log(x);
+   // console.log(x);
     if(parseFloat(x)>=0)
           return 'green';
     else
       return 'red'
   }
+  
 }

@@ -19,9 +19,12 @@ export class TransactionComponent implements OnInit {
   public selectedfolio: any;
   public purchaseOption: any="B";
   isShown: boolean = true;
-  public assetType!: Number;
+  public assetType: Number=1;
   public assetId: any;
-  
+  public buttonName:any = 'Show';
+  public show:boolean = false;
+  public trnStatus:string='Add >'
+  public result=[] as any;
 
   constructor(private _eqTransaction:SharesService,private route:ActivatedRoute,private  router:Router) { }
 
@@ -58,7 +61,7 @@ export class TransactionComponent implements OnInit {
       )
     .subscribe(data => {
       var status= document.getElementById('status')
-     this.status="Record added Successfully: "+this.assetType +" of "+this.assetId;
+     this.status="Record added Successfully: "+this.assetType +" of "+this.assetId.value;
      this.ngOnInit();      
     })
   }
@@ -72,6 +75,10 @@ export class TransactionComponent implements OnInit {
   public onSelect(option:any)
   {    
     this.router.navigate(['/']);
+  }
+  public selectnext(option:any)
+  {    
+    this.router.navigate(['/bankdetail']);   
   }
   selected(){
     console.log(this.selectedLevel)
@@ -128,5 +135,33 @@ export class TransactionComponent implements OnInit {
      }
      this.eqtotal=to.toFixed(2);
     });
+  }
+  public showTrans() {
+    this.show = !this.show;
+
+    // CHANGE THE NAME OF THE BUTTON.
+    if(this.show){
+      this.buttonName = "Hide";
+      this.trnStatus ='Hide';
+    }
+    else{
+      this.buttonName = "Show";
+      this.trnStatus ='Add >';
+    }
+  }
+  public getaseet(e:any)
+  {    
+    if(e.target.value.length>2)
+    {    
+      this._eqTransaction.getShare(e.target.value)
+      .subscribe(data =>{
+        this.result = data;
+        
+      });
+    }
+  }
+  public getId(e:any)
+  {
+    console.log(e.target.value);
   }
 }

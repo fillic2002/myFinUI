@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { BankdetailComponent } from './bankdetail.component';
 
 describe('BankdetailComponent', () => {
@@ -22,4 +21,6 @@ describe('BankdetailComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  
 });
