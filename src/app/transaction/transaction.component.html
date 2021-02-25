@@ -14,13 +14,14 @@
  <div (click)="showTrans(option)" class="dml">{{trnStatus}}</div><br>
  <ng-container *ngIf="show">
 <table>
-    <tr>        
-        <td><span *ngIf="isShown" class="naming" >Asset ID/Name:</span>
-            <div *ngFor="let t of result">    
-                <span (click)="getId($event)" class="dt">{{t.id}}</span>
+    <tr *ngIf="isShown">        
+        <td><span   class="naming" >Asset ID/Name:</span>
+            <div style="z-index: -1" *ngIf="showresult"> 
+            <div  id="result" *ngFor="let t of result">    
+                <span (click)="getId(t.id)" class="dt">{{t.id}}</span>
                 <span class="naming">{{t.fullName}}</span>                
-            </div></td>
-        <td><input *ngIf="isShown" id="txtName" class="headeramt" type="text"  (keypress)="getaseet($event)"></td>
+            </div></div></td>
+        <td><input *ngIf="isShown" id="txtName" class="headeramt" type="text"  (keypress)="getasset($event)" value="{{companyid}}" ></td>
         <td><span class="naming">Quantity:</span></td>
         <td><input id="txtQty" class="headeramt" type="text"></td>
         <td><span class="naming" >Option:</span></td><td>
@@ -30,8 +31,7 @@
         </select>
         </td>
         <td></td>
-        <td></td>
-        
+        <td></td>        
         
     </tr>
     <tr>
@@ -68,10 +68,10 @@
         <td class="headeramt">Quantity</td>
         <td class="headeramt">Invested amt</td>
         <td class="headeramt">Transation Type</td>
+        <td class="headeramt">Action</td>
     </tr>
 
- <tr *ngFor="let t of equitytransaction">
-    
+ <tr class="header2" *ngFor="let t of equitytransaction">    
         <td class="dt">{{t.tranDate|date}}</td>
         <td class="naming">{{t.equityName}}</td>
         <td class="amt">{{t.equityId}}</td>
@@ -79,6 +79,7 @@
         <td class="amt">{{t.qty}}</td>
         <td class="amt">{{t.qty*t.price|number : '1.2-2'}}</td>
         <td class="amt">{{t.tranType}}</td>
+        <td (click)="deleterecord(t.equityId, t.tranDate)" style="cursor: pointer" class="amt" >Delete</td>
     </tr>
  
 </table>

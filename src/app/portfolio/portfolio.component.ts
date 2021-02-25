@@ -14,7 +14,7 @@ import { containsRect, Double } from '@syncfusion/ej2-angular-charts';
 export class PortfolioComponent implements OnInit {
 
   public portfolio =[] as any;
-  public sharecount:number=0;
+  public sharecount:number=0;public sdividend:number=0;
   public eqInvstVal:number=0;
   public eqCurrVal:number=0;
   public mfInvstVal:number=0;
@@ -23,6 +23,7 @@ export class PortfolioComponent implements OnInit {
   public mfCurrVal:number=0;  
   public mfPLPercent:number=0;
   public eqPLPercent:number=0;
+  public mfCount:number=0;
 
   
   constructor(private _portfolio:SharesService,private route:ActivatedRoute,private router:Router) { }
@@ -44,25 +45,27 @@ export class PortfolioComponent implements OnInit {
         element.percentage = (element.livePrice - element.avgprice)*100/element.avgprice;        
       });
     this.portfolio = data;
-        
+    this.sharecount =0;this.mfPLPercent=0;
     var eto:number;
     var mto:number;
     var mato:number;
     var eato:number;
     eto=0;eato=0;
-    mto=0;mato=0;
+    mto=0;mato=0;this.sdividend=0;
  
      for (var i = 0; i < this.portfolio.length; i++) {
        if(this.portfolio[i].equityType==1)
        {
         eto= eto + parseFloat(this.portfolio[i].avgprice)*parseFloat(this.portfolio[i].qty);        
         eato= eato + parseFloat(this.portfolio[i].livePrice)*parseFloat(this.portfolio[i].qty);
-        this.sharecount +=1; 
+        this.sharecount +=1;
+        this.sdividend+= this.portfolio[i].dividend;
        }
        else
        {
         mto= mto + parseFloat(this.portfolio[i].avgprice)*parseFloat(this.portfolio[i].qty); 
         mato= mato + parseFloat(this.portfolio[i].livePrice)*parseFloat(this.portfolio[i].qty);
+        this.mfCount +=1;
        }
      }
      this.eqInvstVal=eto;
@@ -96,8 +99,7 @@ export class PortfolioComponent implements OnInit {
     }   
   }
   public getTrColor(x:any):string
-  {
-   // console.log(x);
+  {   
     if(parseFloat(x)>=0)
           return 'green';
     else

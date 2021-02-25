@@ -25,6 +25,8 @@ export class TransactionComponent implements OnInit {
   public show:boolean = false;
   public trnStatus:string='Add >'
   public result=[] as any;
+  public companyid: string="";
+  showresult: boolean = false ;
 
   constructor(private _eqTransaction:SharesService,private route:ActivatedRoute,private  router:Router) { }
 
@@ -60,8 +62,9 @@ export class TransactionComponent implements OnInit {
           this.assetType
       )
     .subscribe(data => {
-      var status= document.getElementById('status')
+     var status= document.getElementById('status')
      this.status="Record added Successfully: "+this.assetType +" of "+this.assetId.value;
+
      this.ngOnInit();      
     })
   }
@@ -149,19 +152,29 @@ export class TransactionComponent implements OnInit {
       this.trnStatus ='Add >';
     }
   }
-  public getaseet(e:any)
+  public getasset(e:any)
   {    
     if(e.target.value.length>2)
     {    
+      this.showresult =true;
       this._eqTransaction.getShare(e.target.value)
       .subscribe(data =>{
-        this.result = data;
-        
+        this.result = data;        
       });
     }
   }
   public getId(e:any)
   {
-    console.log(e.target.value);
+    console.log(e);
+    this.showresult =false;
+    this.companyid=e;
+  }
+  public deleterecord(id:any,dt:any)
+  {
+    console.log(dt);
+    this._eqTransaction.deleteTransaction(id, dt)
+      .subscribe(data =>{
+        this.result = data;        
+      });
   }
 }

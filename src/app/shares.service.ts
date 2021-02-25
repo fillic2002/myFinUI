@@ -64,5 +64,17 @@ export class SharesService {
  }
  getShare(name:string):Observable<IShareDetail[]>{
   return this.client.get<IShareDetail[]>("http://localhost:59921/Shares/search/"+name)  
-}
+ }
+ deleteTransaction(id:string,dt:Date):Observable<any>{
+   console.log(new Date(dt));
+  return this.client.post("http://localhost:59921/transaction/deletetransction",{    
+    equityId:id,    
+    tranDate: dt,
+    price:0,    
+    qty:0,    
+    tranType: 'B',
+    portfolioId:1,
+    typeAsset:1
+  })
+ }
 }

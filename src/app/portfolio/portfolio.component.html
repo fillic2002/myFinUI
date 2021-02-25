@@ -18,16 +18,15 @@
         <td>
             <div (click)="selecttype(option)" class="status">
                 
-                <div style="height: 20px;"><span class="shatusContent">{{sharecount}}</span><span style="padding-top: 3px; font-size: 10px;color: grey;font-weight: bold;"> Shares</span></div>
-                <div style="height: 20px;"><span class="shatusContent">{{eqInvstVal|number:'1.2-2'}}</span><span style="font-size: 10px; padding-left: 2px;color: grey;font-weight: bold;">(Invested)</span></div>
-                <div style="height: 20px;"><span class="shatusContent">{{eqCurrVal|number:'1.2-2'}}</span><span style="font-size: 10px;padding-left: 2px;color: grey;font-weight: bold;">(Current)</span></div>
-                <div><span [ngClass]="'arrow-up'"></span><span [ngStyle]="{color: getTrColor(mfPLPercent),'font-weight':'bold', 'font-size':'23px'}">{{eqPLPercent|number:'1.2-2'}}%</span></div>
+                <div style="height: 20px;"><span class="shatusContent"></span></div>
+                <div style="height: 20px;"><span class="shatusContent"></span></div>
+                <div style="height: 20px;"><span class="shatusContent"></span></div>
+                <div><span [ngClass]="'arrow-up'"></span><span [ngStyle]="{color: getTrColor(eqPLPercent),'font-weight':'bold', 'font-size':'23px'}">{{eqPLPercent|number:'1.2-2'}}%</span></div>
             </div>
          </td>
        <td> 
-            <div (click)="selecttype(option)" class="status">
-                <div style="height: 20px; color: #0a4c6c; font-weight: bold;">MF</div>
-                <div><span class="shatusContent">{{pfcount}}</span></div>
+            <div (click)="selecttype(option)" class="status">                
+                <div><span class="shatusContent">{{mfCount}}</span><span style="padding-top: 3px; font-size: 10px;color: grey;font-weight: bold;"> MF</span></div>
                 <div style="height: 20px;"><span class="shatusContent">{{mfInvstVal|number:'1.2-2'}}</span><span style="padding-top: 3px; font-size: 10px;color: grey;font-weight: bold;"> invested</span></div>
                 <div style="height: 20px;"><span style="text-align: right;" class="shatusContent">{{mfCurrVal|number:'1.2-2'}}</span><span style="padding-top: 3px; font-size: 10px;color: grey;font-weight: bold;"> Current</span> </div>
                 <div ><span [ngClass]="'arrow-up'"></span><span [ngStyle]="{color: getTrColor(mfPLPercent),'font-weight':'bold', 'font-size':'23px'}">{{mfPLPercent|number:'1.2-2'}}%</span></div>
@@ -39,14 +38,14 @@
 <tr class="header1" style="vertical-align:middle">
     <!--<div class="headeramt">ID</div>-->
     
-    <td class="headername">Equity Name</td>
+    <td class="headername">Equity Name<div>{{sharecount}}</div></td>
     <td class="headeramt">Live Price</td>
     <td class="headeramt">Avg Price</td>
     <td class="headeramt">Quantity</td>
-    <td class="headeramt">Investment</td>
-     
-    <td class="headeramt">Gain</td>
+    <td class="headeramt">Investment<div>{{eqInvstVal|number:'1.2-2'}}</div></td>     
+    <td class="headeramt">Gain<div>{{eqCurrVal-eqInvstVal|number:'1.2-2'}}</div></td>
     <td class="headeramt">Return</td>
+    <td class="headeramt">Dividend<div>{{sdividend}}</div></td>
 </tr> 
  <tr class="header2" *ngFor ="let p of portfolio">    
         <!--<div class="amt">{{p.trasactionId}}</div>-->
@@ -55,11 +54,10 @@
         <td class="amt">{{p.livePrice|number:'1.2-2'}}</td>
         <td class="amt">{{p.avgprice|number : '1.2-2'}}</td>
         <td class="amt">{{p.qty.toFixed(2)}}</td>
-        <td class="amt">{{p.qty*p.avgprice|number:'1.2-2'}}</td>
-         
+        <td class="amt">{{p.qty*p.avgprice|number:'1.2-2'}}</td>         
         <td class="amt" [ngStyle]="{color: getTrColor(p.profit),'font-weight':'bold'}">{{p.profit|number:'1.2-2'}}</td>        
         <td class="amt" [ngStyle]="{color: getTrColor(p.percentage),'font-weight':'bold'}">{{p.percentage|number:'1.2-2'}}%</td>
-   
+        <td class="amt">{{p.dividend.toFixed(2)}}</td>
 
     </tr></table>
 

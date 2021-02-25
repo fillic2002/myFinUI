@@ -15,6 +15,7 @@ export interface IPortfolio
     profit:number
     percentage:number
     equityType:number
+    dividend:number
 }
 export interface ITransaction
 {
