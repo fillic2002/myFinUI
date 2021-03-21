@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
 import { SharesService } from '../shares.service';
 import {Router} from '@angular/router';
 import { containsRect, Double } from '@syncfusion/ej2-angular-charts';
@@ -47,10 +46,8 @@ export class PortfolioComponent implements OnInit {
     this.portfolio = data;
     this.sharecount =0;this.mfPLPercent=0;
     var eto:number;
-    var mto:number;
-    var mato:number;
-    var eato:number;
-    eto=0;eato=0;
+    var mto:number;var mato:number;
+    var eato:number;eto=0;eato=0;
     mto=0;mato=0;this.sdividend=0;
  
      for (var i = 0; i < this.portfolio.length; i++) {

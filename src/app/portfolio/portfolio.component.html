@@ -18,8 +18,8 @@
         <td>
             <div (click)="selecttype(option)" class="status">
                 
-                <div style="height: 20px;"><span class="shatusContent"></span></div>
-                <div style="height: 20px;"><span class="shatusContent"></span></div>
+                <div style="height: 20px;"><span class="shatusContent"></span><span style="padding-top: 3px; font-size: 10px;color: grey;font-weight: bold;">Share Return</span></div>
+                <div style="height: 20px;"><span class="shatusContent">{{sdividend*100/eqInvstVal|number:'1.2-2'}}%</span><span style="padding-top: 3px; font-size: 10px;color: grey;font-weight: bold;">dividend</span></div>
                 <div style="height: 20px;"><span class="shatusContent"></span></div>
                 <div><span [ngClass]="'arrow-up'"></span><span [ngStyle]="{color: getTrColor(eqPLPercent),'font-weight':'bold', 'font-size':'23px'}">{{eqPLPercent|number:'1.2-2'}}%</span></div>
             </div>
@@ -34,19 +34,20 @@
     </td>
 </tr>
 </table>
-<table> 
-<tr class="header1" style="vertical-align:middle">
+<table  matSort (matSortChange)="portfolio($event)" > 
+    <thead>
+    <tr class="header1" style="vertical-align:middle">
     <!--<div class="headeramt">ID</div>-->
     
-    <td class="headername">Equity Name<div>{{sharecount}}</div></td>
-    <td class="headeramt">Live Price</td>
-    <td class="headeramt">Avg Price</td>
-    <td class="headeramt">Quantity</td>
-    <td class="headeramt">Investment<div>{{eqInvstVal|number:'1.2-2'}}</div></td>     
-    <td class="headeramt">Gain<div>{{eqCurrVal-eqInvstVal|number:'1.2-2'}}</div></td>
-    <td class="headeramt">Return</td>
-    <td class="headeramt">Dividend<div>{{sdividend}}</div></td>
-</tr> 
+    <th  mat-sort-header class="headername">Equity Name<div>{{sharecount}}</div></th>
+    <th class="headeramt">Live Price</th>
+    <th class="headeramt">Avg Price</th>
+    <th class="headeramt">Quantity</th>
+    <th class="headeramt">Investment<div>{{eqInvstVal|number:'1.2-2'}}</div></th>     
+    <th class="headeramt">Gain<div>{{eqCurrVal-eqInvstVal|number:'1.2-2'}}</div></th>
+    <th class="headeramt">Return</th>
+    <th class="headeramt">Dividend<div>{{sdividend|number:'1.2-2'}}</div></th>
+</thead> 
  <tr class="header2" *ngFor ="let p of portfolio">    
         <!--<div class="amt">{{p.trasactionId}}</div>-->
          

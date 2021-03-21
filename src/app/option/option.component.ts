@@ -13,7 +13,7 @@ export class OptionComponent implements OnInit {
     {"name":"Dashboard","id":1},
     {"name":"Portfolio","id":2}, 
     {"name":"Transaction","id":4},
-    {"name":"Tax","id":3},
+    {"name":"Taxcompu","id":3},
     {"name":"BankAcDetail","id":5}
 
   ]

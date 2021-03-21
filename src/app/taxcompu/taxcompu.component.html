@@ -1,7 +1,15 @@
-<p>taxcompu works!</p>
-<ejs-accumulationchart id="chart-container" >
-    <e-accumulation-series-collection>
-        <e-accumulation-series type='pie' [dataSource]='piedata' xName='x' yName='y' [dataLabel]='chartlable' ></e-accumulation-series>
-    </e-accumulation-series-collection>
-</ejs-accumulationchart>
+<h2>Products</h2>
+<i class="fa fa-chevron-up" *ngIf="sortDirection === 'asc'" ></i>
+<i class="fa fa-chevron-down" *ngIf="sortDirection === 'desc'"></i>
+<ng-content></ng-content>
+<table>
+  <tr >
+    <td sortable-column="id" [appSort]="rows" data-order="desc" data-name="age" > Age</td>
+    <td [appSort]="rows" data-order="desc" data-name="name"> Name</td>
+  </tr>
+  <tr *ngFor="let product of rows">
+    <td>{{product.Age}}</td>
+    <td>{{product.Name}}</td>
+  </tr>
+</table>
  

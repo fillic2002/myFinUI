@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { IPortfolio, ITransaction,IDashboard,IFolio,IBankAcDetail, IShareDetail } from './ShareDetail';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class SharesService {
    constructor(private client:HttpClient) { }
@@ -18,24 +18,23 @@ export class SharesService {
   getTransaction(id:Number):Observable<ITransaction[]>{
     return this.client.get<ITransaction[]>("http://localhost:59921/transaction/getfolio/"+id)  
   }
-
+  
   postTransaction(price:any,name:any,qty:any,dt:any,folioId: any,option:any,assetType:any):Observable<any>{   
     return this.client.post("http://localhost:59921/transaction/updatefolio",{ 
     price: parseFloat(price.value),
     equityId:name.value,
-    qty:parseFloat(qty.value),
+    qty:parseFloat(qty),
     tranDate:new Date(Date.parse(dt.value)),
     tranType: option,
     portfolioId:parseInt(folioId),
     typeAsset:parseInt(assetType)
-    })
+     })
   }
   postAcTransaction(userid:any,Id:any,roi:any,amt:any,dt:any):Observable<any>{
     //console.log("AMT::"+parseFloat(amt));
     
     if(dt == null)
-    {
-     // console.log("Date:"+dt);
+    {     
       dt= new Date();
     }
     //console.log("Date:"+Date.parse(dt));

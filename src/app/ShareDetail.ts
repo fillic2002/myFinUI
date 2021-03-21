@@ -31,7 +31,8 @@ export interface IDashboard
 {
      Id:Number
      assetName:string
-     total:string
+     invested:string
+     currentValue:string
 }
 export interface IFolio
 {

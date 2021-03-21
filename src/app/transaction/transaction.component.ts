@@ -27,6 +27,7 @@ export class TransactionComponent implements OnInit {
   public result=[] as any;
   public companyid: string="";
   showresult: boolean = false ;
+  qty: any;
 
   constructor(private _eqTransaction:SharesService,private route:ActivatedRoute,private  router:Router) { }
 
@@ -45,17 +46,19 @@ export class TransactionComponent implements OnInit {
   }
 
   AddTransaction():void  {
-  if(document.getElementById('txtName') == null)
-  {
-    this.assetId =""
-  }
-  else{
-    this.assetId = document.getElementById('txtName');
-  }
-    
-   this._eqTransaction.postTransaction(document.getElementById('txtPrice'),
+    if(document.getElementById('txtName') == null)
+    {
+      this.assetId =""
+    }
+    else{
+      this.assetId = document.getElementById('txtName');
+    }
+    this.qty = document.getElementById('txtQty');
+    this.qty=this.qty.value.replace(',','');
+    console.log(this.qty);
+    this._eqTransaction.postTransaction(document.getElementById('txtPrice'),
           this.assetId,
-          document.getElementById('txtQty'),
+          this.qty,
           document.getElementById('txtDt'),
           this.selectedfolio,
           this.purchaseOption,

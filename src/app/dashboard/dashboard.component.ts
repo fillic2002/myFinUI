@@ -33,10 +33,9 @@ export class DashboardComponent implements OnInit {
         var to:number;
         to=0;
         for (var i = 0; i < this.dbDetail.length; i++) {
-          to= to + parseFloat(this.dbDetail[i].total);       
+          to= to + parseFloat(this.dbDetail[i].currentValue);       
         }
-        console.log(to);
-       // to= to + Number(this.dbDetail.total);
+      
         this.total=to.toFixed(2);
     
       });
@@ -62,5 +61,12 @@ export class DashboardComponent implements OnInit {
   }
   showTotal():void{
      
+    }
+    public getTrColor(x:any):string
+    {   
+      if(parseFloat(x)>=0)
+            return 'green';
+      else
+        return 'red'
     }
 }

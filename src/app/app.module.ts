@@ -4,11 +4,13 @@ import { AppRoutingModule, routingComp } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { OptionComponent } from './option/option.component';
 import { SharesService } from './shares.service';
-import {HttpClientModule} from '@angular/common/http'
+import { HttpClientModule} from '@angular/common/http'
 import { PortfolioComponent } from './portfolio/portfolio.component';
 import { TransactionComponent } from './transaction/transaction.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { BankdetailComponent } from './bankdetail/bankdetail.component';
+import { SortDirective } from './directive/sort.directive';
+import {TaxcompuComponent} from './taxcompu/taxcompu.component'
  
 
 @NgModule({
@@ -19,12 +21,15 @@ import { BankdetailComponent } from './bankdetail/bankdetail.component';
     TransactionComponent,
     routingComp,
     DashboardComponent,
-    BankdetailComponent
+    BankdetailComponent,
+    SortDirective,
+    TaxcompuComponent,
+     
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,    
   ],
   providers: [SharesService],
   bootstrap: [AppComponent]

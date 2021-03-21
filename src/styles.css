@@ -166,3 +166,6 @@ html { background-color: rgba(0, 0, 0, 0.007); }
   
   border-right:10px solid blue; 
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
