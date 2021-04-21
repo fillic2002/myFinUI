@@ -53,6 +53,7 @@ export class TransactionComponent implements OnInit {
     else{
       this.assetId = document.getElementById('txtName');
     }
+    console.log(document.getElementById('txtQty'));
     this.qty = document.getElementById('txtQty');
     this.qty=this.qty.value.replace(',','');
     console.log(this.qty);

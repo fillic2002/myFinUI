@@ -1,5 +1,6 @@
-<div><span><input type="button" class="btnHome" value="<<" (click)="onSelect(option)"></span>
-    <span class="title" style="padding-left: 30%;" (click)="onClick($event)">Transaction Detail</span>
+<div>
+    <a href="" class="btnHome" value="H" (click)="onSelect(option)">Home</a>>
+    <span class="title" style="padding-left: 30%;">Transaction Detail</span>
     <span style="padding-left: 30%;"><input type="button" class="btnHome" value=">>" (click)="selectnext(option)"></span>
     </div>
  <br>
@@ -14,14 +15,20 @@
  <div (click)="showTrans(option)" class="dml">{{trnStatus}}</div><br>
  <ng-container *ngIf="show">
 <table>
-    <tr *ngIf="isShown">        
-        <td><span   class="naming" >Asset ID/Name:</span>
-            <div style="z-index: -1" *ngIf="showresult"> 
-            <div  id="result" *ngFor="let t of result">    
-                <span (click)="getId(t.id)" class="dt">{{t.id}}</span>
-                <span class="naming">{{t.fullName}}</span>                
-            </div></div></td>
-        <td><input *ngIf="isShown" id="txtName" class="headeramt" type="text"  (keypress)="getasset($event)" value="{{companyid}}" ></td>
+    <tr  >        
+        <td><span class="naming">Asset Type:</span></td>
+        <td><select class="headeramt" id="portfolio" (change)="changeAsset($event)">
+                <option value=1 >Shares</option>
+                <option value=2>Equity MF</option>
+                <option value=3>PF</option>
+                <option value=4>PPF</option>
+                <option value=5>Debt MF</option>           
+                <option value=8>Flat</option> 
+                <option value=12>Gold</option> 
+                <option value=7>Plot</option> 
+                <option value=6>Bank</option> 
+         </select></td>
+        
         <td><span class="naming">Quantity:</span></td>
         <td><input id="txtQty" class="headeramt" type="text"></td>
         <td><span class="naming" >Option:</span></td><td>
@@ -34,19 +41,15 @@
         <td></td>        
         
     </tr>
-    <tr>
-        <td> <span class="naming">Asset Type:</span></td>
-        <td><select id="portfolio" (change)="changeAsset($event)">
-            <option value=1 >Shares</option>
-            <option value=2>Equity MF</option>
-            <option value=3>PF</option>
-            <option value=4>PPF</option>
-            <option value=5>Debt MF</option>           
-            <option value=8>Flat</option> 
-            <option value=12>Gold</option> 
-            <option value=7>Plot</option> 
-            <option value=6>Bank</option> 
-     </select></td>
+    <tr  >
+        <td *ngIf="isShown"> <span class="naming" >Asset ID/Name:</span>
+            <div style="z-index: -1" *ngIf="showresult"> 
+                <div  id="result" *ngFor="let t of result">    
+                    <span (click)="getId(t.id)" class="dt">{{t.id}}</span>
+                    <span class="naming">{{t.fullName}}</span>                
+                </div></div>
+        </td>
+     <td><input *ngIf="isShown" id="txtName" class="headeramt" type="text"  (keypress)="getasset($event)" value="{{companyid}}" ></td>   
      <td><span class="naming">Date:</span></td>
      <td><input id="txtDt" type="date" (change)="changeDate($event)"></td>
      <td><span class="naming">Price:</span></td>

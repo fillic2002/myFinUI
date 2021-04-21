@@ -11,8 +11,8 @@ registerLocaleData(localeIn);
   styleUrls: ['./bankdetail.component.css']
 })
 export class BankdetailComponent implements OnInit {
-
   public accDetail =[] as any;
+  public filterAcct =[] as any;
   public at:any;
   public rcash:number=0;
   public rpf:number=0;
@@ -62,6 +62,7 @@ export class BankdetailComponent implements OnInit {
         }
       }
       this.at=this.rcash+this.rpf+this.rppf+this.gcash+this.gpf+this.gppf;
+      this.filterAcct = this.accDetail;
     });
   }
   AddTransaction():void  {    
@@ -76,12 +77,22 @@ export class BankdetailComponent implements OnInit {
      // var status= document.getElementById('status')
       //status=data;
                          
-    })    
+    })
+    this.ngOnInit();
   }
   public onSelect(option:any)
   {    
     this.router.navigate(['/']);
   }
+  public onFilter(option:any)
+  {    
+    this.at=0;
+    this.filterAcct=this.accDetail.filter((acct: { userid: number; }) => acct.userid===option);
+    for (var i = 0; i < this.filterAcct.length; i++) {
+      this.at=this.at+parseFloat(this.accDetail[i].amt);
+    }
+  }
+  
   public showTrans() {
     this.show = !this.show;
 
@@ -99,14 +110,15 @@ export class BankdetailComponent implements OnInit {
     
     this.accDetail[acctId][property] = editField;
     
-    console.log(this.accDetail[acctId]['amt']);
+    //console.log(this.accDetail[acctId]['amt'].split(',').join(''));
+
     this.tUserid = this.accDetail[acctId]['userid'];
     this.tId= this.accDetail[acctId]['acctId'];
     this.tRoi= this.accDetail[acctId]['roi'];
     this.tAmt= this.accDetail[acctId]['amt'].split(',').join('');
         
     this.AddTransaction();
-    //console.log(property);
+   
   }
   onChange(item:string,event:any)
   {

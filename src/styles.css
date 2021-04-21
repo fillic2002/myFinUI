@@ -27,11 +27,14 @@ html { background-color: rgba(0, 0, 0, 0.007); }
     cursor: pointer;
   }
 .shatusContent{
-  font:500 14px "Open Sans", Arial, Helvetica, sans-serif;
+  font:500 14px  Helvetica, sans-serif;
   font-weight: bold;
   padding-top: 6px;
   color:rgb(0 ,118, 15);
   padding-right: 4px;
+}
+.header4{
+  font:bold 18px "Open Sans", Arial, Helvetica, sans-serif;
 }
 
   .header1 { 
@@ -95,8 +98,8 @@ html { background-color: rgba(0, 0, 0, 0.007); }
   .naming{    
     width: 170px;    
     font-weight: bold;
-    font-size: 11px;    
-    color: #000000c2;
+    font-size: 12px;    
+    color: #000000a9;
     
   }
   .amt{    
@@ -113,7 +116,8 @@ html { background-color: rgba(0, 0, 0, 0.007); }
     
   }
   .btnHome{
-    height: 25px;
+    font:10 10px "bold", verdana, sans-serif;
+    color: rgb(38, 24, 230);
   }
  .title{
   font:500 26px "bold", "Open Sans", Arial, Helvetica, sans-serif;
@@ -131,23 +135,7 @@ html { background-color: rgba(0, 0, 0, 0.007); }
   color: #d27c19;
   font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
-.arrow-up {
-  width: 0; 
-  height: 0; 
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  
-  border-bottom: 10px solid green;
-}
 
-.arrow-down {
-  width: 0; 
-  height: 0; 
-  border-left: 20px solid transparent;
-  border-right: 20px solid transparent;
-  
-  border-top: 20px solid #f00;
-}
 
 .arrow-right {
   width: 0; 
@@ -169,3 +157,21 @@ html { background-color: rgba(0, 0, 0, 0.007); }
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.arrow {
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+}
+
+.right {
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+ border: solid green;
+}
+.up {
+  transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+  border: solid green;
+  border-width: 0 3px 3px 0;  
+}

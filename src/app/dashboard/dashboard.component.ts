@@ -4,10 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { registerLocaleData } from '@angular/common';
 import localeIn from '@angular/common/locales/en-IN';
 import {Router} from '@angular/router';  
-import { ChartComponent } from '@syncfusion/ej2-angular-charts';
-import { CategoryService, LegendService, TooltipService } from '@syncfusion/ej2-angular-charts';
-import { DataLabelService, LineSeriesService} from '@syncfusion/ej2-angular-charts';
-
+import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
+import {Color, Label } from 'ng2-charts';
 
 registerLocaleData(localeIn);
 
@@ -21,10 +19,12 @@ export class DashboardComponent implements OnInit {
  
  
   public dbDetail = [] as any;
+  public assetValue =[] as number[];
+  public assetName=[] as string[];
   public bankAmt: any;
   public total: any;
   
-  constructor(private _dashbrd:SharesService,private route:ActivatedRoute,private  router:Router) { }
+  constructor(private _dashbrd:SharesService,private route:ActivatedRoute,private router:Router) { }
  
   ngOnInit(): void {
     this._dashbrd.getDashBoard()
@@ -34,11 +34,11 @@ export class DashboardComponent implements OnInit {
         to=0;
         for (var i = 0; i < this.dbDetail.length; i++) {
           to= to + parseFloat(this.dbDetail[i].currentValue);       
-        }
-      
+          this.assetValue.push(this.dbDetail[i].currentValue);
+          this.assetName.push(this.dbDetail[i].assetName);          
+        }         
         this.total=to.toFixed(2);
-    
-      });
+       });
 
   /*  this._dashbrd.getBankAcTotal()
     .subscribe(data =>{ 
@@ -58,7 +58,8 @@ export class DashboardComponent implements OnInit {
   public onSelect(option:any)
   {    
     this.router.navigate(['/']);
-  }
+  } 
+
   showTotal():void{
      
     }
@@ -68,5 +69,24 @@ export class DashboardComponent implements OnInit {
             return 'green';
       else
         return 'red'
+
+      
     }
+
+    public barChartOptions: ChartOptions = {
+      responsive: true,
+    };
+  
+    public barChartLabels: Label[] = this.assetName; //['"'+this.assetName[0]+'"', '2016', '2017', '2018', '2019', '2020'];
+    public barChartType: ChartType = 'bar';
+    public barChartLegend = true;
+    public barChartPlugins = [];
+    public barChartColors: Color[] = [
+      { backgroundColor: 'green ' },
+      { backgroundColor: 'green' },
+    ]
+    public barChartData: ChartDataSets[] = [
+      { data:this.assetValue, label: 'Current Value' },      
+    ];
+
 }

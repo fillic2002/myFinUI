@@ -2,14 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SharesService } from '../shares.service';
 import {Router} from '@angular/router';
-import { containsRect, Double } from '@syncfusion/ej2-angular-charts';
-
+import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
+import {Color, Label } from 'ng2-charts';
 
 @Component({
   selector: 'app-portfolio',
   templateUrl: './portfolio.component.html',
   styleUrls: ['./portfolio.component.css']
 })
+
 export class PortfolioComponent implements OnInit {
 
   public portfolio =[] as any;
@@ -23,6 +24,8 @@ export class PortfolioComponent implements OnInit {
   public mfPLPercent:number=0;
   public eqPLPercent:number=0;
   public mfCount:number=0;
+  public sector=[] as string[];  
+  public assetValue =[] as number[];
 
   
   constructor(private _portfolio:SharesService,private route:ActivatedRoute,private router:Router) { }
@@ -37,12 +40,34 @@ export class PortfolioComponent implements OnInit {
       });
   }
   changeFolio(e :any) {
+    this.sector.length=0;
+    this.assetValue.splice(0,this.assetValue.length);
+    
     this._portfolio.getPortfolio(e.target.value)
      .subscribe(data =>{
       data.forEach(element => {
         element.profit= element.qty*(element.livePrice - element.avgprice);
-        element.percentage = (element.livePrice - element.avgprice)*100/element.avgprice;        
+        element.percentage = (element.livePrice - element.avgprice)*100/element.avgprice;
+        if(element.sector!="undefined")
+        {
+           
+          if(this.sector.indexOf(element.sector)<=-1 )
+          {
+            if(element.sector!="")
+            {
+            this.sector.push(element.sector);
+            console.log(element.sector);
+            this.assetValue[this.sector.indexOf(element.sector)]=0;
+            }
+          }
+        }
+        if(element.sector!="")
+          {
+            this.assetValue[this.sector.indexOf(element.sector)] = this.assetValue[this.sector.indexOf(element.sector)] + element.avgprice*element.qty;
+          }
       });
+    this.sector = this.sector.filter((e, i) => i === this.sector.indexOf(e))
+     
     this.portfolio = data;
     this.sharecount =0;this.mfPLPercent=0;
     var eto:number;
@@ -71,7 +96,7 @@ export class PortfolioComponent implements OnInit {
      this.mfInvstVal=mto;    
      this.mfCurrVal =mato; 
      this.mfPLPercent = (this.mfCurrVal-this.mfInvstVal)*100/this.mfInvstVal;
-     //console.log("Percent:"+this.eqPLPercent);
+     this.barChartLabels=this.sector;
     });
   }
   onClick(option:any)
@@ -102,5 +127,27 @@ export class PortfolioComponent implements OnInit {
     else
       return 'red'
   }
+  public sorting(option:any)
+  {
+    console.log(option);
+    this.portfolio= this.portfolio.sort((a,b)=> a.equityName.rendered.localeCompare(b.equityName.rendered));
+  }
   
+
+  public barChartOptions: ChartOptions = {
+    responsive: true,
+  };
+
+  public barChartLabels: Label[] = this.sector; 
+  public barChartType: ChartType = 'bar';
+  public barChartLegend = true;
+  public barChartPlugins = [];
+  public barChartColors: Color[] = [
+    { backgroundColor: 'green ' },
+    { backgroundColor: 'green' },
+  ]
+  
+  public barChartData: ChartDataSets[] = [
+    { data:this.assetValue, label: 'sector wise asset' },      
+  ];
 }

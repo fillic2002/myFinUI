@@ -1,6 +1,6 @@
 <div>
-    <span><input type="button" class="btnHome" value="<<" (click)="onSelect(option)"></span>
-    <span class="title" style="padding-left: 30%;" (click)="onClick($event)">Bank Account Details</span>
+    <a href="" class="btnHome" value="H" (click)="onSelect(option)">Home</a>>
+    <span class="title" style="padding-left: 30%;" >Bank Account Details</span>
     <span style="padding-left: 30%;"><input type="button" class="btnHome" value=">>" (click)="onSelect(option)"></span>
 </div>
 <div (click)="showTrans(option)" class="dml">Add ></div>
@@ -15,16 +15,16 @@
 <span class="naming">Date of Update:</span><input id="txtDt"  type="date" (blur)="onChange('dt',$event)">
 <input class="savebtn" type="button" value="Save" (click)="AddTransaction()"></div></ng-container><br>
 
-<div class="status"><div class="naming">Renuka</div>
-    <div class="amt">Cash  : <span class="shatusContent">{{rcash|number:'1.2-2'}}</span></div>
-    <div class="amt">PF   :<span class="shatusContent"> {{rpf|number:'1.2-2'}}</span></div>
-    <div class="amt">PPF  :<span class="shatusContent">{{rppf|number:'1.2-2'}}</span></div>
+<div class="status" (click)="onFilter(2)"><div class="naming">Renuka</div>
+    <div class="amt"><span style="float: left;padding-left: 15px;">Bank: </span><span class="shatusContent">{{rcash|number:'1.2-2'}}</span></div>
+    <div class="amt"><span style="float: left;padding-left: 15px;">PF:</span><span class="shatusContent"> {{rpf|number:'1.2-2'}}</span></div>
+    <div class="amt"><span style="float: left;padding-left: 15px;">PPF:</span><span class="shatusContent">{{rppf|number:'1.2-2'}}</span></div>
 </div>
 
-<div class="status"><div class="naming">Gaurav</div>
-    <div class="amt">Cash : <span class="shatusContent">{{gcash|number:'1.2-2'}}</span></div>
-    <div class="amt">PF   : <span class="shatusContent">{{gpf|number:'1.2-2'}}</span></div>
-    <div class="amt">PPF  : <span class="shatusContent">{{gppf|number:'1.2-2'}}</span></div>
+<div class="status" (click)="onFilter(1)"><div class="naming">Gaurav</div>
+    <div class="amt"><span style="float: left;padding-left: 15px;">Bank:</span><span class="shatusContent">{{gcash|number:'1.2-2'}}</span></div>
+    <div class="amt"><span style="float: left;padding-left: 15px;">PF:</span><span class="shatusContent">{{gpf|number:'1.2-2'}}</span></div>
+    <div class="amt"><span style="float: left;padding-left: 15px;">PPF:</span><span class="shatusContent">{{gppf|number:'1.2-2'}}</span></div>
 </div>
  
 <table>
@@ -44,12 +44,12 @@
     <td class="headeramt">Rate Of Intreset</td>
     <td class="headeramt">Accout Balance</td>      
 </tr>
-<tr class="header2" *ngFor ="let p of accDetail;  let acctId = index">
+<tr class="header2" *ngFor ="let p of filterAcct; let acctId = index">
     <td class="amt">{{p.userid}}</td>        
         <!--<td class="amt">{{p.acctId}}</td>        -->
         <td class="amt">{{p.acctName}}</td>
         <td class="amt">{{p.acctType}}</td>
-        <td contenteditable="true" (keyup)="changeValue(roi, 'roi', $event)" (blur)="updateList(acctId, 'roi', $event)" class="amt">{{p.roi|number:'1.1-2'}}%</td>
-        <td contenteditable="true" (keyup)="changeValue(amt, 'amt', $event)" (blur)="updateList(acctId, 'amt', $event)" class="amt">{{p.amt|number:'1.2-2'}}</td>
+        <td contenteditable="true" (keyup)="changeValue(roi, 'roi', $event)" (blur)="updateList(p.acctId, 'roi', $event)" class="amt">{{p.roi|number:'1.1-2'}}%</td>
+        <td contenteditable="true" (keyup)="changeValue(amt, 'amt', $event)" (blur)="updateList(p.acctId, 'amt', $event)" class="amt">{{p.amt|number:'1.2-2'}}</td>
     
 </tr></table>

@@ -1,6 +1,6 @@
-<input type="button" class="btnHome" value="H" (click)="onSelect(option)">
-<h1>Dashboard</h1>
-<h3 >Total : {{total|number : '1.2-2'}}</h3>
+<a href="" class="btnHome" value="H" (click)="onSelect(option)">Home</a>>
+<span class="title" style="padding-left: 30%;">Dashboard</span><br>
+<span class="header2" >Total : {{total|number : '1.2-2'}}</span>
 <table> 
 <tr class="header1">
     <td class="headername">Asset Type</td>
@@ -15,5 +15,19 @@
         <td class="amt">{{d.currentValue|number : '1.2-2'}}</td>
         <td class="amt" [ngStyle]="{color: getTrColor(d.currentValue-d.invested),'font-weight':'bold'}" >{{(d.currentValue-d.invested)*100/d.invested|number : '1.2-2'}}%</td>
 </tr>
-</table>
+</table><span> 
+<div style="width: 700px;" >
+    <canvas baseChart 
+      [datasets]="barChartData"
+      [labels]="barChartLabels"
+      [options]="barChartOptions"
+      [colors]="barChartColors"
+      [plugins]="barChartPlugins"
+      [legend]="barChartLegend"
+      [chartType]="barChartType">
+    </canvas>
+    <canvas id="mycanvas">
+      
+      </canvas>
+  </div></span>
  

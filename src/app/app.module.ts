@@ -12,6 +12,9 @@ import { BankdetailComponent } from './bankdetail/bankdetail.component';
 import { SortDirective } from './directive/sort.directive';
 import {TaxcompuComponent} from './taxcompu/taxcompu.component'
  
+//import { ChartModule } from '@syncfusion/ej2-angular-charts';
+import{ChartsModule} from 'ng2-charts'
+ 
 
 @NgModule({
   declarations: [
@@ -29,7 +32,8 @@ import {TaxcompuComponent} from './taxcompu/taxcompu.component'
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule,    
+    HttpClientModule,
+    ChartsModule  
   ],
   providers: [SharesService],
   bootstrap: [AppComponent]
