@@ -1,24 +1,30 @@
- <div>
-     <span value="H" (click)="onSelect(option)" style="font-size: 20px;">my<span style="color: orange; cursor: pointer;">f</span>in</span>
-     <span class="title" style="padding-left: 30%;" (click)="onClick($event)">Portfolio</span>
-     <span class="pipe" style="padding-left: 30%;" (click)="selectnext(option)">Transaction</span>
-</div><hr size="1"  color="lightgrey">  
-<table style="border-style: solid;border-color: white;"> 
-    <tr >
-         
-        <td>Portfolio:
-            <select style="cursor: pointer; background-color: #ffff002e;" id="portfolio" (change)="changeFolio($event)">
-                <option value=0>Portfolio</option>
-                <option value=1 >Fillic_gov</option>
-                <option value=2>Renuka</option>
-                <option value=3>Fillic</option>
-                <option value=4>Naitik</option>
-                <option value=5>Kedar</option> 
-            </select> 
+ 
+<table style="width: 100%;">
+    <tr>
+        <td style="width: 15%;">
+            <span value="H" (click)="onSelect(option)" style="font-size: 20px;">my<span style="color: orange; cursor: pointer;">f</span>in</span>
         </td>
+        <td style="width: 70%;">
+            <span class="title" style="padding-left: 30%;" (click)="onClick($event)">Portfolio</span>
+        </td>
+        <td style="width: 15%;">
+            <span class="pipe"  (click)="selectnext(option)">Transaction</span>
+        </td>
+    </tr>
+</table><hr size="1"  color="lightgrey"> 
+<table style="border-style: solid;border-color: white;"> 
+    <tr>        
+       
         <td>
             <table style="height: 100%;"> 
-                 
+                 <tr>  <select style="cursor: pointer; background-color: #ffff002e;" id="portfolio" (change)="changeFolio($event)">
+                    <option value=0>Portfolio</option>
+                    <option value=1 >Fillic_gov</option>
+                    <option value=2>Renuka</option>
+                    <option value=3>Fillic</option>
+                    <option value=4>Naitik</option>
+                    <option value=5>Kedar</option> 
+                </select> <tr>
                 <tr class="header3">
                     <td style="width: 150px;">Net Return</td>
                     <td style="width: 150px;">Investment</td>
@@ -41,9 +47,20 @@
                  </tr>
             </table>
         </td>
+        <td><div style="width: 700px;padding: 20px;height: 300px;" >
+            <canvas baseChart
+              [datasets]="getfolioAssetHistory"
+              [labels]="assetHistorylbl"
+              [options]="barChartOptions2"
+              [plugins]="barChartPlugins2"
+              [legend]="barChartLegend2"
+              [colors]="barChartColors2"
+              [chartType]="barChartType2">
+            </canvas></div></td>
+        <td>
 </tr>
 <tr>
-    <td><div style="width: 400px;padding: 20px;" >
+    <td><div style="width: 700px;padding: 20px;height: 300px;" >
         <canvas baseChart
           [datasets]="getfolioAssetHistory"
           [labels]="assetHistorylbl"

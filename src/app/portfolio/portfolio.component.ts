@@ -54,8 +54,7 @@ export class PortfolioComponent implements OnInit {
         element.profit= element.qty*(element.livePrice - element.avgprice);
         element.percentage = (element.livePrice - element.avgprice)*100/element.avgprice;
         if(element.sector!="undefined")
-        {
-           
+        {           
           if(this.sector.indexOf(element.sector)<=-1 )
           {
             if(element.sector!="")
@@ -101,7 +100,27 @@ export class PortfolioComponent implements OnInit {
      this.mfCurrVal =mato; 
      this.mfPLPercent = (this.mfCurrVal-this.mfInvstVal)*100/this.mfInvstVal;
      this.barChartLabels=this.sector;
+
+     
+
     });
+     
+    this._portfolio.getfolioAssetHistory(e.target.value)
+    .subscribe(data=>{
+      console.log(data);
+      data.forEach(element => {       
+
+        this.assetHistoryTime.push(element.qtr.toString()+"-"+element.year.toString());
+        this.assetValueHistory.push(element.assetValue);
+        this.dividendHistory.push(element.dividend);
+        this.investmentHistory.push(element.investment);
+      })
+       
+    });
+    this.assetHistoryTime.length=0;
+    this.dividendHistory.length=0;
+    this.assetValueHistory.length=0;
+    this.investmentHistory.length=0;
   }
  
 
@@ -151,6 +170,7 @@ export class PortfolioComponent implements OnInit {
   public barChartColors: Color[] = [
     { backgroundColor: '#08b100db ' },
     { backgroundColor: '#08b100db' },
+    
   ]
   public barChartData: ChartDataSets[] = [
     { data:this.assetValue, label: 'Sector Invested' },   
@@ -167,7 +187,7 @@ export class PortfolioComponent implements OnInit {
   
   public getfolioAssetHistory: ChartDataSets[] = [
     { data:this.investmentHistory, label: 'Investment' },        
-    { data:this.assetValueHistory, label: 'Asset Value' },     
+    { data:this.assetValueHistory, label: 'Current Value' },     
     { data:this.dividendHistory, label: 'Dividend' },
   ];
 }
