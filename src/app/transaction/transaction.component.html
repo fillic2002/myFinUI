@@ -1,21 +1,32 @@
 <div>
-    <a href="" class="btnHome" value="H" (click)="onSelect(option)">Home</a>>
-    <span class="title" style="padding-left: 30%;">Transaction Detail</span>
-    <span style="padding-left: 30%;"><input type="button" class="btnHome" value=">>" (click)="selectnext(option)"></span>
+    <span value="H" (click)="onSelect(option)" style="font-size: 20px;">my<span style="color: orange; cursor: pointer;">f</span>in</span>
+    <span class="title" style="padding-left: 30%;padding-top: 10px;">Transaction Detail</span>
+    <span class="pipe" style="padding-left: 30%;"  (click)="selectnext(option)">Bank Account Details</span>
     </div>
- <br>
- <span class="naming" >PortFolio:</span>
- <select id="portfolio" (change)="changeFolio($event)">
-    <option value=1 >Fillic_gov</option>
-    <option value=2>Renuka</option>
-    <option value=3>Fillic</option>
-    <option value=4>Naitik</option>
-    <option value=5>Kedar</option> 
-</select><br>
- <div (click)="showTrans(option)" class="dml">{{trnStatus}}</div><br>
- <ng-container *ngIf="show">
+ <hr size="1"  color="grey">  
+  
+<div id="comment" class="comment">{{status}}</div>
+<table style="width: 100%;">
+    <tr class="header3">
+        <td style="width: 30%;"><div><span class="naming" (click)="selectFolio()">PortFolio: </span>
+            <select id="portfolio" (change)="changeFolio($event)">
+               <option value=1 >Fillic_gov</option>
+               <option value=2>Renuka</option>
+               <option value=3>Fillic</option>
+               <option value=4>Naitik</option>
+               <option value=5>Kedar</option> 
+           </select></div></td>
+           <td>Net Investment</td>
+    </tr>
+    <tr  class="header4">
+        <td></td>
+           <td>{{eqtotal|number : '1.2-2'}}</td>
+    </tr>
+</table>
+ 
+<ng-container *ngIf="show">
 <table>
-    <tr  >        
+    <tr >        
         <td><span class="naming">Asset Type:</span></td>
         <td><select class="headeramt" id="portfolio" (change)="changeAsset($event)">
                 <option value=1 >Shares</option>
@@ -57,11 +68,9 @@
      <td><input class="savebtn" type="button" value="Save" (click)="AddTransaction()"></td>
      <td></td>
     </tr>
-</table></ng-container>
-
-
-<div id="comment" class="comment">{{status}}</div>
-<h4>Total Amount: </h4>
+</table>
+</ng-container>
+<div (click)="showTrans(option)" class="dml">{{trnStatus}}</div><br>
 <table >
     <tr class="header1">
         <td class="headerdt">Date of Purchase</td>
@@ -81,7 +90,7 @@
         <td class="amt">{{t.price|number : '1.2-2'}}</td>
         <td class="amt">{{t.qty}}</td>
         <td class="amt">{{t.qty*t.price|number : '1.2-2'}}</td>
-        <td class="amt">{{t.tranType}}</td>
+        <td class="amt" [ngStyle]="{color: getTrColor(t.tranType)}">{{t.tranType}}</td>
         <td (click)="deleterecord(t.equityId, t.tranDate)" style="cursor: pointer" class="amt" >Delete</td>
     </tr>
  

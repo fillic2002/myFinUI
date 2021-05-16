@@ -1,51 +1,73 @@
- <div> <a href="" class="btnHome" value="H" (click)="onSelect(option)">Home</a>>
-<span class="title" style="padding-left: 30%;" (click)="onClick($event)">Portfolio</span>
-<span style="padding-left: 30%;"><input type="button" class="btnHome" value=">>" (click)="selectnext(option)"></span>
-</div> 
+ <div>
+     <span value="H" (click)="onSelect(option)" style="font-size: 20px;">my<span style="color: orange; cursor: pointer;">f</span>in</span>
+     <span class="title" style="padding-left: 30%;" (click)="onClick($event)">Portfolio</span>
+     <span class="pipe" style="padding-left: 30%;" (click)="selectnext(option)">Transaction</span>
+</div><hr size="1"  color="lightgrey">  
 <table style="border-style: solid;border-color: white;"> 
     <tr >
+         
         <td>Portfolio:
-            <select id="portfolio" (change)="changeFolio($event)">
-                <option value=0>All</option>
+            <select style="cursor: pointer; background-color: #ffff002e;" id="portfolio" (change)="changeFolio($event)">
+                <option value=0>Portfolio</option>
                 <option value=1 >Fillic_gov</option>
                 <option value=2>Renuka</option>
                 <option value=3>Fillic</option>
                 <option value=4>Naitik</option>
                 <option value=5>Kedar</option> 
-            </select>
+            </select> 
         </td>
-        <td style="width: 200px;height: 135px;">
-            <div style="width: 600px;" >
-                <canvas baseChart 
-                  [datasets]="barChartData"
-                  [labels]="barChartLabels"
-                  [options]="barChartOptions"
-                  [plugins]="barChartPlugins"
-                  [legend]="barChartLegend"
-                  [colors]="barChartColors"
-                  [chartType]="barChartType">
-                </canvas></div></td>
         <td>
-            <div>
-                <div ><span class="shatusContent"></span><span style="width: 40px; font-size: 14px;color: grey;">Net Return</span></div>
-                <div> <span [ngStyle]="{color: getTrColor(eqPLPercent),'font-weight':'bold', 'font-size':'23px'}">{{eqPLPercent|number:'1.2-2'}}%</span></div>
-                
-                 <div style="height: 20px;"><span class="shatusContent">{{sdividend*100/eqInvstVal|number:'1.2-2'}}%</span><span style="padding-top: 3px; font-size: 12px;color: grey;">Dividend</span></div>
-                <div style="height: 20px;"><span class="shatusContent"></span></div>
+            <table style="height: 100%;"> 
                  
-            </div>
-         </td>
-       <td> 
-            <div >                
-                <div><span class="shatusContent">{{mfCount}}</span><span style="padding-top: 3px; font-size: 10px;color: grey;font-weight: bold;"> MF</span></div>
-                <div ><span class="shatusContent">{{mfInvstVal|number:'1.2-2'}}</span><span style="padding-top: 3px; font-size: 10px;color: grey;font-weight: bold;"> invested</span></div>
-                <div style="height: 20px;"><span style="text-align: right;" class="shatusContent">{{mfCurrVal|number:'1.2-2'}}</span><span style="padding-top: 3px; font-size: 10px;color: grey;font-weight: bold;"> Current</span> </div>
-                <div ><span [ngStyle]="{color: getTrColor(mfPLPercent),'font-weight':'bold', 'font-size':'23px'}">{{mfPLPercent|number:'1.2-2'}}%</span></div>
-            </div>
+                <tr class="header3">
+                    <td style="width: 150px;">Net Return</td>
+                    <td style="width: 150px;">Investment</td>
+                    <td style="width: 150px;">Current</td>
+                    <td style="width: 150px;">Dividend</td>
+                </tr>
+                <tr class="header4">
+                    <td style="width: 150px;text-align: center;"><span [ngStyle]="{color: getTrColor(eqPLPercent), 'font-size':'22px'}">{{eqPLPercent|number:'1.2-2'}}%</span></td>
+                    <td style="width: 150px;text-align: center;"> <span class="shatusContent2">{{eqInvstVal|number:'1.2-2'}}</span></td>
+                    <td style="width: 150px;text-align: center;"> <span class="shatusContent2">{{eqCurrVal|number:'1.2-2'}}</span></td>
+                    <td style="width: 150px;text-align: center;"><span class="shatusContent2">{{sdividend|number:'1.2-2'}}</span>
+                    <span class="statusSmall">({{sdividend*100/eqInvstVal|number:'1.2-2'}}%)</span>
+                    </td>
+                </tr>
+                <tr class="header4">
+                    <td style="width: 150px;text-align: center;"><span [ngStyle]="{color: getTrColor(mfPLPercent), 'font-size':'22px'}">{{mfPLPercent|number:'1.2-2'}}%</span></td>
+                    <td style="width: 150px;text-align: center;"><span class="shatusContent2">{{mfInvstVal|number:'1.2-2'}}</span></td>
+                    <td style="width: 150px;text-align: center;"><span class="shatusContent2">{{mfCurrVal|number:'1.2-2'}}</span></td>
+                    <td style="width: 150px;text-align: center;"></td>
+                 </tr>
+            </table>
+        </td>
+</tr>
+<tr>
+    <td><div style="width: 400px;padding: 20px;" >
+        <canvas baseChart
+          [datasets]="getfolioAssetHistory"
+          [labels]="assetHistorylbl"
+          [options]="barChartOptions2"
+          [plugins]="barChartPlugins2"
+          [legend]="barChartLegend2"
+          [colors]="barChartColors2"
+          [chartType]="barChartType2">
+        </canvas></div></td>
+    <td>
+        <div style="width: 400px;padding: 40px;" >
+            <canvas baseChart 
+              [datasets]="barChartData"
+              [labels]="barChartLabels"
+              [options]="barChartOptions"
+              [plugins]="barChartPlugins"
+              [legend]="barChartLegend"
+              [colors]="barChartColors"
+              [chartType]="barChartType">
+            </canvas></div>
     </td>
 </tr>
 </table>
-<table   > 
+<table> 
     <thead>
     <tr class="header1" style="vertical-align:middle">
     <!--<div class="headeramt">ID</div>-->

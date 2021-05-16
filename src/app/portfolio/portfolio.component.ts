@@ -4,6 +4,7 @@ import { SharesService } from '../shares.service';
 import {Router} from '@angular/router';
 import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
 import {Color, Label } from 'ng2-charts';
+import { Console } from 'console';
 
 @Component({
   selector: 'app-portfolio',
@@ -14,7 +15,8 @@ import {Color, Label } from 'ng2-charts';
 export class PortfolioComponent implements OnInit {
 
   public portfolio =[] as any;
-  public sharecount:number=0;public sdividend:number=0;
+  public sharecount:number=0;
+  public sdividend:number=0;
   public eqInvstVal:number=0;
   public eqCurrVal:number=0;
   public mfInvstVal:number=0;
@@ -26,7 +28,10 @@ export class PortfolioComponent implements OnInit {
   public mfCount:number=0;
   public sector=[] as string[];  
   public assetValue =[] as number[];
-
+  public dividendHistory=[] as number[];
+  public assetValueHistory=[] as number[];
+  public investmentHistory=[] as number[];
+  public assetHistoryTime=[] as string[];
   
   constructor(private _portfolio:SharesService,private route:ActivatedRoute,private router:Router) { }
 
@@ -42,7 +47,7 @@ export class PortfolioComponent implements OnInit {
   changeFolio(e :any) {
     this.sector.length=0;
     this.assetValue.splice(0,this.assetValue.length);
-    
+    console.log(e.target.value);
     this._portfolio.getPortfolio(e.target.value)
      .subscribe(data =>{
       data.forEach(element => {
@@ -56,7 +61,6 @@ export class PortfolioComponent implements OnInit {
             if(element.sector!="")
             {
             this.sector.push(element.sector);
-            console.log(element.sector);
             this.assetValue[this.sector.indexOf(element.sector)]=0;
             }
           }
@@ -92,13 +96,15 @@ export class PortfolioComponent implements OnInit {
      }
      this.eqInvstVal=eto;
      this.eqCurrVal = eato;
-     this.eqPLPercent = (eato-eto)*100/eto;
+     this.eqPLPercent = (eato-eto+this.sdividend)*100/eto;
      this.mfInvstVal=mto;    
      this.mfCurrVal =mato; 
      this.mfPLPercent = (this.mfCurrVal-this.mfInvstVal)*100/this.mfInvstVal;
      this.barChartLabels=this.sector;
     });
   }
+ 
+
   onClick(option:any)
   {
     this._portfolio.getlivePrice()
@@ -108,7 +114,7 @@ export class PortfolioComponent implements OnInit {
   } 
   public onSelect(option:any)
   {    
-    this.router.navigate(['/']);   
+    this.router.navigate(['/']);
   }
   public selectnext(option:any)
   {    
@@ -117,15 +123,14 @@ export class PortfolioComponent implements OnInit {
   public selecttype(option:any)
   {    
     for (var i = 0; i < this.portfolio.length; i++) {
-      //console.log(this.portfolio[i].avgprice)
     }   
   }
   public getTrColor(x:any):string
   {   
     if(parseFloat(x)>=0)
-          return 'green';
+          return '#08b100db';
     else
-      return 'red'
+      return '#ff000091'
   }
   public sorting(option:any)
   {
@@ -133,21 +138,36 @@ export class PortfolioComponent implements OnInit {
     this.portfolio= this.portfolio.sort((a,b)=> a.equityName.rendered.localeCompare(b.equityName.rendered));
   }
   
-
+// Sector wise Chart
   public barChartOptions: ChartOptions = {
     responsive: true,
   };
+
 
   public barChartLabels: Label[] = this.sector; 
   public barChartType: ChartType = 'bar';
   public barChartLegend = true;
   public barChartPlugins = [];
   public barChartColors: Color[] = [
-    { backgroundColor: 'green ' },
-    { backgroundColor: 'green' },
+    { backgroundColor: '#08b100db ' },
+    { backgroundColor: '#08b100db' },
   ]
-  
   public barChartData: ChartDataSets[] = [
-    { data:this.assetValue, label: 'sector wise asset' },      
+    { data:this.assetValue, label: 'Sector Invested' },   
+  ];
+
+  //Asset History Chart
+  public barChartOptions2: ChartOptions = {
+    responsive: true,
+  };
+  public assetHistorylbl: Label[] = this.assetHistoryTime; 
+  public barChartType2: ChartType = 'line';
+  public barChartLegend2 = true;
+  public barChartPlugins2 = [];
+  
+  public getfolioAssetHistory: ChartDataSets[] = [
+    { data:this.investmentHistory, label: 'Investment' },        
+    { data:this.assetValueHistory, label: 'Asset Value' },     
+    { data:this.dividendHistory, label: 'Dividend' },
   ];
 }

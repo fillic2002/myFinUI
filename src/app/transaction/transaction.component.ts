@@ -44,7 +44,6 @@ export class TransactionComponent implements OnInit {
      
     }); 
   }
-
   AddTransaction():void  {
     if(document.getElementById('txtName') == null)
     {
@@ -87,10 +86,17 @@ export class TransactionComponent implements OnInit {
   {    
     this.router.navigate(['/bankdetail']);   
   }
+  public selectFolio()
+  {
+    console.log("selected");
+    this.router.navigate(['/portfolio']);   
+  }
+  
   selected(){
     console.log(this.selectedLevel)
   }
   changeFolio(e :any) {
+    this.status="";
     this.selectedfolio=e.target.value;
     this._eqTransaction.getTransaction(e.target.value)
     .subscribe(data =>{
@@ -180,5 +186,13 @@ export class TransactionComponent implements OnInit {
       .subscribe(data =>{
         this.result = data;        
       });
+  }
+  public getTrColor(x:any):string
+  {   
+    console.log(x);
+    if(x=='B')
+          return '#08b100db';
+    else
+      return '#ff000091'
   }
 }

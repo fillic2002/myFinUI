@@ -3,7 +3,7 @@ export interface IShareDetail
     id: Int32Array
     shortName: string
     fullName:string
-    livePrice:Number
+    livePrice:number
 }
 export interface IPortfolio
 {
@@ -20,8 +20,8 @@ export interface IPortfolio
 }
 export interface ITransaction
 {
-    equityid: Number
-    price: Number
+    equityid: number
+    price: number
     equityName:string
     qty:number
     tranDate:Date
@@ -30,23 +30,33 @@ export interface ITransaction
 }
 export interface IDashboard
 {
-     Id:Number
+     Id:number
      assetName:string
      invested:string
      currentValue:string
 }
 export interface IFolio
 {
-    folioID:Number
+    folioID:number
     folioName:string     
 }
 export interface IBankAcDetail
 {
-    acctId:Number
-    amt:Number
-    roi:Number 
+    acctId:number
+    amt:number
+    roi:number 
     transactionDate:Date
     acctName:string
     acctType:string
     userid:number
+}
+export interface IAssetHistory
+{
+    portfolioId: number,
+    assetValue: number,
+    dividend: number,
+    investment:number,
+    qtr: number,
+    year: number,
+    qty: number
 }

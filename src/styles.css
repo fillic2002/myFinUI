@@ -27,18 +27,22 @@ html { background-color: rgba(0, 0, 0, 0.007); }
     cursor: pointer;
   }
 .shatusContent{
-  font:500 14px  Helvetica, sans-serif;
-  font-weight: bold;
-  padding-top: 6px;
-  color:rgb(0 ,118, 15);
-  padding-right: 4px;
+  font:500 18px  Helvetica, sans-serif;
+  padding-left: 100px;
+  color: grey;
 }
-.header4{
-  font:bold 18px "Open Sans", Arial, Helvetica, sans-serif;
-}
+.shatusContent2{
+  font:500 16px  Helvetica, sans-serif;
+  text-align: right; 
+} 
+.statusSmall{
+  font: 12px  Helvetica, sans-serif;
+  text-align: right; 
+  padding-left: 5px;
+} 
 
   .header1 { 
-    background: rgb(170, 58, 58);    
+    background: #d27c19;    
     height: 40px;      
     color: rgb(226, 225, 225);
     font-size: 12px;
@@ -52,16 +56,18 @@ html { background-color: rgba(0, 0, 0, 0.007); }
     font:600 13px "Open Sans", Arial, Helvetica, sans-serif;
     border-bottom: "1px solid #ddd"
   }
-  .header3{
-    background: rgb(0,44,103);    
+  .header3{    
     height: 40px;
-    color: white;
-    font-size: 14px;
-    font-weight: 550;   
-    text-align: left;
+    font: 20px "Open Sans", Arial, Helvetica, sans-serif;
+    color: #80808078;
+    text-align: center;
   }
   .header4{
     text-align: center;
+    height: 40px;
+    font:300 18px  Helvetica, sans-serif;
+    color: grey;
+    border: 1px solid grey;
   }
   .savebtn{
     background-color: rgb(240, 240, 240);
@@ -75,9 +81,10 @@ html { background-color: rgba(0, 0, 0, 0.007); }
     border-color: rgba(128, 128, 128, 0.719);
   }
   .savebtn:hover{
-    color:rgba(0, 0, 255, 0.685);
+    color:green;
     font-weight: bold;
-    cursor: pointer;    
+    cursor: pointer;
+    box-shadow: 0 1px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19); 
   }
   .cellrow{
     background-color: rgb(197, 196, 196);
@@ -85,8 +92,7 @@ html { background-color: rgba(0, 0, 0, 0.007); }
     border-collapse: collapse;
   }
   .headeramt{    
-    width: 100px;
-         
+    width: 100px;         
   }
   .headername{    
     width: 250px; 
@@ -100,6 +106,7 @@ html { background-color: rgba(0, 0, 0, 0.007); }
     font-weight: bold;
     font-size: 12px;    
     color: #000000a9;
+ 
     
   }
   .amt{    
@@ -107,12 +114,13 @@ html { background-color: rgba(0, 0, 0, 0.007); }
     color: grey;
     text-align: right;  
     font:550 12px "Open Sans", Arial, Helvetica, sans-serif;
+    padding-right: 6px;
   }
   .dt{
     width: 90px;
-    font-weight: 500;
+    font-weight: bold;
     font-size: 11px;    
-    color: #3d87ff;
+    background-color: #ffff002e;
     
   }
   .btnHome{
@@ -120,9 +128,10 @@ html { background-color: rgba(0, 0, 0, 0.007); }
     color: rgb(38, 24, 230);
   }
  .title{
-  font:500 26px "bold", "Open Sans", Arial, Helvetica, sans-serif;
+  font:500 28px "bold", "Open Sans", Arial, Helvetica, sans-serif;
   padding-left: 30%;
   color: #d27c19;
+  
  }
  td {
   vertical-align: middle;
@@ -174,4 +183,15 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   -webkit-transform: rotate(-135deg);
   border: solid green;
   border-width: 0 3px 3px 0;  
+}
+.pipe{
+  margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; 
+  vertical-align: bottom;
+  font-size: 11px;
+  font-weight: bold;
+  color: grey;
+}
+.pipe:hover{
+  color: goldenrod;
+  cursor: pointer;
 }

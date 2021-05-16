@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { IPortfolio, ITransaction,IDashboard,IFolio,IBankAcDetail, IShareDetail } from './ShareDetail';
+import { IPortfolio, ITransaction,IDashboard,IFolio,IBankAcDetail, IShareDetail, IAssetHistory } from './ShareDetail';
 
 @Injectable({
     providedIn: 'root'
@@ -18,7 +18,9 @@ export class SharesService {
   getTransaction(id:Number):Observable<ITransaction[]>{
     return this.client.get<ITransaction[]>("http://localhost:59921/transaction/getfolio/"+id)  
   }
-  
+  getfolioAssetHistory(folioId:number):Observable<IAssetHistory[]>{    
+    return this.client.get<IAssetHistory[]>("http://localhost:59921/portfolio/GetFolioSnapshot/"+folioId)  
+  }
   postTransaction(price:any,name:any,qty:any,dt:any,folioId: any,option:any,assetType:any):Observable<any>{   
     return this.client.post("http://localhost:59921/transaction/updatefolio",{ 
     price: parseFloat(price.value),

@@ -34,6 +34,7 @@ export class TaxcompuComponent {
     @HostListener('click')
     sort() {
         this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+        console.log(this.sortDirection);
     }
 
     ngOnInit() { }
@@ -41,12 +42,12 @@ export class TaxcompuComponent {
     public barChartOptions: ChartOptions = {
       responsive: true,
     };
-    public barChartLabels: Label[] = ['2015', '2016', '2017', '2018', '2019', '2020'];
-    public barChartType: ChartType = 'bar';
+    public lineChartLabels: Label[] = ['2015', '2016', '2017', '2018', '2019', '2020'];
+    public barChartType: ChartType = 'line';
     public barChartLegend = true;
     public barChartPlugins = [];
     
-    public barChartData: ChartDataSets[] = [
+    public lineChartData: ChartDataSets[] = [
       { data: [65, 67, 70, 75, 80, 90], label: 'PHP' },
       { data: [50, 48, 47, 49, 44, 40], label: '.Net' },
     ];
