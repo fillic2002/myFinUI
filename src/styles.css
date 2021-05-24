@@ -4,15 +4,22 @@ html { background-color: rgba(0, 0, 0, 0.007); }
     display:inline-block; 
     margin-left: 40px;
     border-radius: 15px;
-    background: #ddd;
+    background: #113c9da8;
     width: 120px;
     height: 65px;
     text-align: center;
     padding-top:35px ;
-    box-shadow: 10px 10px 5px #888888;
-    color: rgba(0, 0, 0, 0.575);
+    box-shadow: 10px 10px 5px #b3b2b2;
+    color: white;
     font-size: medium;
   }
+  .button:hover {
+    background: #bdbdbd;
+    cursor: pointer;  
+    color: rgb(85, 85, 85);
+    box-shadow: 10px 10px 5px #868686; 
+ 
+ }
   .status {
     display:inline-block; 
     margin-right: 14px;
@@ -32,7 +39,7 @@ html { background-color: rgba(0, 0, 0, 0.007); }
   color: grey;
 }
 .shatusContent2{
-  font:500 16px  Helvetica, sans-serif;
+  font:500 24px  Helvetica, sans-serif;
   text-align: right; 
 } 
 .statusSmall{
@@ -44,10 +51,10 @@ html { background-color: rgba(0, 0, 0, 0.007); }
   .header1 { 
     background: #d27c19;    
     height: 40px;      
-    color: rgb(226, 225, 225);
-    font-size: 12px;
+    color: white;
+    font-size: 14px;
     font-weight: 550;   
-    text-align: center;  
+    text-align: center; 
   }
   .header2 {  
     background: rgb(240, 240, 243);    
@@ -57,17 +64,17 @@ html { background-color: rgba(0, 0, 0, 0.007); }
     border-bottom: "1px solid #ddd"
   }
   .header3{    
-    height: 40px;
-    font: 20px "Open Sans", Arial, Helvetica, sans-serif;
-    color: #80808078;
+    height: 25px;
+    font: 24px "Open Sans", sans-serif;
+    color: #808080ad;
     text-align: center;
   }
   .header4{
     text-align: center;
-    height: 40px;
-    font:300 18px  Helvetica, sans-serif;
-    color: grey;
-    border: 1px solid grey;
+    height: 25px;
+    font:300 14px sans-serif;;
+    color: #808080ad;
+    
   }
   .savebtn{
     background-color: rgb(240, 240, 240);
@@ -92,29 +99,42 @@ html { background-color: rgba(0, 0, 0, 0.007); }
     border-collapse: collapse;
   }
   .headeramt{    
-    width: 100px;         
+    width: 120px;         
   }
   .headername{    
-    width: 250px; 
+    width: 220px; 
   }
   .headerdt{    
     width: 110px; 
   }
   
   .naming{    
-    width: 170px;    
+    width: 170px;
+    padding-left: 5px;
     font-weight: bold;
     font-size: 12px;    
     color: #000000a9;
- 
+    border-bottom: 1px dotted #bfbfbf
     
   }
   .amt{    
-    height: 20px;
+    height: 30px;
+    color: #666;
+    text-align: right;  
+    font:550 14px "Open Sans", Arial, Helvetica, sans-serif;
+    padding-right: 6px;
+    border-bottom: 1px dotted #bfbfbf
+  }
+  .action{    
+    
     color: grey;
     text-align: right;  
-    font:550 12px "Open Sans", Arial, Helvetica, sans-serif;
+    font:500 14px "Open Sans", Arial, Helvetica, sans-serif;
     padding-right: 6px;
+    border-bottom: 1px dotted #bfbfbf
+  }
+  .action:hover{    
+    color: red;
   }
   .dt{
     width: 90px;

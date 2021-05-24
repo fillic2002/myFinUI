@@ -60,20 +60,17 @@ export class DashboardComponent implements OnInit {
     this.router.navigate(['/']);
   } 
 
-  showTotal():void{
-     
+  showTotal():void{     
     }
     public getTrColor(x:any):string
     {   
       if(parseFloat(x)>=0)
             return 'green';
       else
-        return 'red'
-
-      
+        return 'red'      
     }
 
-    public barChartOptions: ChartOptions = {
+    public barChartOptions: ChartOptions = { 
       responsive: true,
     };
   
@@ -82,7 +79,7 @@ export class DashboardComponent implements OnInit {
     public barChartLegend = true;
     public barChartPlugins = [];
     public barChartColors: Array < any > = [{
-      backgroundColor: ['lightred', 'yellow','green','blue','red','lightblue','orange','pink','darkgrey', 'rgba(148,159,177,0.2)'], 
+      backgroundColor: ['lightred', '#bfbfbf','lightpink','blue','lightgreen','lightblue','orange','pink','darkgrey', 'rgba(148,159,177,0.2)'], 
    }];
     public barChartData: ChartDataSets[] = [
       { data:this.assetValue, label: 'Current Value' },      

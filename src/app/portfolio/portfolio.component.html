@@ -12,41 +12,23 @@
         </td>
     </tr>
 </table><hr size="1"  color="lightgrey"> 
-<table style="border-style: solid;border-color: white;"> 
-    <tr>        
-       
-        <td>
-            <table style="height: 100%;"> 
-                 <tr>  <select style="cursor: pointer; background-color: #ffff002e;" id="portfolio" (change)="changeFolio($event)">
-                    <option value=0>Portfolio</option>
-                    <option value=1 >Fillic_gov</option>
-                    <option value=2>Renuka</option>
-                    <option value=3>Fillic</option>
-                    <option value=4>Naitik</option>
-                    <option value=5>Kedar</option> 
-                </select> <tr>
-                <tr class="header3">
-                    <td style="width: 150px;">Net Return</td>
-                    <td style="width: 150px;">Investment</td>
-                    <td style="width: 150px;">Current</td>
-                    <td style="width: 150px;">Dividend</td>
-                </tr>
-                <tr class="header4">
-                    <td style="width: 150px;text-align: center;"><span [ngStyle]="{color: getTrColor(eqPLPercent), 'font-size':'22px'}">{{eqPLPercent|number:'1.2-2'}}%</span></td>
-                    <td style="width: 150px;text-align: center;"> <span class="shatusContent2">{{eqInvstVal|number:'1.2-2'}}</span></td>
-                    <td style="width: 150px;text-align: center;"> <span class="shatusContent2">{{eqCurrVal|number:'1.2-2'}}</span></td>
-                    <td style="width: 150px;text-align: center;"><span class="shatusContent2">{{sdividend|number:'1.2-2'}}</span>
-                    <span class="statusSmall">({{sdividend*100/eqInvstVal|number:'1.2-2'}}%)</span>
-                    </td>
-                </tr>
-                <tr class="header4">
-                    <td style="width: 150px;text-align: center;"><span [ngStyle]="{color: getTrColor(mfPLPercent), 'font-size':'22px'}">{{mfPLPercent|number:'1.2-2'}}%</span></td>
-                    <td style="width: 150px;text-align: center;"><span class="shatusContent2">{{mfInvstVal|number:'1.2-2'}}</span></td>
-                    <td style="width: 150px;text-align: center;"><span class="shatusContent2">{{mfCurrVal|number:'1.2-2'}}</span></td>
-                    <td style="width: 150px;text-align: center;"></td>
-                 </tr>
-            </table>
+<table style="border-style: solid;border-color: white; width: 100%;"> 
+    <tr>
+        <td><select style="cursor: pointer; background-color: #ffff002e;" id="portfolio" (change)="changeFolio($event)">
+                <option value=0>Portfolio</option>
+                <option value=1 >Fillic_gov</option>
+                <option value=2>Renuka</option>
+                <option value=3>Fillic</option>
+                <option value=4>Naitik</option>
+                <option value=5>Kedar</option> 
+            </select>
         </td>
+        <td>
+            <input (click)="setradio('share')" type="radio" id="Share" name="equity" value="Share" checked> <label for="Share">Share</label>
+            <input (click)="setradio('MF')"type="radio" id="MF" name="equity" value="MF"> <label for="MF">MF</label>
+        </td>
+    </tr>
+    <tr>   
         <td><div style="width: 700px;padding: 20px;height: 300px;" >
             <canvas baseChart
               [datasets]="getfolioAssetHistory"
@@ -56,31 +38,48 @@
               [legend]="barChartLegend2"
               [colors]="barChartColors2"
               [chartType]="barChartType2">
-            </canvas></div></td>
+            </canvas></div>
+        </td>
         <td>
+            <table style="width: 100%;">                 
+                <tr class="header3">                    
+                    <td *ngIf="isShare" style="width: 110px;text-align: center;"><span  [ngStyle]="{color: getTrColor(eqPLPercent), 'font-size':'22px'}">{{eqPLPercent|number:'1.2-2'}}%</span></td>
+                    <td *ngIf="isShare"  style="width: 150px;text-align: center;"> <span class="shatusContent2">{{eqInvstVal|number:'1.2-2'}}</span></td>
+                    <td *ngIf="isShare"  style="width: 150px;text-align: center;"> <span class="shatusContent2">{{eqCurrVal|number:'1.2-2'}}</span></td>
+                    <td *ngIf="isShare"  style="width: 150px;text-align: center;"><span class="shatusContent2">{{sdividend|number:'1.2-2'}}</span>
+                    <span *ngIf="isShare"  class="statusSmall">({{sdividend*100/eqInvstVal|number:'1.2-2'}}%)</span>
+                    </td>
+                </tr>
+                <tr class="header4">
+                    <td style="width: 110px;">Net Return</td>
+                    <td style="width: 150px;">Investment</td>
+                    <td style="width: 150px;">Current</td>
+                    <td *ngIf="isShare"  style="width: 150px;">Dividend</td>
+                </tr>
+                <tr class="header4">
+                    <td style="width: 110px;text-align: center;"><span *ngIf="isMF" [ngStyle]="{color: getTrColor(mfPLPercent), 'font-size':'22px'}">{{mfPLPercent|number:'1.2-2'}}%</span></td>
+                    <td style="width: 150px;text-align: center;"><span *ngIf="isMF" class="shatusContent2">{{mfInvstVal|number:'1.2-2'}}</span></td>
+                    <td style="width: 150px;text-align: center;"><span *ngIf="isMF" class="shatusContent2">{{mfCurrVal|number:'1.2-2'}}</span></td>
+                    <td style="width: 150px;text-align: center;"></td>
+                 </tr>
+            </table>
+        </td>
+        
+        
 </tr>
 <tr>
-    <td><div style="width: 700px;padding: 20px;height: 300px;" >
-        <canvas baseChart
-          [datasets]="getfolioAssetHistory"
-          [labels]="assetHistorylbl"
-          [options]="barChartOptions2"
-          [plugins]="barChartPlugins2"
-          [legend]="barChartLegend2"
-          [colors]="barChartColors2"
-          [chartType]="barChartType2">
+    <td> <div style="width: 400px;padding: 40px;" >
+        <canvas baseChart 
+          [datasets]="barChartData"
+          [labels]="barChartLabels"
+          [options]="barChartOptions"
+          [plugins]="barChartPlugins"
+          [legend]="barChartLegend"
+          [colors]="barChartColors"
+          [chartType]="barChartType">
         </canvas></div></td>
     <td>
-        <div style="width: 400px;padding: 40px;" >
-            <canvas baseChart 
-              [datasets]="barChartData"
-              [labels]="barChartLabels"
-              [options]="barChartOptions"
-              [plugins]="barChartPlugins"
-              [legend]="barChartLegend"
-              [colors]="barChartColors"
-              [chartType]="barChartType">
-            </canvas></div>
+         
     </td>
 </tr>
 </table>

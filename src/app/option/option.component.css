@@ -1,19 +1,15 @@
 .rcorners1 {
     border-radius: 25px;
-    background: #d47ed0;
+    background: #e7e7e7;
     padding: 20px;
     width: 80px;
     height: 80px;
     text-align: center;   
-    box-shadow: 10px 10px 5px #888888;   
+    box-shadow: 10px 10px 5px #bdbbbb;   
   }
   
    
-  .button:hover {
-     background: #d27c19;
-     cursor: pointer;  
-     color: white;
-  }
+   
  
   
   

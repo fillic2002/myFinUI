@@ -1,4 +1,17 @@
+<table style="width: 100%;">
+    <tr>
+        <td style="width: 15%;">
+            <span value="H" (click)="onSelect(option)" style="font-size: 20px;">my<span style="color: orange; cursor: pointer;">f</span>in</span>
+        </td>
+        <td style="width: 70%;">
+            <span class="title" style="padding-left: 30%;" (click)="onClick($event)"></span>
+        </td>
+        <td style="width: 15%;">
+            <span class="pipe"  (click)="selectnext(option)"></span>
+        </td>
+    </tr>
+</table><hr size="0"  color="lightgrey" style="background-color: grey;" >
 <br>
 <span (click)="onSelect(option)"   *ngFor="let option of options">
     <div class="button">{{option.name}}</div>
-</span>
+</span><br><br>

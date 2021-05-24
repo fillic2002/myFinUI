@@ -181,11 +181,13 @@ export class TransactionComponent implements OnInit {
   }
   public deleterecord(id:any,dt:any)
   {
-    console.log(dt);
+    if(confirm("Are you sure to delete ")) {    
+    
     this._eqTransaction.deleteTransaction(id, dt)
       .subscribe(data =>{
         this.result = data;        
       });
+   }
   }
   public getTrColor(x:any):string
   {   

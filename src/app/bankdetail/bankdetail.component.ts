@@ -84,10 +84,11 @@ export class BankdetailComponent implements OnInit {
   {    
     this.router.navigate(['/']);
   }
-  public onFilter(option:any)
-  {    
+  public onFilter(e:any)
+  {
+    
     this.at=0;
-    this.filterAcct=this.accDetail.filter((acct: { userid: number; }) => acct.userid===option);
+    this.filterAcct=this.accDetail.filter((acct: { userid: number; }) => acct.userid==e.target.value);
     for (var i = 0; i < this.filterAcct.length; i++) {
       this.at=this.at+parseFloat(this.accDetail[i].amt);
     }

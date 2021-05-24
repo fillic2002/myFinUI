@@ -5,18 +5,7 @@
     <span class="pipe" style="padding-left: 30%;" (click)="selectnext(option)">Transaction</span>
     
 </div><hr size="1"  color="lightgrey">
-<div (click)="showTrans(option)" class="dml">Add ></div>
-<br>
-<ng-container *ngIf="show"> <div> 
-<span class="naming">User Id:</span>
-    <input id="txtUserId" class="headeramt" ref-sname type="text" (blur)="onChange('userid',$event)">
-<span class="naming">Acct Id:
-      </span><input id="txtId" class="headeramt" ref-sname type="text" (blur)="onChange('id',$event)">
-<span class="naming">ROI:</span><input id="txtRoi" class="headeramt" type="text" (blur)="onChange('roi',$event)">
-<span class="naming">Total Amt:</span><input id="txtAmt" class="headeramt" type="text" (blur)="onChange('amt',$event)">
-<span class="naming">Date of Update:</span><input id="txtDt"  type="date" (blur)="onChange('dt',$event)">
-<input class="savebtn" type="button" value="Save" (click)="AddTransaction()"></div></ng-container><br>
-
+ 
 <div class="status" (click)="onFilter(2)"><div class="naming">Renuka</div>
     <div class="amt"><span style="float: left;padding-left: 15px;">Bank: </span><span class="shatusContent">{{rcash|number:'1.2-2'}}</span></div>
     <div class="amt"><span style="float: left;padding-left: 15px;">PF:</span><span class="shatusContent"> {{rpf|number:'1.2-2'}}</span></div>
@@ -30,18 +19,36 @@
         <span class="shatusContent">{{gppf|number:'1.2-2'}}</span></div>
 </div>  
  
-<table>
+<table style="width: 60%;">
     <tr>
+        <td><select style="cursor: pointer; background-color: #ffff002e;" id="portfolio" (change)="onFilter($event)">
+            <option value=0>Account</option>    
+            <option value=2>Renuka</option>
+            <option value=1>Fillic</option>    
+        </select></td>
         <td></td>
         <td></td>
-        <td></td>
+    </tr>
+    <tr>
+        <td colspan="2"><div (click)="showTrans(option)" class="dml">Add</div>
+            <br>
+                <ng-container *ngIf="show"> <div> 
+                <span class="naming">User Id:</span>
+                    <input id="txtUserId" class="headeramt" ref-sname type="text" (blur)="onChange('userid',$event)">
+                <span class="naming">Acct Id:
+                    </span><input id="txtId" class="headeramt" ref-sname type="text" (blur)="onChange('id',$event)">
+                <span class="naming">ROI:</span><input id="txtRoi" class="headeramt" type="text" (blur)="onChange('roi',$event)">
+                <span class="naming">Total Amt:</span><input id="txtAmt" class="headeramt" type="text" (blur)="onChange('amt',$event)">
+                <span class="naming">Date of Update:</span><input id="txtDt"  type="date" (blur)="onChange('dt',$event)">
+                <input class="savebtn" type="button" value="Save" (click)="AddTransaction()"></div></ng-container><br>
+        </td>
+         
         
-        <td class="amt" >Total Amount:</td>
-        <td class="amt" >{{at|number:'1.2-2'}}</td>
+        <td class="header4" >Total Amount:</td>
+        <td class="header3" >{{at|number:'1.2-2'}}</td>
     </tr> 
   <tr class="header1"> 
-    <td class="headeramt">UserId</td>
-    <!--<td class="headeramt">Accout Id</td>-->
+    <td class="headeramt">UserId</td>    
     <td class="headeramt">Acct Name</td>
     <td class="headeramt">Accout Type</td>       
     <td class="headeramt">Rate Of Intreset</td>

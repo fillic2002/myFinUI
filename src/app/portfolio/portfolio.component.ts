@@ -32,22 +32,24 @@ export class PortfolioComponent implements OnInit {
   public assetValueHistory=[] as number[];
   public investmentHistory=[] as number[];
   public assetHistoryTime=[] as string[];
+  isMF:boolean=false;
+  isShare:boolean=true;
   
-  constructor(private _portfolio:SharesService,private route:ActivatedRoute,private router:Router) { }
+  constructor(private _portfolio:SharesService,private route:ActivatedRoute,private router:Router) {  }
 
   ngOnInit(): void {    
      this._portfolio.getPortfolio(1)
      .subscribe(data => {
        this.portfolio = data;
        data.forEach(element => {
-          element.profit= element.qty*element.livePrice - element.avgprice;
+          element.profit= element.qty*element.livePrice - element.avgprice;          
         });
       });
   }
   changeFolio(e :any) {
     this.sector.length=0;
     this.assetValue.splice(0,this.assetValue.length);
-    console.log(e.target.value);
+     
     this._portfolio.getPortfolio(e.target.value)
      .subscribe(data =>{
       data.forEach(element => {
@@ -155,28 +157,36 @@ export class PortfolioComponent implements OnInit {
   {
     console.log(option);
     this.portfolio= this.portfolio.sort((a,b)=> a.equityName.rendered.localeCompare(b.equityName.rendered));
-  }
+  }  
   
-// Sector wise Chart
+  setradio(e: string): void   
+  {    
+        console.log(e);
+        this.isMF = !this.isMF;
+        this.isShare=!this.isShare;
+  }
+
+ // Sector wise Chart
   public barChartOptions: ChartOptions = {
     responsive: true,
-  };
-
+    
+  };   
 
   public barChartLabels: Label[] = this.sector; 
   public barChartType: ChartType = 'bar';
   public barChartLegend = true;
   public barChartPlugins = [];
   public barChartColors: Color[] = [
-    { backgroundColor: '#08b100db ' },
+    { backgroundColor: 'skyblue ' },
     { backgroundColor: '#08b100db' },
     
   ]
   public barChartData: ChartDataSets[] = [
-    { data:this.assetValue, label: 'Sector Invested' },   
+    { data:this.assetValue, label: 'Sector Invested',stack:'a' },   
+    { data:this.assetValue, label: 'Sector Invested',stack:'a' } 
   ];
 
-  //Asset History Chart
+  //Asset History Chart 
   public barChartOptions2: ChartOptions = {
     responsive: true,
   };

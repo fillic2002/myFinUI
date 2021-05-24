@@ -1,29 +1,31 @@
-<span value="H" (click)="onSelect(option)" style="font-size: 20px;color: grey;">my<span style="color: orange; cursor: pointer;">f</span>in</span>
+<span value="H" (click)="onSelect(option)" style="font-size: 22px;color: grey; cursor: pointer;">my<span style="color: orange;">f</span>in</span>
 <span class="title" style="padding-left: 30%;">Dashboard</span><br>
 
 <hr size="1"  color="lightgrey">  
-<table>
+<table style="padding-left: 6px;padding-top: 6px;">
   <tr>
     <td>
-      <span class="header2" >Total : {{total|number : '1.2-2'}}</span>
+      <span class="header3" >Current Asset Size : </span><span class="header3">{{total|number : '1.2-2'}}</span>
       <table> 
-      <tr class="header1">
-          <td class="headername">Asset Type</td>
-          <td class="headeramt">Invested</td>    
-          <td class="headeramt">Current</td>
-          <td class="headeramt">Return</td>    
-      </tr>
-      <tr class="header2" *ngFor ="let d of dbDetail">
-      
-              <td class="naming">{{d.assetName}}</td>
-              <td class="amt">{{d.invested|number : '1.2-2'}}</td>
-              <td class="amt">{{d.currentValue|number : '1.2-2'}}</td>
-              <td class="amt" [ngStyle]="{color: getTrColor(d.currentValue-d.invested),'font-weight':'bold'}" >{{(d.currentValue-d.invested)*100/d.invested|number : '1.2-2'}}%</td>
-      </tr>
+        <tr class="header1">
+            <td class="headername">Asset Type</td>
+            <td class="headeramt">Invested</td>    
+            <td class="headeramt">Current</td>
+            <td class="headeramt">Return</td>    
+        </tr>
+        <tr class="header2" *ngFor ="let d of dbDetail">
+        
+                <td class="naming">{{d.assetName}}</td>
+                <td class="amt">{{d.invested|number : '1.2-2'}}</td>
+                <td class="amt">{{d.currentValue|number : '1.2-2'}}</td>
+                <td class="amt" [ngStyle]="{color: getTrColor(d.currentValue-d.invested)}" >{{(d.currentValue-d.invested)*100/d.invested|number : '1.2-2'}}%</td>
+        </tr>
       </table>
     </td>
-    <td> 
-      <div style="width: 500px;" >
+    <td>
+      <span style="text-align: center;font-size:14px; font-weight: bold;" >Asset Distribution</span>
+       
+             <div style="width: 600px; height: 350px;padding-left: 50px;" >
           <canvas baseChart 
             [datasets]="barChartData"
             [labels]="barChartLabels"
