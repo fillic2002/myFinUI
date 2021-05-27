@@ -14,9 +14,9 @@ html { background-color: rgba(0, 0, 0, 0.007); }
     font-size: medium;
   }
   .button:hover {
-    background: #bdbdbd;
+    background: #113b9d6b;
     cursor: pointer;  
-    color: rgb(85, 85, 85);
+    color: rgb(65, 64, 64);
     box-shadow: 10px 10px 5px #868686; 
  
  }
@@ -121,7 +121,7 @@ html { background-color: rgba(0, 0, 0, 0.007); }
     height: 30px;
     color: #666;
     text-align: right;  
-    font:550 14px "Open Sans", Arial, Helvetica, sans-serif;
+    font:600 13px "Open Sans", Arial, sans-serif;;
     padding-right: 6px;
     border-bottom: 1px dotted #bfbfbf
   }

@@ -15,6 +15,7 @@ import { Console } from 'console';
 export class PortfolioComponent implements OnInit {
 
   public portfolio =[] as any;
+  public filterPortfolio =[] as any;
   public sharecount:number=0;
   public sdividend:number=0;
   public eqInvstVal:number=0;
@@ -32,8 +33,11 @@ export class PortfolioComponent implements OnInit {
   public assetValueHistory=[] as number[];
   public investmentHistory=[] as number[];
   public assetHistoryTime=[] as string[];
+  public companyDividend=[] as number[];
   isMF:boolean=false;
   isShare:boolean=true;
+  direction:string="asc";
+  dividendTotal:number=0;
   
   constructor(private _portfolio:SharesService,private route:ActivatedRoute,private router:Router) {  }
 
@@ -41,6 +45,7 @@ export class PortfolioComponent implements OnInit {
      this._portfolio.getPortfolio(1)
      .subscribe(data => {
        this.portfolio = data;
+       
        data.forEach(element => {
           element.profit= element.qty*element.livePrice - element.avgprice;          
         });
@@ -101,15 +106,14 @@ export class PortfolioComponent implements OnInit {
      this.mfInvstVal=mto;    
      this.mfCurrVal =mato; 
      this.mfPLPercent = (this.mfCurrVal-this.mfInvstVal)*100/this.mfInvstVal;
-     this.barChartLabels=this.sector;
-
-     
-
+     this.barChartLabels=this.sector;   
+     this.filterPortfolio =this.portfolio;
+   
     });
      
     this._portfolio.getfolioAssetHistory(e.target.value)
     .subscribe(data=>{
-      console.log(data);
+      
       data.forEach(element => {       
 
         this.assetHistoryTime.push(element.qtr.toString()+"-"+element.year.toString());
@@ -149,23 +153,98 @@ export class PortfolioComponent implements OnInit {
   public getTrColor(x:any):string
   {   
     if(parseFloat(x)>=0)
-          return '#08b100db';
+          return '#0b893e';
     else
-      return '#ff000091'
+      return '#bf1722'
   }
-  public sorting(option:any)
-  {
-    console.log(option);
-    this.portfolio= this.portfolio.sort((a,b)=> a.equityName.rendered.localeCompare(b.equityName.rendered));
-  }  
+   
+  sort(e:string) {
+      console.log(e);
+      if(e=="Dividend")
+      {
+        if(this.direction =="asc")
+        {
+          this.filterPortfolio.sort((a,b)=>a.dividend-b.dividend);
+          this.direction ="desc";
+        }
+        else 
+        {
+          this.filterPortfolio.sort((a,b)=>b.dividend-a.dividend);
+          this.direction ="asc";
+        }
+     }
+     if(e=="Return")
+      {
+        if(this.direction =="asc")
+        {
+          this.filterPortfolio.sort((a,b)=>a.percentage-b.percentage);
+          this.direction ="desc";
+        }
+        else 
+        {
+          this.filterPortfolio.sort((a,b)=>b.percentage-a.percentage);
+          this.direction ="asc";
+        }
+     }
+     if(e=="Investment")
+     {
+       if(this.direction =="asc")
+       {
+         this.filterPortfolio.sort((a,b)=>a.qty*a.avgprice-b.qty*b.avgprice);
+         this.direction ="desc";
+       }
+       else 
+       {
+        this.filterPortfolio.sort((a,b)=>b.qty*b.avgprice-a.qty*a.avgprice);
+         this.direction ="asc";
+       }
+    }
+    if(e=="Gain")
+    {
+      if(this.direction =="asc")
+      {
+        this.filterPortfolio.sort((a,b)=>b.profit-a.profit);
+        this.direction ="desc";
+      }
+      else 
+      {
+        this.filterPortfolio.sort((a,b)=>a.profit-b.profit);
+        this.direction ="asc";
+      }
+   }
+  }
   
   setradio(e: string): void   
   {    
         console.log(e);
         this.isMF = !this.isMF;
         this.isShare=!this.isShare;
+        if(e=="share")
+          this.filterPortfolio =  this.portfolio.filter(s => s.equityType===1);
+        else  
+          this.filterPortfolio =  this.portfolio.filter(s => s.equityType===2 ||s.equityType===5 );
   }
+  showdividend(e:string)
+  {
+     
+    this._portfolio.getDividend(e)
+    .subscribe(data => { 
+      this.share = data;
+      this.companyDividend=data;
+      data.forEach(element => {
+        this.dividendTotal += element.value;
+        console.log( element.value);
+      });
+     });
 
+     document.getElementById('sharedetails').style.display='block';
+
+  }
+  hideShareDetails()
+  {
+    console.log("i am in");
+     document.getElementById('sharedetails').style.display='none';
+  }
  // Sector wise Chart
   public barChartOptions: ChartOptions = {
     responsive: true,
@@ -182,8 +261,8 @@ export class PortfolioComponent implements OnInit {
     
   ]
   public barChartData: ChartDataSets[] = [
-    { data:this.assetValue, label: 'Sector Invested',stack:'a' },   
-    { data:this.assetValue, label: 'Sector Invested',stack:'a' } 
+    { data:this.assetValue, label: 'Sector Invested',stack:'a' }
+    
   ];
 
   //Asset History Chart 

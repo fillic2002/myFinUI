@@ -25,7 +25,7 @@ export class SharesService {
     return this.client.post("http://localhost:59921/transaction/updatefolio",{ 
     price: parseFloat(price.value),
     equityId:name.value,
-    qty:parseFloat(qty),
+    qty:parseFloat(qty), 
     tranDate:new Date(Date.parse(dt.value)),
     tranType: option,
     portfolioId:parseInt(folioId),
@@ -65,6 +65,9 @@ export class SharesService {
  }
  getShare(name:string):Observable<IShareDetail[]>{
   return this.client.get<IShareDetail[]>("http://localhost:59921/Shares/search/"+name)  
+ }
+ getDividend(name:string):Observable<IDividend[]>{
+  return this.client.get<IShareDetail[]>("http://localhost:59921/Shares/getdividend/"+name)  
  }
  deleteTransaction(id:string,dt:Date):Observable<any>{
    console.log(new Date(dt));

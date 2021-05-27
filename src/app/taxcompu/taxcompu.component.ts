@@ -23,7 +23,7 @@ export class TaxcompuComponent {
       "Gender" : "Male",
       "Country" : "India"
     }];
-
+    direction:string="asc";
    
     @Input('sortable-column')
     columnName: string | undefined;
@@ -33,8 +33,19 @@ export class TaxcompuComponent {
 
     @HostListener('click')
     sort() {
-        this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
-        console.log(this.sortDirection);
+ 
+        this.rows.sort((a,b)=>a.ID-b.ID);
+        console.log(this.direction);
+        if(this.direction =="asc")
+        {
+          this.rows.sort((a,b)=>a.ID-b.ID);
+          this.direction ="desc";
+        }
+        else 
+        {
+          this.rows.sort((a,b)=>b.ID-a.ID);
+          this.direction ="asc";
+        }
     }
 
     ngOnInit() { }

@@ -17,6 +17,7 @@ export interface IPortfolio
     equityType:number
     dividend:number
     sector:string
+    EquityId:string
 }
 export interface ITransaction
 {
@@ -60,3 +61,10 @@ export interface IAssetHistory
     year: number,
     qty: number
 }
+export interface IDividend
+{
+    dt: Date,
+    value: number,
+    companyid: string
+}
+     

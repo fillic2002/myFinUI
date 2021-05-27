@@ -11,10 +11,10 @@ export class Sort{
     }
 
     public startsort(order:any, type="", property:number){
-        if(order =="desc")
-        {
-            this.sortorder=-1;            
-        }
+        //if(order =="desc")
+        //{
+         //   this.sortorder=-1;            
+       // }
         
         return(a,b)=>{
             console.log(property);

@@ -1,13 +1,14 @@
-<h2>Products</h2>
-<i class="fa fa-chevron-up" *ngIf="sortDirection === 'asc'" ></i>
-<i class="fa fa-chevron-down" *ngIf="sortDirection === 'desc'"></i>
+<h2>TAx</h2>
+
 <ng-content></ng-content>
 <table>
   <tr >
-    <td sortable-column="id" [appSort]="rows" data-order="desc" data-name="age" > Age</td>
-    <td [appSort]="rows" data-order="desc" data-name="name"> Name</td>
+    <td > ID</td>
+    <td > Age  </td>
+    <td>   Name</td>
   </tr>
   <tr *ngFor="let product of rows">
+    <td>{{product.ID}}</td>
     <td>{{product.Age}}</td>
     <td>{{product.Name}}</td>
   </tr>
@@ -21,8 +22,6 @@
     [legend]="barChartLegend"
     [chartType]="barChartType">
   </canvas>
-  <canvas id="mycanvas">
-    
-    </canvas>
+ 
 </div>
  
