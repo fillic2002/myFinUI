@@ -1,27 +1,124 @@
-<h2>TAx</h2>
+<div>
+  <span value="H" (click)="onSelect(option)" style="font-size: 20px;">my<span style="color: orange; cursor: pointer;">f</span>in</span>
+  <span class="title" style="padding-left: 30%;padding-top: 10px;">Asset Creation/Tax Saving</span>
+  <span class="pipe" style="padding-left: 32%;" (click)="selectnext(option)">Bank Account Details</span>
+  <span class="pipe" > | </span>
+  <span class="pipe" (click)="selectnext(option)">Portfolio</span>
+  <span class="pipe" > | </span>
+  <span class="pipe" (click)="selectnext(option)">Transaction</span>
+  </div>
+<hr size="1"  color="lightgrey">  
 
 <ng-content></ng-content>
 <table>
-  <tr >
-    <td > ID</td>
-    <td > Age  </td>
-    <td>   Name</td>
+  <tr>
+    <td><select style="cursor: pointer; background-color: #ffff002e;height: 26px;width: 100px;" id="portfolio" (change)="changeFolio($event)">
+      <option value=0>All Portfolio</option>
+      <option value=1 >Fillic_gov</option>
+      <option value=2>Renuka</option>
+      <option value=3>Fillic</option>
+      <option value=4>Naitik</option>
+      <option value=5>Kedar</option> 
+  </select></td>
+    
+  <td colspan="2" style="text-align: right;">
+      <span>Past</span>
+      <span (click)="selectCashflow(6)" class="header2">6 Month</span>
+      <span (click)="selectCashflow(12)" class="header2">12 Month</span>
+      <span (click)="selectCashflow(0)" class="header2" >All months</span>
+    </td>    
+     
   </tr>
-  <tr *ngFor="let product of rows">
-    <td>{{product.ID}}</td>
-    <td>{{product.Age}}</td>
-    <td>{{product.Name}}</td>
+  <tr>
+    <td colspan="3"><div class="header3" style="text-align: left;color:crimson">Cash Flow</div></td>
+  </tr>
+  <tr>
+    <td >
+      <table  style="float:left; padding-left: 10px;">
+        <tr  >
+          <td class="header1">Month</td>    
+          <td class="header1">Dividend<br><span>{{avgDiv/pastMonth|number:'1.2-2'}}</span></td>
+          <td class="header1">CF from Shares</td>           
+        </tr>
+        <tr *ngFor ="let p of cashflw">
+          <td class="dt">{{p.monthyear}}</td>    
+          <td class="amt">{{p.dividend|number:'1.2-2'}}</td>
+          <td class="amt">{{p.cash|number:'1.2-2'}}</td>           
+        </tr>
+      </table>
+      <table style="float: left;">
+        <tr  >
+          <td class="header1">From Equity MF<br>{{avgEqtCashflow/pastMonth|number:'1.2-2'}}</td>           
+        </tr>
+        <tr  *ngFor ="let p of cashflwMF">          
+          <td class="amt">{{p.cash|number:'1.2-2'}}</td>          
+        </tr>
+      </table>
+      <table>        
+        <tr >     
+          <td class="header1"><span>From Debt MF</span><br> <span>{{avgDebtCashflow/pastMonth|number:'1.2-2'}}</span></td>           
+        </tr>
+        <tr *ngFor ="let p of cashflwDMF">          
+          <td class="amt">{{p.cash|number:'1.2-2'}}</td>                                  
+        </tr>
+      </table>      
+    </td>
+    <td class="header3" >
+       <span>{{avgMonthCashflow/pastMonth|number:'1.2-2'}}</span><span class="header4"> (past {{pastMonth}} months)</span> 
+    </td>     
+  </tr>
+  <tr >
+    <td> 
+      <div style="width: 600px;height: 350px;" >
+      <canvas baseChart 
+        [datasets]="barChartData"
+        [labels]="barChartLabels"
+        [options]="barChartOptions"
+        [plugins]="barChartPlugins"
+        [legend]="barChartLegend"
+        [colors]="barChartColors"
+        [chartType]="barChartType">
+      </canvas></div>
+    </td>
+    <td> 
+      <div style="width: 600px;height: 350px;" >
+        <canvas baseChart 
+          [datasets]="barChartDataMF"
+          [labels]="barChartLabelsMF"
+          [options]="barChartOptionsMF"
+          [plugins]="barChartPluginsMF"
+          [legend]="barChartLegendMF"
+          [colors]="barChartColorsMF"
+          [chartType]="barChartTypeMF">
+        </canvas></div>
+    </td>
+    <td> 
+  </td>
+  </tr>
+  <tr>
+    <td>
+      <div class="status">
+        <span>Cash Flow</span>
+      </div>
+      <div class="status">
+    <div>Cash Out</div>
+  </div>
+    </td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr >
+    <td>Month/Year</td>
+    <td>Dividend</td>    
+    <td>Cash Flow</td>
+  </tr>
+  <tr *ngFor ="let p of cashflw">
+    <td>{{p.monthyear}}</td>    
+    <td>{{p.dividend|number:'1.2-2'}}</td>
+    <td>{{p.cash|number:'1.2-2'}}</td>   
   </tr>
 </table>
 <div style="display: block;" >
-  <canvas baseChart 
-    [datasets]="lineChartData"
-    [labels]="lineChartLabels"
-    [options]="barChartOptions"
-    [plugins]="barChartPlugins"
-    [legend]="barChartLegend"
-    [chartType]="barChartType">
-  </canvas>
- 
+  
 </div>
  

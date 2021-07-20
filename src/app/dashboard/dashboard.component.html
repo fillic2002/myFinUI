@@ -13,8 +13,7 @@
             <td class="headeramt">Current</td>
             <td class="headeramt">Return</td>    
         </tr>
-        <tr class="header2" *ngFor ="let d of dbDetail">
-        
+        <tr class="header2" *ngFor ="let d of dbDetail">        
                 <td class="naming">{{d.assetName}}</td>
                 <td class="amt">{{d.invested|number : '1.2-2'}}</td>
                 <td class="amt">{{d.currentValue|number : '1.2-2'}}</td>
@@ -23,9 +22,8 @@
       </table>
     </td>
     <td>
-      <span style="text-align: center;font-size:14px; font-weight: bold;" >Asset Distribution</span>
-       
-             <div style="width: 600px; height: 350px;padding-left: 50px;" >
+      <span style="text-align: center;font-size:14px; font-weight: bold;" >Asset Distribution</span>       
+          <div style="width: 600px; height: 350px;padding-left: 50px;" >
           <canvas baseChart 
             [datasets]="barChartData"
             [labels]="barChartLabels"

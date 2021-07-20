@@ -1,7 +1,11 @@
 <div>
     <span value="H" (click)="onSelect(option)" style="font-size: 20px;">my<span style="color: orange; cursor: pointer;">f</span>in</span>
     <span class="title" style="padding-left: 30%;padding-top: 10px;">Transaction Detail</span>
-    <span class="pipe" style="padding-left: 30%;"  (click)="selectnext(option)">Bank Account Details</span>
+    <span class="pipe" style="padding-left: 32%;" (click)="selectnext(option)">Bank Account Details</span>
+    <span class="pipe" > | </span>
+    <span class="pipe" (click)="selectnext(option)">Portfolio</span>
+    <span class="pipe" > | </span>
+    <span class="pipe" (click)="selectnext(option)">Tax</span>
     </div>
  <hr size="1"  color="lightgrey">  
   
@@ -16,11 +20,12 @@
                <option value=4>Naitik</option>
                <option value=5>Kedar</option> 
            </select></div></td>
-           
+             <input (click)="setradio('share')" type="radio" id="Share" name="equity" value="Share" checked> <label for="Share">Share</label>
+            <input (click)="setradio('MF')"type="radio" id="MF" name="equity" value="MF"> <label for="MF">MF</label>
            <td>{{eqtotal|number : '1.2-2'}}</td>
     </tr>
     <tr  class="header4">
-        <td></td>
+        <td>  </td>
             
            <td>Net Investment</td>
     </tr>
@@ -50,7 +55,7 @@
             <option value="S">Sell</option>
         </select>
         </td>
-        <td></td>
+        <td> </td>
         <td></td>        
         
     </tr>
@@ -77,7 +82,7 @@
     <tr class="header1">
         <td class="headerdt">Date of Purchase</td>
         <td class="headername">Equity Name</td>
-        <td class="headeramt"> ID</td>
+        <td (click)="sort('ID')" class="headeramt"> ID</td>
         <td class="headeramt">Purchase Price</td>
         <td class="headeramt">Quantity</td>
         <td class="headeramt">Invested amt</td>
@@ -85,7 +90,7 @@
         <td class="headeramt">Action</td>
     </tr>
 
- <tr class="header2" *ngFor="let t of equitytransaction">    
+ <tr class="header2" *ngFor="let t of filterPortfolio">    
         <td class="dt">{{t.tranDate|date}}</td>
         <td class="naming">{{t.equityName}}</td>
         <td class="amt">{{t.equityId}}</td>

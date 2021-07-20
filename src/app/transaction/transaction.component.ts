@@ -10,6 +10,8 @@ import {Router} from '@angular/router';
 })
 export class TransactionComponent implements OnInit {
 
+  public portfolio =[] as any;
+  public filterPortfolio =[] as any;
   public equitytransaction =[] as any;
   public folio =[] as any;
   public status!: string;
@@ -28,6 +30,9 @@ export class TransactionComponent implements OnInit {
   public companyid: string="";
   showresult: boolean = false ;
   qty: any;
+  direction:string="asc";
+  isMF:boolean=false;
+  isShare:boolean=true;
 
   constructor(private _eqTransaction:SharesService,private route:ActivatedRoute,private  router:Router) { }
 
@@ -35,6 +40,7 @@ export class TransactionComponent implements OnInit {
     this._eqTransaction.getTransaction(1)
     .subscribe(data =>{
      this.equitytransaction = data
+     this.filterPortfolio=data;
      var to:number;
      to=0;
      for (var i = 0; i < this.equitytransaction.length; i++) {
@@ -55,7 +61,7 @@ export class TransactionComponent implements OnInit {
     console.log(document.getElementById('txtQty'));
     this.qty = document.getElementById('txtQty');
     this.qty=this.qty.value.replace(',','');
-    console.log(this.qty);
+    
     this._eqTransaction.postTransaction(document.getElementById('txtPrice'),
           this.assetId,
           this.qty,
@@ -83,24 +89,28 @@ export class TransactionComponent implements OnInit {
     this.router.navigate(['/']);
   }
   public selectnext(option:any)
-  {    
-    this.router.navigate(['/bankdetail']);   
+  { 
+    if(option='Portfolio')   
+      this.router.navigate(['/portfolio']);
+    if(option='Tax')   
+      this.router.navigate(['/tax']);
   }
   public selectFolio()
   {
-    console.log("selected");
+    
     this.router.navigate(['/portfolio']);   
   }
   
   selected(){
-    console.log(this.selectedLevel)
+ 
   }
   changeFolio(e :any) {
     this.status="";
+    //this.equitytransaction.length=0;
     this.selectedfolio=e.target.value;
     this._eqTransaction.getTransaction(e.target.value)
     .subscribe(data =>{
-
+      this.portfolio=data;
      this.equitytransaction = data
      var eqto:number;
      var mfto:number;
@@ -117,6 +127,10 @@ export class TransactionComponent implements OnInit {
      }
      this.eqtotal=eqto.toFixed(2);
      this.mftotal=mfto.toFixed(2);
+     if(this.isShare)
+         this.filterPortfolio =  this.equitytransaction.filter(s => s.assetType===1);
+     else  
+         this.filterPortfolio =  this.equitytransaction.filter(s => s.assetType===2 ||s.assetType===5 );
     });
   }
   changeDate(e:any){
@@ -175,7 +189,7 @@ export class TransactionComponent implements OnInit {
   }
   public getId(e:any)
   {
-    console.log(e);
+    
     this.showresult =false;
     this.companyid=e;
   }
@@ -191,10 +205,35 @@ export class TransactionComponent implements OnInit {
   }
   public getTrColor(x:any):string
   {   
-    console.log(x);
+   
     if(x=='B')
           return '#08b100db';
     else
       return '#ff000091'
+  }
+  sort(e:string) {
+    console.log(e);
+    if(e=="ID")
+    {
+      if(this.direction =="asc")
+      {
+        this.equitytransaction.sort((a,b)=>(a.equityId>b.equityId)?1:-1);
+        this.direction ="desc";
+      }
+      else 
+      {
+        this.equitytransaction.sort((a,b)=>(b.equityId>a.equityId)?1:-1);
+        this.direction ="asc";
+      }
+   }
+  }
+  setradio(e: string): void   
+  {            
+        this.isMF = !this.isMF;
+        this.isShare=!this.isShare;
+        if(this.isShare)
+          this.filterPortfolio =  this.equitytransaction.filter(s => s.assetType===1);
+        else  
+          this.filterPortfolio =  this.equitytransaction.filter(s => s.assetType===2 ||s.assetType===5 );
   }
 }

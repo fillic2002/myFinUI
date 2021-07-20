@@ -18,8 +18,14 @@ export class SharesService {
   getTransaction(id:Number):Observable<ITransaction[]>{
     return this.client.get<ITransaction[]>("http://localhost:59921/transaction/getfolio/"+id)  
   }
-  getfolioAssetHistory(folioId:number):Observable<IAssetHistory[]>{    
-    return this.client.get<IAssetHistory[]>("http://localhost:59921/portfolio/GetFolioSnapshot/"+folioId)  
+  getEqtTransaction(folioid:Number,eqtId:string):Observable<ITransaction[]>{
+    return this.client.get<ITransaction[]>("http://localhost:59921/transaction/tran/"+folioid+"/"+eqtId)  
+  }
+  getCashFlow(folioId:number,pastmonth:number):Observable<ICashflow[]>{    
+    return this.client.get<ICashflow[]>("http://localhost:59921/portfolio/GetCashFlowStatment/"+folioId+"/"+pastmonth)  
+  }
+  getAssetHistory(folioId:number,isShare:number):Observable<IAssetHistory[]>{    
+    return this.client.get<IAssetHistory[]>("http://localhost:59921/portfolio/getAssetHistory/"+folioId+"/"+isShare);
   }
   postTransaction(price:any,name:any,qty:any,dt:any,folioId: any,option:any,assetType:any):Observable<any>{   
     return this.client.post("http://localhost:59921/transaction/updatefolio",{ 

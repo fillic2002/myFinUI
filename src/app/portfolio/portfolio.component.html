@@ -30,11 +30,11 @@
     </tr>
     <tr>
         <td *ngIf="isShare" class="header3">            
-                <span style="padding-right: 10%;"  [ngStyle]="{color: getTrColor(eqPLPercent), 'font-size':'20px'}">{{eqPLPercent|number:'1.2-2'}}%</span>
+                <span style="padding-right: 11%;"  [ngStyle]="{color: getTrColor(eqPLPercent), 'font-size':'20px'}">{{eqPLPercent|number:'1.2-2'}}%</span>
                 <span  style="padding-left: 10%;" class="shatusContent2">{{eqCurrVal|number:'1.2-2'}}</span>
         </td>        
         
-        <td class="header3" *ngIf="isShare" > 
+        <td *ngIf="isShare" class="header3">  
             <span style="padding-right: 10%; width: 150px;" class="shatusContent2">{{eqInvstVal|number:'1.2-2'}}</span>
             <span style="padding-left: 10%;" class="shatusContent2">{{sdividend|number:'1.2-2'}}</span>
             <span *ngIf="isShare"  class="statusSmall">({{sdividend*100/eqInvstVal|number:'1.2-2'}}%)</span>
@@ -51,8 +51,8 @@
             <span style="padding-left: 11%;" *ngIf="isShare">Dividend</span>
         </td>        
     </tr>
-    <tr>   
-        <td><div style="width: 600px;" >
+    <tr >   
+        <td style="vertical-align: top;"><div style="width: 640px;height: 400px; " >
             <canvas baseChart
               [datasets]="getfolioAssetHistory"
               [labels]="assetHistorylbl"
@@ -78,78 +78,116 @@
                           [chartType]="barChartType">
                         </canvas></div></td>
                 </tr>
-                <tr class="header3">                    
-                    <td> <div style="width: 450px;padding: 20px;height: 200px;" >
-                        <canvas baseChart 
-                          [datasets]="barChartData"
-                          [labels]="barChartLabels"
-                          [options]="barChartOptions"
-                          [plugins]="barChartPlugins"
-                          [legend]="barChartLegend"
-                          [colors]="barChartColors"
-                          [chartType]="barChartType">
-                        </canvas></div></td>
-                </tr>
-                
+                <tr>                     
+                    <td>
+                    <table style="padding-top: 30px;width: 40%;padding-left: 10px;">
+                        <tr class="header1" style="width:60%;height: 10px;" >
+                            <td (click)="sort('Month')" >Month</td>
+                            <td>Return</td>                            
+                            <!--<td (click)="sort('current')" style="width:50px;height: 10px;">Current</td>
+                            <td style="width:50px;height: 10px;">Previous</td>-->
+                        </tr>
+                        <tr style="height: 25px;" *ngFor ="let q of assetReturn.slice(1,10)" >
+                            <td class="dt">{{q.monthyear|date:format:shortDate}}</td>
+                            <td class="amt" style="height:11px;border-bottom: 1px dotted grey;">{{q.return|number:'1.2-2'}}%</td>                       
+                            <!--<td style="width:50px;height: 10px;">{{q.current}}</td>                            
+                            <td style="width:50px;height: 10px;">{{q.previous}}</td>-->
+                        </tr>
+                    </table>
+                </td>                    
+                </tr>         
                 
             </table>
-        </td>
-        
+        </td>     
         
 </tr>
 <tr>
     <td>  
-
     </td>
-    <td>
-         
+    <td>         
     </td>
 </tr>
 </table>
 <table> 
     <thead>
-    <tr class="header1" style="vertical-align:middle">
-    <!--<div class="headeramt">ID</div>-->
-    
-    <th class="headername">Equity Name<div>{{sharecount}}</div></th>
-    <th class="headeramt">Live Price</th>
-    <th class="headeramt">Avg Price</th>
+    <tr class="header1" style="vertical-align:middle">    
+    <th (click)="sort('name')" class="headername">Equity Name<div>{{sharecount}}</div></th>
+    <th class="headeramt">Live Price</th>    
     <th class="headeramt">Quantity</th>
-    <th (click)="sort('Investment')" class="headeramt">Investment<div>{{eqInvstVal|number:'1.2-2'}}</div></th>     
+    <th class="headeramt">Avg Price</th>
+    <th (click)="sort('Investment')" class="headeramt">Net Invst<div>{{eqInvstVal|number:'1.2-2'}}</div></th>     
     <th (click)="sort('Gain')" class="headeramt">Gain<div>{{eqCurrVal-eqInvstVal|number:'1.2-2'}}</div></th>
     <th (click)="sort('Return')" class="headeramt">Return</th>
     <th (click)="sort('Dividend')" class="headeramt">Dividend<div>{{sdividend|number:'1.2-2'}}</div></th>
+    <th (click)="sort('Divyield')" class="headeramt">Div Yield</th>
 </thead> 
  <tr class="header2" *ngFor ="let p of filterPortfolio">    
         <!--<div class="amt">{{p.trasactionId}}</div>-->
          
         <td class="naming" id="{{p.equityId}}" (click)="showdividend(p.equityId)">{{p.equityName}}<div id="{{p.equityId}}" ng-show=""></div></td>
-        <td class="amt">{{p.livePrice|number:'1.2-2'}}</td>
+        <td class="amt">{{p.livePrice|number:'1.2-2'}}</td>        
+        <td class="amt">{{p.qty.toFixed(0)}}</td>
         <td class="amt">{{p.avgprice|number : '1.2-2'}}</td>
-        <td class="amt">{{p.qty.toFixed(2)}}</td>
         <td class="amt">{{p.qty*p.avgprice|number:'1.2-2'}}</td>         
         <td class="amt" [ngStyle]="{color: getTrColor(p.profit),'font-weight':'bold'}">{{p.profit|number:'1.2-2'}}</td>        
         <td class="amt" [ngStyle]="{color: getTrColor(p.percentage),'font-weight':'bold'}">{{p.percentage|number:'1.2-2'}}%</td>
         <td class="amt">{{p.dividend.toFixed(2)}}</td>
+        <td class="amt" style="color: green;">{{(p.dividend*100/(p.qty*p.avgprice)).toFixed(1)}}%</td>
 
-</tr></table>
-  
-<div id="sharedetails" class="popup">
-    <div (click)="hideShareDetails()" style="text-align: right;">X</div>
-    <div>
-        <span style="padding:6px;background-color: #d27c19;cursor: pointer;border: 1px solid lightgray;font: 300 14px sans-serif;color:#f0f8ffc7">Last 10 yrs</span>
-        <span style="padding:6px;background-color: #d27c19;cursor: pointer;border: 1px solid lightgray;font: 300 14px sans-serif;color:#f0f8ffc7">Last 10 yrs</span>
-        <span class="header3">Total:{{dividendTotal}}</span>
-    </div>    
-    <div class="header3"  >         
-        <span class="amt">Date</span>
-       <span class="amt">Dividend</span>              
+</tr>
+</table>
 
-   </div>
-    <div class="header3" *ngFor ="let p of companyDividend">         
-         <span class="amt">{{p.dt}}</span>
-        <span class="amt">{{p.value}}</span>              
-
-    </div>
-</div>
+<table id="sharedetails" class="popup">
+    <tr>
+        <td>
+            <table>
+                <tr style="height: 25px;">
+                    <td colspan="2" (click)="hideShareDetails()" style="text-align: right;cursor: pointer;font-weight: bold;">X</td>
+                </tr>    
+                <tr style="height: 40px;">
+                    <td style="width: 60%;">Last..
+                        <span style="padding:6px;background-color: grey;cursor: pointer;border: 1px solid lightgray;font: 300 14px sans-serif;color:#f0f8ffc7">5 yrs</span>            
+                        <span style="padding:6px;background-color: grey;cursor: pointer;border: 1px solid lightgray;font: 300 14px sans-serif;color:#f0f8ffc7">10 yrs</span>
+                    </td>
+                    <td style="width: 41%;font-size: 16px;" class="header3">
+                        Total: {{dividendTotal.toFixed(2)}}
+                    </td>
+                </tr>
+                <tr style="height: 27px;" class="header4">
+                    <td style="text-align: center;">
+                            Date          </td>
+                    <td style="text-align: center;">
+                        Dividend         
+                    </td>
+            
+                </tr>
+                <tr style="height: 20px;"  *ngFor ="let p of companyDividend">       
+                    <td>
+                        {{p.dt|date}}
+                    </td> 
+                    <td style="text-align: right;">            
+                        {{p.value}}
+                    </td>     
+            
+                </tr>
+            </table>
+        </td>
+        <td>
+            <table>
+                <tr>
+                    <td>Date</td>
+                    <td>Qty</td>
+                    <td>Price</td>
+                </tr>
+                <tr class="header2" *ngFor ="let p of eqtTransaction">
+                    <td class="amt">{{p.tranDate|date}}</td>  
+                    <td class="amt">{{p.qty.toFixed(0)}}</td> 
+                    <td class="amt">{{p.price.toFixed(0)}}</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    
+     
+</table>
     

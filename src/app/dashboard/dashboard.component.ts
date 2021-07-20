@@ -79,7 +79,7 @@ export class DashboardComponent implements OnInit {
     public barChartLegend = true;
     public barChartPlugins = [];
     public barChartColors: Array < any > = [{
-      backgroundColor: ['lightred', '#bfbfbf','lightpink','blue','lightgreen','lightblue','orange','pink','darkgrey', 'rgba(148,159,177,0.2)'], 
+      backgroundColor: ['lightred', 'green','red','blue','lightgreen','lightblue','orange','pink','darkgrey', 'rgba(148,159,177,0.2)'], 
    }];
     public barChartData: ChartDataSets[] = [
       { data:this.assetValue, label: 'Current Value' },      

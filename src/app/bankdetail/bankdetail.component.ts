@@ -29,7 +29,8 @@ export class BankdetailComponent implements OnInit {
   public tUserid:number=1;
   public tId:number=1;
   public tdt:Date= new Date();
-     
+  status:string="";  
+  
   constructor(private _acct:SharesService, private route:ActivatedRoute,private router:Router) { }
 
   ngOnInit(): void {
@@ -76,7 +77,7 @@ export class BankdetailComponent implements OnInit {
     .subscribe(data => {
      // var status= document.getElementById('status')
       //status=data;
-                         
+      status              
     })
     this.ngOnInit();
   }
@@ -119,7 +120,7 @@ export class BankdetailComponent implements OnInit {
     this.tAmt= this.accDetail[acctId]['amt'].split(',').join('');
         
     this.AddTransaction();
-   
+    this.status="Account Updated Successfully!";
   }
   onChange(item:string,event:any)
   {

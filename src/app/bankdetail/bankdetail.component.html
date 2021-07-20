@@ -18,7 +18,7 @@
     <div class="amt"><span style="float: left;padding-left: 15px;">PPF:</span>
         <span class="shatusContent">{{gppf|number:'1.2-2'}}</span></div>
 </div>  
- 
+  
 <table style="width: 60%;">
     <tr>
         <td><select style="cursor: pointer; background-color: #ffff002e;" id="portfolio" (change)="onFilter($event)">
@@ -26,8 +26,8 @@
             <option value=2>Renuka</option>
             <option value=1>Fillic</option>    
         </select></td>
-        <td></td>
-        <td></td>
+        
+        <td colspan="2"><div style="font-size: 20px;color: green;">{{status}}</div></td>
     </tr>
     <tr>
         <td colspan="2"><div (click)="showTrans(option)" class="dml">Add</div>
@@ -53,13 +53,12 @@
     <td class="headeramt">Accout Type</td>       
     <td class="headeramt">Rate Of Intreset</td>
     <td class="headeramt">Accout Balance</td>      
-</tr>
-<tr class="header2" *ngFor ="let p of filterAcct; let acctId = index">
+ </tr>
+ <tr class="header2" *ngFor ="let p of filterAcct; let acctId = index">
     <td class="amt">{{p.userid}}</td>        
-        <!--<td class="amt">{{p.acctId}}</td>        -->
-        <td class="amt">{{p.acctName}}</td>
-        <td class="amt">{{p.acctType}}</td>
-        <td contenteditable="true" (keyup)="changeValue(roi, 'roi', $event)" (blur)="updateList(p.acctId, 'roi', $event)" class="amt">{{p.roi|number:'1.1-2'}}%</td>
-        <td contenteditable="true" (keyup)="changeValue(amt, 'amt', $event)" (blur)="updateList(p.acctId, 'amt', $event)" class="amt">{{p.amt|number:'1.2-2'}}</td>
-    
-</tr></table>
+    <td class="amt">{{p.acctName}}</td>
+    <td class="amt">{{p.acctType}}</td>
+    <td contenteditable="true" (keyup)="changeValue(roi, 'roi', $event)" (blur)="updateList(p.acctId, 'roi', $event)" class="amt">{{p.roi|number:'1.1-2'}}%</td>
+    <td contenteditable="true" (keyup)="changeValue(amt, 'amt', $event)" (blur)="updateList(p.acctId, 'amt', $event)" class="amt">{{p.amt|number:'1.2-2'}}</td>    
+  </tr>
+</table>

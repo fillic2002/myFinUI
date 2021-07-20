@@ -27,6 +27,7 @@ export interface ITransaction
     qty:number
     tranDate:Date
     tranType:string
+    assetType:number
      
 }
 export interface IDashboard
@@ -59,7 +60,8 @@ export interface IAssetHistory
     investment:number,
     qtr: number,
     year: number,
-    qty: number
+    qty: number,
+    assettype:number
 }
 export interface IDividend
 {
@@ -67,4 +69,14 @@ export interface IDividend
     value: number,
     companyid: string
 }
+export interface ICashflow
+{
+    portfolioId: number,
+    cashflow: number,
+    dividend: number,
+    qtr: number,
+    year: number,    
+    assettype:number
+}
+
      
