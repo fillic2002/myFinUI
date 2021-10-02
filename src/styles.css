@@ -22,15 +22,14 @@ html { background-color: rgba(0, 0, 0, 0.007); }
  }
   .status {
     display:inline-block; 
-    margin-right: 14px;
+    margin-right: 12px;
     border-radius: 20px;
-    background: #ddd;
-    width: 210px;
-    height: 130px;
+    background: #113c9da8;    
     text-align: center;    
-    box-shadow: 5px -3px 5px #888888;
-    color: rgba(0, 0, 0, 0.658);
-    font-size:13px;
+    box-shadow: 5px 4px 5px #888888;
+    color: white;
+    border: 1px solid #113c9da8;
+    font-size:12px;
     cursor: pointer;
   }
 .shatusContent{
@@ -40,7 +39,8 @@ html { background-color: rgba(0, 0, 0, 0.007); }
 }
 .shatusContent2{
   font:500 24px  Helvetica, sans-serif;
-  text-align: right; 
+  text-align: center;
+  padding: 5px; 
 } 
 .statusSmall{
   font: 12px  Helvetica, sans-serif;
@@ -49,13 +49,11 @@ html { background-color: rgba(0, 0, 0, 0.007); }
 } 
 
   .header1 { 
-    background: #d27c19;    
-    height: 30px;      
+    background: #505f82;            
     color: white;
-    font-size: 14px;
-    font-weight: 550;   
+    font: 14px  Helvetica, sans-serif;
     text-align: center; 
-    padding: 8px;
+    
   }
   .header2 {  
     background: rgb(240, 240, 243);    
@@ -67,13 +65,12 @@ html { background-color: rgba(0, 0, 0, 0.007); }
   .header3{    
     height: 25px;
     font: 20px "Open Sans", sans-serif;
-    color: #3a3a3aad;
     text-align: center;
   }
   .header4{
     text-align: center;
     height: 25px;
-    font:300 14px sans-serif;;
+    font:300 14px sans-serif;
     color: #808080ad;
     
   }
@@ -96,23 +93,24 @@ html { background-color: rgba(0, 0, 0, 0.007); }
   }
   .cellrow{
     background-color: rgb(197, 196, 196);
-    border-spacing: 0px;
+ 
     border-collapse: collapse;
   }
   .headeramt{    
-    width: 75px;         
+    width: 100px;
+    padding: 7px;       
   }
   .headername{    
-    width: 220px; 
+    width: 240px; 
   }
   .headerdt{    
     width: 110px; 
   }
   
   .naming{    
-    width: 170px;
+    width: 180px;
     padding-left: 5px;     
-    font-size: 12px;    
+    font-size: 14px;    
     color: #000000a9;
     border-bottom: 1px dotted #bfbfbf
     
@@ -121,7 +119,7 @@ html { background-color: rgba(0, 0, 0, 0.007); }
     height: 30px;
     color: #666;
     text-align: right;  
-    font:550 11px "Open Sans", Arial, sans-serif;;
+    font:500 14px  Helvetica, sans-serif;;
     padding-right: 6px;
     border-bottom: 1px dotted #bfbfbf
   }

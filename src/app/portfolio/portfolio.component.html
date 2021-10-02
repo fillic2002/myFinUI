@@ -1,4 +1,3 @@
- 
 <table style="width: 100%;">
     <tr>
         <td style="width: 15%;">
@@ -12,101 +11,102 @@
         </td>
     </tr>
 </table><hr size="1"  color="lightgrey"> 
-<table style="border-style: solid;border-color: white; width: 100%;"> 
+<table style="border-style: solid;border-color: white; width: 100%;">   
     <tr>
-        <td><select style="cursor: pointer; background-color: #ffff002e;" id="portfolio" (change)="changeFolio($event)">
-                <option value=0>Portfolio</option>
-                <option value=1 >Fillic_gov</option>
-                <option value=2>Renuka</option>
-                <option value=3>Fillic</option>
-                <option value=4>Naitik</option>
-                <option value=5>Kedar</option> 
-            </select>
-        </td>
-        <td>
-            <input (click)="setradio('share')" type="radio" id="Share" name="equity" value="Share" checked> <label for="Share">Share</label>
-            <input (click)="setradio('MF')"type="radio" id="MF" name="equity" value="MF"> <label for="MF">MF</label>
-        </td>
-    </tr>
-    <tr>
-        <td *ngIf="isShare" class="header3">            
-                <span style="padding-right: 11%;"  [ngStyle]="{color: getTrColor(eqPLPercent), 'font-size':'20px'}">{{eqPLPercent|number:'1.2-2'}}%</span>
-                <span  style="padding-left: 10%;" class="shatusContent2">{{eqCurrVal|number:'1.2-2'}}</span>
-        </td>        
+        <td colspan="2">
+          <table style="width: 98%;" class="status">
+            <tr>
+                <td style="width: 45%;">
+                    <select style="cursor: pointer; background-color: #eaea25de;" id="portfolio" (change)="changeFolio($event)">
+                        <option value=0>Portfolio</option>
+                        <option value=1 >Fillic_gov</option>
+                        <option value=2>Renuka</option>
+                        <option value=3>Fillic</option>
+                        <option value=4>Naitik</option>
+                        <option value=5>Kedar</option> 
+                    </select>
+                </td>
+                <td *ngIf="isShare" class="header3">         
+                    <span style="display: inline-block;width: 170px;padding:2px;"  [ngStyle]="{color: getHeaderTrColor(eqPLPercent), 'font-size':'20px'}">{{eqPLPercent|number:'1.2-2'}}%</span>
+                    <span style="display: inline-block;width: 170px;padding:2px;" class="shatusContent2">{{eqCurrVal|number:'1.2-2'}}</span>
+                    <span style="display: inline-block;width: 170px;" class="shatusContent2">{{eqInvstVal|number:'1.2-2'}}</span>
+                    <span style="display: inline-block;width: 170px;" class="shatusContent2">{{sdividend|number:'1.2-2'}} 
+                    <span *ngIf="isShare"  class="statusSmall">({{sdividend*100/eqInvstVal|number:'1.2-2'}}%)</span></span>
+                </td>
+            </tr>
+            
+            <tr>
+                <td>
+                    <input (click)="setradio('share')" type="radio" id="Share" name="equity" value="Share" checked> <label for="Share">Share</label>
+                    <input (click)="setradio('MF')"type="radio" id="MF" name="equity" value="MF"> <label for="MF">MF</label>
         
-        <td *ngIf="isShare" class="header3">  
-            <span style="padding-right: 10%; width: 150px;" class="shatusContent2">{{eqInvstVal|number:'1.2-2'}}</span>
-            <span style="padding-left: 10%;" class="shatusContent2">{{sdividend|number:'1.2-2'}}</span>
-            <span *ngIf="isShare"  class="statusSmall">({{sdividend*100/eqInvstVal|number:'1.2-2'}}%)</span>
-        </td>                   
-        
+                </td>
+                <td >
+                    <span style="display: inline-block;width: 170px;padding:2px;">Net Return</span>            
+                    <span style="display: inline-block;width: 170px;padding:2px;">Current</span>
+                    <span style="display: inline-block;width: 170px;padding:2px;">Investment</span>
+                    <span style="display: inline-block;width: 170px;padding:2px;" *ngIf="isShare">Dividend</span>
+                </td>
+            </tr>
+        </table>
+                            
+    </td>
     </tr>
-    <tr class="header4" >
-        <td>
-            <span style="padding-right: 11%;">Net Return</span>            
-            <span style="padding-left: 11%;">Current</span>
-        </td>
-        <td>
-            <span style="padding-right: 11%;">Investment</span>
-            <span style="padding-left: 11%;" *ngIf="isShare">Dividend</span>
-        </td>        
-    </tr>
-    <tr >   
-        <td style="vertical-align: top;"><div style="width: 640px;height: 400px; " >
-            <canvas baseChart
-              [datasets]="getfolioAssetHistory"
-              [labels]="assetHistorylbl"
-              [options]="barChartOptions2"
-              [plugins]="barChartPlugins2"
-              [legend]="barChartLegend2"
-              [colors]="barChartColors2"
-              [chartType]="barChartType2">
-            </canvas></div>
+    <tr>   
+        <td style="width: 46%;">
+            <div style="width: 650px;height:350px; " >
+                <canvas baseChart
+                [datasets]="getfolioAssetHistory"
+                [labels]="assetHistorylbl"
+                [options]="barChartOptions2"
+                [plugins]="barChartPlugins2"
+                [legend]="barChartLegend2"
+                [colors]="barChartColors2"
+                [chartType]="barChartType2">
+                </canvas>
+            </div>
             <div style="text-align: center;">Asset Value</div>
         </td>
-        <td>
+        <td style="width: 54%;">
             <table style="width: 100%;">                 
-                <tr class="header3">                    
-                    <td> <div style="width: 450px;height: 200px;" >
-                        <canvas baseChart 
-                          [datasets]="barChartData"
-                          [labels]="barChartLabels"
-                          [options]="barChartOptions"
-                          [plugins]="barChartPlugins"
-                          [legend]="barChartLegend"
-                          [colors]="barChartColors"
-                          [chartType]="barChartType">
-                        </canvas></div></td>
-                </tr>
-                <tr>                     
-                    <td>
-                    <table style="padding-top: 30px;width: 40%;padding-left: 10px;">
-                        <tr class="header1" style="width:60%;height: 10px;" >
-                            <td (click)="sort('Month')" >Month</td>
-                            <td>Return</td>                            
-                            <!--<td (click)="sort('current')" style="width:50px;height: 10px;">Current</td>
-                            <td style="width:50px;height: 10px;">Previous</td>-->
-                        </tr>
-                        <tr style="height: 25px;" *ngFor ="let q of assetReturn.slice(1,10)" >
-                            <td class="dt">{{q.monthyear|date:format:shortDate}}</td>
-                            <td class="amt" style="height:11px;border-bottom: 1px dotted grey;">{{q.return|number:'1.2-2'}}%</td>                       
-                            <!--<td style="width:50px;height: 10px;">{{q.current}}</td>                            
-                            <td style="width:50px;height: 10px;">{{q.previous}}</td>-->
-                        </tr>
-                    </table>
-                </td>                    
-                </tr>         
+                <tr  >                    
+                    <td style="width: 60%;"> 
+                        <div style="width: 450px;height: 280px;" >
+                            <canvas baseChart 
+                            [datasets]="barChartData"
+                            [labels]="barChartLabels"
+                            [options]="barChartOptions"
+                            [plugins]="barChartPlugins"
+                            [legend]="barChartLegend"
+                            [colors]="barChartColors"
+                            [chartType]="barChartType">
+                            </canvas>                   
+                             
+                        </div>
+                    </td>                    
+                    <td style="width: 40%;">
+                        <table style="padding-left: 10px;width: 80%;">
+                            <tr class="header1" style="width:60%;" >
+                                <td (click)="sort('Month')" >Month</td>
+                                <td>Return</td>                            
+                                <!--<td (click)="sort('current')" style="width:50px;height: 10px;">Current</td>
+                                <td style="width:50px;height: 10px;">Previous</td>-->
+                            </tr>
+                            <tr style="height: 25px;" *ngFor ="let q of assetReturn.slice(1,13)" >
+                                <td class="dt">{{q.monthyear|date:format:shortDate}}</td>
+                                <td class="amt" style="height:11px;border-bottom: 1px dotted grey;">{{q.return|number:'1.2-2'}}%</td>                       
+                                <!--<td style="width:50px;height: 10px;">{{q.current}}</td>                            
+                                <td style="width:50px;height: 10px;">{{q.previous}}</td>-->
+                            </tr>
+                        </table>
+                    </td>
+                </tr>  
                 
             </table>
         </td>     
         
 </tr>
-<tr>
-    <td>  
-    </td>
-    <td>         
-    </td>
-</tr>
+
 </table>
 <table> 
     <thead>
@@ -132,17 +132,20 @@
         <td class="amt" [ngStyle]="{color: getTrColor(p.profit),'font-weight':'bold'}">{{p.profit|number:'1.2-2'}}</td>        
         <td class="amt" [ngStyle]="{color: getTrColor(p.percentage),'font-weight':'bold'}">{{p.percentage|number:'1.2-2'}}%</td>
         <td class="amt">{{p.dividend.toFixed(2)}}</td>
-        <td class="amt" style="color: green;">{{(p.dividend*100/(p.qty*p.avgprice)).toFixed(1)}}%</td>
+        <td class="amt" style="color:#48b534;">{{(p.dividend*100/(p.qty*p.avgprice)).toFixed(1)}}%</td>
 
 </tr>
 </table>
 
 <table id="sharedetails" class="popup">
+    <tr style="height: 25px;">
+        <td colspan="2" (click)="hideShareDetails()" style="text-align: right;cursor: pointer;font-weight: bold;">X</td>
+    </tr>
     <tr>
         <td>
-            <table>
+            <table>                    
                 <tr style="height: 25px;">
-                    <td colspan="2" (click)="hideShareDetails()" style="text-align: right;cursor: pointer;font-weight: bold;">X</td>
+                    <td colspan="2"  style="text-align: right;cursor: pointer;font-weight: bold;">{{shareName}}</td>
                 </tr>    
                 <tr style="height: 40px;">
                     <td style="width: 60%;">Last..
@@ -174,18 +177,36 @@
         </td>
         <td>
             <table>
-                <tr>
+                <!--<tr class="header1">
                     <td>Date</td>
                     <td>Qty</td>
                     <td>Price</td>
+                    <td>Total</td>          
                 </tr>
                 <tr class="header2" *ngFor ="let p of eqtTransaction">
                     <td class="amt">{{p.tranDate|date}}</td>  
                     <td class="amt">{{p.qty.toFixed(0)}}</td> 
                     <td class="amt">{{p.price.toFixed(0)}}</td>
+                    <td class="amt">{{(p.price*p.qty).toFixed(0)}}</td>
+                </tr>-->
+                <tr>
+                    <td>
+                        <div style="width: 650px;height:350px; " >
+                            <canvas baseChart
+                                [datasets]="getEquityInvstmt"
+                                [labels]="eqtyHistorylbl"
+                                [options]="barChartOptions2"
+                                [plugins]="barChartPlugins3"
+                                [legend]="barChartLegend2"
+                                [colors]="barChartColors2"
+                                [chartType]="barChartType3">
+                            </canvas>
+                        </div>
+                    </td>
                 </tr>
             </table>
         </td>
+        
     </tr>
     
      

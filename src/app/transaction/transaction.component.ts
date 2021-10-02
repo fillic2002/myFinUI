@@ -50,6 +50,7 @@ export class TransactionComponent implements OnInit {
      
     }); 
   }
+  
   AddTransaction():void  {
     if(document.getElementById('txtName') == null)
     {
@@ -72,10 +73,12 @@ export class TransactionComponent implements OnInit {
       )
     .subscribe(data => {
      var status= document.getElementById('status')
-     this.status="Record added Successfully: "+this.assetType +" of "+this.assetId.value;
+     this.status="Record "+this.purchaseOption+" Successfully for: "+this.assetId +" in portfolio: "+this.selectedfolio;
 
      this.ngOnInit();      
     })
+     
+    document.getElementById('status').style.display='block';
   }
   add(){ 
       this._eqTransaction.getAllfolio()
@@ -83,6 +86,10 @@ export class TransactionComponent implements OnInit {
       this.folio = datan;
     });
    
+  }
+  hideShareDetails()
+  {
+    document.getElementById('status').style.display='none';
   } 
   public onSelect(option:any)
   {    
@@ -220,12 +227,26 @@ export class TransactionComponent implements OnInit {
         this.equitytransaction.sort((a,b)=>(a.equityId>b.equityId)?1:-1);
         this.direction ="desc";
       }
-      else 
+      else
       {
         this.equitytransaction.sort((a,b)=>(b.equityId>a.equityId)?1:-1);
         this.direction ="asc";
       }
    }
+   if(e=="purchaseDt")
+   {
+     console.log('in');
+     if(this.direction =="asc")
+     {
+       this.equitytransaction.sort((a,b)=>(a.tranDate>b.tranDate)?1:-1);
+       this.direction ="desc";
+     }
+     else 
+     {
+       this.equitytransaction.sort((a,b)=>(b.tranDate>a.tranDate)?1:-1);
+       this.direction ="asc";
+     }
+  }
   }
   setradio(e: string): void   
   {            

@@ -6,9 +6,9 @@
     margin-right: 200px;
   }
   .popup{
-    background-color: lightgray;
-     height: 350px;
-     width: 450px;
+    background-color: #111114fa;
+     height: 450px;
+     width: 850px;
      padding: 6px;
      z-index: 900;
      position: fixed;

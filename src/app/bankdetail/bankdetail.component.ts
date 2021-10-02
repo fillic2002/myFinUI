@@ -17,6 +17,9 @@ export class BankdetailComponent implements OnInit {
   public rcash:number=0;
   public rpf:number=0;
   public rppf:number=0;
+  public cash:number=0;
+  public pf:number=0;
+  public ppf:number=0;
   public gcash:number=0;
   public gpf:number=0;
   public gppf:number=0;
@@ -37,16 +40,18 @@ export class BankdetailComponent implements OnInit {
     this._acct.getBankAcDetails()
     .subscribe(data =>{ 
       this.accDetail = data;    
-      var to:number;
-      to=0;
-      for (var i = 0; i < this.accDetail.length; i++) {
-        //to= to + parseFloat(this.accDetail[i].acctType);
+      var to:number=0;
+      
+      for (var i = 0; i < this.accDetail.length; i++) {        
         
         if(this.accDetail[i].userid==1)
         { 
-          console.log(this.accDetail[i].acctType)
-          if(this.accDetail[i].acctType=="Liquid")
-            {this.rcash += parseFloat(this.accDetail[i].amt);}
+          //console.log(this.accDetail[i].acctType)
+          if(this.accDetail[i].acctType=="Liquid" || this.accDetail[i].acctType=="FD")
+            {
+              this.rcash += parseFloat(this.accDetail[i].amt);
+              
+            }
           else if(this.accDetail[i].acctType=="people provident fund")
             {this.rppf += parseFloat(this.accDetail[i].amt);}
           else if(this.accDetail[i].acctType=="providend fund")
@@ -54,7 +59,7 @@ export class BankdetailComponent implements OnInit {
         }
         else
         {
-          if(this.accDetail[i].acctType=="Liquid")
+          if(this.accDetail[i].acctType=="Liquid"|| this.accDetail[i].acctType=="FD")
             {this.gcash += parseFloat(this.accDetail[i].amt);}
           else if(this.accDetail[i].acctType=="people provident fund")
             {this.gppf += parseFloat(this.accDetail[i].amt);}
@@ -76,8 +81,7 @@ export class BankdetailComponent implements OnInit {
    )
     .subscribe(data => {
      // var status= document.getElementById('status')
-      //status=data;
-      status              
+      //status=data;                
     })
     this.ngOnInit();
   }
@@ -87,7 +91,18 @@ export class BankdetailComponent implements OnInit {
   }
   public onFilter(e:any)
   {
-    
+    console.log(e.target.value);
+    if(e.target.value==2)
+    {
+      this.cash=this.gcash;
+      this.pf=this.gpf;
+      this.ppf =this.gppf;
+    }
+    else{
+      this.cash=this.rcash;
+      this.pf=this.rpf;
+      this.ppf =this.rppf;
+    }
     this.at=0;
     this.filterAcct=this.accDetail.filter((acct: { userid: number; }) => acct.userid==e.target.value);
     for (var i = 0; i < this.filterAcct.length; i++) {
@@ -107,18 +122,23 @@ export class BankdetailComponent implements OnInit {
   changeValue(acctId: number, property: string, event: any) {
     this.editField = event.target.textContent;    
   }
-  updateList(acctId: number, property: string, event: any) {
-    const editField = event.target.textContent.replace('%','');
+  updateList(event: any,acctId: number,property: string,user:number,ROI:string,amt:number) {
     
-    this.accDetail[acctId][property] = editField;
-    
-    //console.log(this.accDetail[acctId]['amt'].split(',').join(''));
-
-    this.tUserid = this.accDetail[acctId]['userid'];
-    this.tId= this.accDetail[acctId]['acctId'];
-    this.tRoi= this.accDetail[acctId]['roi'];
-    this.tAmt= this.accDetail[acctId]['amt'].split(',').join('');
-        
+    const editField = event.target.textContent;    
+    this.tUserid = user;
+    this.tId=acctId;
+    if(property=='amt')
+    {
+      this.tAmt= editField.toString().replace(',','');
+      this.tRoi=Number(ROI.toString().replace('%',''));
+    }
+    else if(property=='roi')
+    {      
+      const editField = event.target.textContent.toString().replace('%','');
+      this.tRoi=editField;
+      this.tAmt=amt;
+    }
+    console.log(this.tRoi+","+this.tAmt+","+this.tId ); 
     this.AddTransaction();
     this.status="Account Updated Successfully!";
   }

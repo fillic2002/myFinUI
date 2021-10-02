@@ -5,6 +5,10 @@ import {Router} from '@angular/router';
 import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
 import {Color, Label } from 'ng2-charts';
 import { Console } from 'console';
+import { element } from 'protractor';
+import { DatePipe } from '@angular/common';
+
+providers: [DatePipe]
 
 export interface returnonasset{
   monthyear:Date;
@@ -23,6 +27,8 @@ export class PortfolioComponent implements OnInit {
   public portfolio =[] as any;
   public filterPortfolio =[] as any;
   public eqtTransaction=[] as any;
+  eqtQty=[] as number[];
+  eqtTrandt=[] as Date[];
   
   public sharecount:number=0;
   public sdividend:number=0;
@@ -48,11 +54,14 @@ export class PortfolioComponent implements OnInit {
   direction:string="asc";
   dividendTotal:number=0;
   previousMonthAsset:number=0;
+  previousMonthInvst:number=0;
   option:number=0;
   folioId:number=0;
- 
+  pastYearReturn:number=0;
+  shareName:string="";
+  trnDt:Date=new Date();
 
-  constructor(private _portfolio:SharesService,private route:ActivatedRoute,private router:Router) {  }
+  constructor(private _portfolio:SharesService,private route:ActivatedRoute,private router:Router, public datepipe: DatePipe) {  }
 
   ngOnInit(): void {    
      this._portfolio.getPortfolio(1)
@@ -147,27 +156,28 @@ export class PortfolioComponent implements OnInit {
         this.investmentHistory.push(parseFloat(element.investment.toString()).toFixed(2));        
         let dt:Date = new Date(element.year,element.qtr);
         if(this.previousMonthAsset==0)
-        {
-          
+        {          
           let a:returnonasset={ monthyear:dt,return:element.assetValue};        
           this.assetReturn.push(a);
-          this.previousMonthAsset=element.assetValue;            
+          this.previousMonthAsset=element.assetValue;
+          this.previousMonthInvst = element.investment;          
         }
         else{
           //console.log(element.assetValue+"--"+this.previousMonthAsset);
-          let a:returnonasset={ monthyear:dt,return:((element.assetValue-this.previousMonthAsset)*100/this.previousMonthAsset),
-          current:element.assetValue.toFixed(2),previous:this.previousMonthAsset.toFixed(2)};          
+          let a:returnonasset={ monthyear:dt,return:((element.assetValue-this.previousMonthAsset-(element.investment-this.previousMonthInvst))*100/this.previousMonthAsset),
+          current:Number(element.assetValue.toFixed(2)),previous:Number(this.previousMonthAsset.toFixed(2))};          
           this.assetReturn.push(a);
-          this.previousMonthAsset=element.assetValue;                  
+          this.previousMonthAsset=element.assetValue;
+          this.previousMonthInvst=element.investment;                  
         }
-      })       
+      })      
     });
 
     this.assetHistoryTime.length=0;
     this.dividendHistory.length=0;
     this.assetValueHistory.length=0;
     this.investmentHistory.length=0;
-    this.assetReturn.sort((a,b)=>b.monthyear-a.monthyear);
+    this.assetReturn.sort((a,b)=>a.monthyear-b.monthyear);
 
   }
  
@@ -195,10 +205,18 @@ export class PortfolioComponent implements OnInit {
   public getTrColor(x:any):string
   {   
     if(parseFloat(x)>=0)
-          return '#0b893e';
+          return '#28c704';
     else
       return '#bf1722'
   }
+  public getHeaderTrColor(x:any):string
+  {   
+    if(parseFloat(x)>=0)
+          return '#fcff3b';
+    else
+      return '#bf1722'
+  }
+   
    
   sort(e:string) {
       //console.log(e);
@@ -260,7 +278,7 @@ export class PortfolioComponent implements OnInit {
         if(this.direction =="asc")
         {
           this.filterPortfolio.sort((a,b)=>a.percentage-b.percentage);
-          this.direction ="desc";
+          this.direction ="desc";          
         }
         else 
         {
@@ -300,11 +318,20 @@ export class PortfolioComponent implements OnInit {
       {
         this.assetReturn.sort((a,b)=>b.monthyear-a.monthyear);
         this.direction ="desc";
-      }
+        this.pastYearReturn=0;
+        for (let index = 0; index < 12; index++) {
+          this.pastYearReturn += this.assetReturn[index]["return"];          
+        console.log(this.assetReturn[index]["return"] );        
+        } 
+      } 
       else 
       {
         this.assetReturn.sort((a,b)=>a.monthyear-b.monthyear);
         this.direction ="asc";
+        this.pastYearReturn=0;
+        for (let index = 0; index < 12; index++) {
+          this.pastYearReturn += this.assetReturn[index]["return"];          
+        }
       }
     }
   }
@@ -326,19 +353,25 @@ export class PortfolioComponent implements OnInit {
       this.companyDividend=data;
       data.forEach(element => {
         this.dividendTotal += element.value;
-        console.log( element.value);
+       // console.log( element.value);
       });
      });
-
      
-  
     this._portfolio.getEqtTransaction(this.folioId, e)
-    .subscribe(a => { 
-      this.eqtTransaction=a;
-      console.log(a);
+    .subscribe(data => { 
+      this.eqtTransaction=data;
+      this.eqtQty.length=0;
+      this.eqtTrandt.length=0;
+      data.forEach(element=>{
+        this.eqtQty.push(element.qty);
+        let ss = this.datepipe.transform(element.tranDate, 'yyyy-MM-dd');//!=null?this.datepipe.transform(element.tranDate, 'yyyy/MM/dd'):new Date();
+        this.eqtTrandt.push( ss!=null?new Date(ss):new Date() );
+        //console.log(this.eqtTransaction);
+      });      
      });
-
      document.getElementById('sharedetails').style.display='block';
+     
+    this.shareName = e;
   }
   hideShareDetails()
   {
@@ -356,8 +389,7 @@ export class PortfolioComponent implements OnInit {
   public barChartPlugins = [];
   public barChartColors: Color[] = [
     { backgroundColor: 'skyblue ' },
-    { backgroundColor: '#08b100db' },
-    
+    { backgroundColor: '#08b100db' },     
   ]
   public barChartData: ChartDataSets[] = [
     { data:this.assetValue, label: 'Sector Invested',stack:'a' }
@@ -378,4 +410,13 @@ export class PortfolioComponent implements OnInit {
     { data:this.assetValueHistory, label: 'Current Value' },     
     { data:this.dividendHistory, label: 'Dividend' },
   ];
+
+  //Equity Investment History
+  public eqtyHistorylbl: Label[] = this.eqtTrandt; 
+  public barChartType3: ChartType = 'line';
+  public barChartPlugins3 = [];
+  public getEquityInvstmt:ChartDataSets[] = [
+    { data:this.eqtQty, label: 'Invstmt',stack:'a' }    
+  ];
+
 }

@@ -71,18 +71,17 @@ export class TaxcompuComponent {
           {
             this.netInvestAdded = element.investment-this.prevMonthInvst;
             this.currentMonthCashflowShr = element.assetValue-this.cumMonthlyAsst-this.netInvestAdded;
-            let a:cashflow={ monthyear:element.qtr.toString()+"-"+element.year.toString(),cash:this.currentMonthCashflowShr,dividend:element.dividend-this.cumDiv};
+            let a:cashflow={ monthyear:element.qtr.toString()+"-"+element.year.toString(),cash:this.currentMonthCashflowShr,dividend:element.dividend};
             this.cashflw.push(a);
 
             this.timeLine.push(element.qtr.toString()+"-"+element.year.toString());
-            this.monthlyCashflowShr.push(this.currentMonthCashflowShr);
+               this.monthlyCashflowShr.push(this.currentMonthCashflowShr);
 
             this.cumDiv = element.dividend;
             this.cumMonthlyAsst = element.assetValue;
             this.prevMonthInvst = element.investment;
           }
           else{
-
           }
         });
       });
@@ -90,9 +89,9 @@ export class TaxcompuComponent {
     changeFolio(e :any) {
      
       this.monthlyCashflowShr.length=0; 
-       this.cashflwMF.length=0;
-       this.cashflwDMF.length=0;
-       this.cashflw.length=0;
+      this.cashflwMF.length=0;
+      this.cashflwDMF.length=0;
+      this.cashflw.length=0;
       this.monthlyCashflowEMF.length=0;
       this.monthlyDiv.length=0;
       this.timeLine.length=0;

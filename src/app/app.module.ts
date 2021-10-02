@@ -14,6 +14,8 @@ import {TaxcompuComponent} from './taxcompu/taxcompu.component'
  
 //import { ChartModule } from '@syncfusion/ej2-angular-charts';
 import{ChartsModule} from 'ng2-charts'
+import { DatePipe } from '@angular/common';
+import { CommonYrComponent } from './common-yr/common-yr.component';
  
 
 @NgModule({
@@ -27,6 +29,8 @@ import{ChartsModule} from 'ng2-charts'
     BankdetailComponent,
     SortDirective,
     TaxcompuComponent,
+    CommonYrComponent,
+    
      
   ],
   imports: [
@@ -35,7 +39,7 @@ import{ChartsModule} from 'ng2-charts'
     HttpClientModule,
     ChartsModule  
   ],
-  providers: [SharesService],
+  providers: [SharesService,DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

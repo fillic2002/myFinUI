@@ -1,11 +1,20 @@
 <span value="H" (click)="onSelect(option)" style="font-size: 22px;color: grey; cursor: pointer;">my<span style="color: orange;">f</span>in</span>
 <span class="title" style="padding-left: 30%;">Dashboard</span><br>
 
-<hr size="1"  color="lightgrey">  
-<table style="padding-left: 6px;padding-top: 6px;">
+<hr size="1"  color="lightgrey">
+<table style="width: 100%;"  >
   <tr>
+    <td style="width: 1%;"></td>
+     <td class="status"  style="width: 98%;"    ><div class="shatusContent2"> {{total|number : '1.2-2'}}</div><span>Current Asset Size</span></td>
+  </tr>
+   
+</table>
+<table >
+  
+  <tr>
+    <td style="width: 1%;"></td>
     <td>
-      <span class="header3" >Current Asset Size : </span><span class="header3">{{total|number : '1.2-2'}}</span>
+       
       <table> 
         <tr class="header1">
             <td class="headername">Asset Type</td>
@@ -23,7 +32,7 @@
     </td>
     <td>
       <span style="text-align: center;font-size:14px; font-weight: bold;" >Asset Distribution</span>       
-          <div style="width: 600px; height: 350px;padding-left: 50px;" >
+          <div style="width: 700px; height: 450px;padding-left: 50px;" >
           <canvas baseChart 
             [datasets]="barChartData"
             [labels]="barChartLabels"
@@ -33,9 +42,15 @@
             [legend]="barChartLegend"
             [chartType]="barChartType">
           </canvas>
-          <canvas id="mycanvas">
-            
-            </canvas>
+          <canvas baseChart 
+            [datasets]="pieChartData"
+            [labels]="pieChartLabels"
+            [options]="pieChartOptions"
+            [colors]="pieChartColors"
+            [plugins]="pieChartPlugins"
+            [legend]="pieChartLegend"
+            [chartType]="pieChartType">
+          </canvas>
         </div></td>
   </tr>
 </table>

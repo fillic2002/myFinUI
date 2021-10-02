@@ -27,6 +27,9 @@ export class SharesService {
   getAssetHistory(folioId:number,isShare:number):Observable<IAssetHistory[]>{    
     return this.client.get<IAssetHistory[]>("http://localhost:59921/portfolio/getAssetHistory/"+folioId+"/"+isShare);
   }
+  getAssetsHistory(folioId:number):Observable<IAssetHistory[]>{    
+    return this.client.get<IAssetHistory[]>("http://localhost:59921/portfolio/getAssetsHistory/");
+  }
   postTransaction(price:any,name:any,qty:any,dt:any,folioId: any,option:any,assetType:any):Observable<any>{   
     return this.client.post("http://localhost:59921/transaction/updatefolio",{ 
     price: parseFloat(price.value),
@@ -39,8 +42,6 @@ export class SharesService {
      })
   }
   postAcTransaction(userid:any,Id:any,roi:any,amt:any,dt:any):Observable<any>{
-    //console.log("AMT::"+parseFloat(amt));
-    
     if(dt == null)
     {     
       dt= new Date();
@@ -56,7 +57,7 @@ export class SharesService {
   }
 
   getDashBoard():Observable<IDashboard[]>{
-    return this.client.get<IDashboard[]>("http://localhost:59921/dashboard")  
+    return this.client.get<IDashboard[]>("http://localhost:59921/dashboard/getDashboard")  
   }
 
   getBankAcTotal():Observable<IBankAcDetail[]>{
