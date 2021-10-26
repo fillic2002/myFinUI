@@ -61,7 +61,7 @@ this._dashbrd.getAssetsHistory(1)
     .subscribe(ast =>{ 
       ast.forEach(element => {
         this.assetValues.push(element.assetValue.toFixed(2));
-        this.assetXaxis.push(element.year+"-"+element.qtr);
+        this.assetXaxis.push(element.year+"-"+element.month);
         this.invstValues.push(element.investment.toFixed(2));        
       });
       

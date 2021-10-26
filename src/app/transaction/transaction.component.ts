@@ -219,34 +219,35 @@ export class TransactionComponent implements OnInit {
       return '#ff000091'
   }
   sort(e:string) {
-    console.log(e);
+     
     if(e=="ID")
     {
       if(this.direction =="asc")
       {
-        this.equitytransaction.sort((a,b)=>(a.equityId>b.equityId)?1:-1);
+         
+        this.filterPortfolio.sort((a,b)=>(a.equityId>b.equityId)?1:-1);
         this.direction ="desc";
       }
       else
       {
-        this.equitytransaction.sort((a,b)=>(b.equityId>a.equityId)?1:-1);
-        this.direction ="asc";
-      }
+        this.filterPortfolio.sort((a,b)=>(b.equityId>a.equityId)?1:-1);
+        this.direction ="asc"; 
+      } 
    }
    if(e=="purchaseDt")
    {
      console.log('in');
      if(this.direction =="asc")
      {
-       this.equitytransaction.sort((a,b)=>(a.tranDate>b.tranDate)?1:-1);
+       this.filterPortfolio.sort((a,b)=>(a.tranDate>b.tranDate)?1:-1);
        this.direction ="desc";
      }
      else 
      {
-       this.equitytransaction.sort((a,b)=>(b.tranDate>a.tranDate)?1:-1);
+       this.filterPortfolio.sort((a,b)=>(b.tranDate>a.tranDate)?1:-1);
        this.direction ="asc";
      }
-  }
+  } 
   }
   setradio(e: string): void   
   {            

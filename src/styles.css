@@ -46,6 +46,7 @@ html { background-color: rgba(0, 0, 0, 0.007); }
   font: 12px  Helvetica, sans-serif;
   text-align: right; 
   padding-left: 5px;
+  color:#9bff3b
 } 
 
   .header1 { 
@@ -102,6 +103,7 @@ html { background-color: rgba(0, 0, 0, 0.007); }
   }
   .headername{    
     width: 240px; 
+    font:13px Arial;
   }
   .headerdt{    
     width: 110px; 
@@ -110,7 +112,7 @@ html { background-color: rgba(0, 0, 0, 0.007); }
   .naming{    
     width: 180px;
     padding-left: 5px;     
-    font-size: 14px;    
+    font: 13px arial;    
     color: #000000a9;
     border-bottom: 1px dotted #bfbfbf
     

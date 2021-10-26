@@ -73,15 +73,13 @@
                 <div  id="result" *ngFor="let t of result">    
                     <span (click)="getId(t.id)" class="dt">{{t.id}}</span>
                     <span class="naming">{{t.fullName}}</span>                
-                </div></div>
-                <input id="txtQty" class="headeramt" type="text"><span class="naming">Date:</span>
-                <input id="txtDt" type="date" (change)="changeDate($event)">
-        <input *ngIf="isShown" id="txtName" class="headeramt" type="text"  (keypress)="getasset($event)" value="{{companyid}}" >
-        <span class="naming">Quantity:</span>
- 
-        <span class="naming">Price:</span>
-        <input id="txtPrice" class="headeramt" type="text">
-        <input class="savebtn" type="button" value="Save" (click)="AddTransaction()">
+                </div>
+            </div><input *ngIf="isShown" id="txtName" class="headeramt" type="text"  (keypress)="getasset($event)" value="{{companyid}}" >
+            
+            <span class="naming">Date:</span><input id="txtDt" type="date" (change)="changeDate($event)">
+            <span class="naming">Quantity:</span><input id="txtQty" class="headeramt" type="text"> 
+            <span class="naming">Price:</span><input id="txtPrice" class="headeramt" type="text">
+            <input class="savebtn" type="button" value="Save" (click)="AddTransaction()">
         </td>
     </tr>
 

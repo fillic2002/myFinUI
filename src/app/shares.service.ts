@@ -27,6 +27,9 @@ export class SharesService {
   getAssetHistory(folioId:number,isShare:number):Observable<IAssetHistory[]>{    
     return this.client.get<IAssetHistory[]>("http://localhost:59921/portfolio/getAssetHistory/"+folioId+"/"+isShare);
   }
+  getAssetReturn(folioId:number,isShare:number):Observable<IAssetReturn[]>{    
+    return this.client.get<IAssetReturn[]>("http://localhost:59921/portfolio/getAssetsReturn/"+folioId+"/"+isShare);
+  }
   getAssetsHistory(folioId:number):Observable<IAssetHistory[]>{    
     return this.client.get<IAssetHistory[]>("http://localhost:59921/portfolio/getAssetsHistory/");
   }

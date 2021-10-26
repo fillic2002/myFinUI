@@ -16,6 +16,10 @@ export interface returnonasset{
   current:number;
   previous:number;
 }
+export interface returnonassets{
+  year:number;
+  return:number;  
+}
 @Component({
   selector: 'app-portfolio',
   templateUrl: './portfolio.component.html',
@@ -48,7 +52,8 @@ export class PortfolioComponent implements OnInit {
   public investmentHistory=[] as number[];
   public assetHistoryTime=[] as string[];
   public companyDividend=[] as number[];
-  assetReturn=[] as returnonasset[];
+ // assetReturn=[] as returnonasset[];
+  assetReturns=[] as returnonassets[];
   isMF:boolean=false;
   isShare:boolean=true;
   direction:string="asc";
@@ -79,8 +84,7 @@ export class PortfolioComponent implements OnInit {
     this.folioId=e.target.value;
     this.assetValue.splice(0,this.assetValue.length);     
     this._portfolio.getPortfolio(e.target.value)
-     .subscribe(data =>{
-       
+     .subscribe(data =>{       
       data.forEach(element => {
         element.profit= element.qty*(element.livePrice - element.avgprice);
         element.percentage = (element.livePrice - element.avgprice)*100/element.avgprice;
@@ -136,7 +140,8 @@ export class PortfolioComponent implements OnInit {
      this.filterPortfolio =this.portfolio;
    
     });
-    this.assetReturn.length=0;
+  //  this.assetReturn.length=0;
+    this.assetReturns.length=0;
     
     if(this.isShare)
     {
@@ -150,34 +155,43 @@ export class PortfolioComponent implements OnInit {
     this._portfolio.getAssetHistory(e.target.value,this.option)
     .subscribe(data=>{      
       data.forEach(element => {              
-        this.assetHistoryTime.push(element.qtr.toString()+"-"+element.year.toString());
+        this.assetHistoryTime.push(element.month+"-"+element.year);
          this.assetValueHistory.push(parseFloat(element.assetValue.toString()).toFixed(2));        
         this.dividendHistory.push(element.dividend);
         this.investmentHistory.push(parseFloat(element.investment.toString()).toFixed(2));        
-        let dt:Date = new Date(element.year,element.qtr);
+        let dt:Date = new Date(element.year,element.month);
         if(this.previousMonthAsset==0)
         {          
-          let a:returnonasset={ monthyear:dt,return:element.assetValue};        
-          this.assetReturn.push(a);
+      //    let a:returnonasset={ monthyear:dt,return:element.assetValue};        
+      //    this.assetReturn.push(a);
           this.previousMonthAsset=element.assetValue;
           this.previousMonthInvst = element.investment;          
         }
         else{
           //console.log(element.assetValue+"--"+this.previousMonthAsset);
-          let a:returnonasset={ monthyear:dt,return:((element.assetValue-this.previousMonthAsset-(element.investment-this.previousMonthInvst))*100/this.previousMonthAsset),
-          current:Number(element.assetValue.toFixed(2)),previous:Number(this.previousMonthAsset.toFixed(2))};          
-          this.assetReturn.push(a);
+        //  let a:returnonasset={ monthyear:dt,return:((element.assetValue-this.previousMonthAsset-(element.investment-this.previousMonthInvst))*100/this.previousMonthAsset),
+        //  current:Number(element.assetValue.toFixed(2)),previous:Number(this.previousMonthAsset.toFixed(2))};          
+       //   this.assetReturn.push(a);
           this.previousMonthAsset=element.assetValue;
           this.previousMonthInvst=element.investment;                  
         }
       })      
     });
 
+console.log(this.folioId);
+    this._portfolio.getAssetReturn(this.folioId,this.option)
+    .subscribe(data=>{      
+      data.forEach(element => {            
+          let a:returnonassets={ year:element.year,return:element.return};        
+          this.assetReturns.push(a);
+      })
+    });
+
     this.assetHistoryTime.length=0;
     this.dividendHistory.length=0;
     this.assetValueHistory.length=0;
     this.investmentHistory.length=0;
-    this.assetReturn.sort((a,b)=>a.monthyear-b.monthyear);
+   // this.assetReturn.sort((a,b)=>a.monthyear-b.monthyear);
 
   }
  
@@ -205,7 +219,7 @@ export class PortfolioComponent implements OnInit {
   public getTrColor(x:any):string
   {   
     if(parseFloat(x)>=0)
-          return '#28c704';
+          return '#22a704';
     else
       return '#bf1722'
   }
@@ -219,7 +233,7 @@ export class PortfolioComponent implements OnInit {
    
    
   sort(e:string) {
-      //console.log(e);
+      //console.log(e); 
    
       if(e=="current")
       {
@@ -312,38 +326,103 @@ export class PortfolioComponent implements OnInit {
         this.direction ="asc";
       }
    }
-   if(e=="Month")
+   if(e=="Year")
     {
       if(this.direction =="asc")
       {
-        this.assetReturn.sort((a,b)=>b.monthyear-a.monthyear);
-        this.direction ="desc";
-        this.pastYearReturn=0;
-        for (let index = 0; index < 12; index++) {
-          this.pastYearReturn += this.assetReturn[index]["return"];          
-        console.log(this.assetReturn[index]["return"] );        
-        } 
+        this.assetReturns.sort((a,b)=>b.year-a.year);
+        this.direction ="desc";        
       } 
       else 
       {
-        this.assetReturn.sort((a,b)=>a.monthyear-b.monthyear);
-        this.direction ="asc";
-        this.pastYearReturn=0;
-        for (let index = 0; index < 12; index++) {
-          this.pastYearReturn += this.assetReturn[index]["return"];          
-        }
+        this.assetReturns.sort((a,b)=>a.year-b.year);
+        this.direction ="asc";      
       }
     }
   }
   
   setradio(e: string): void   
-  {        
-        this.isMF = !this.isMF;
-        this.isShare=!this.isShare;
-        if(e=="share")
-          this.filterPortfolio =  this.portfolio.filter(s => s.equityType===1);
+  {       
+    this.assetHistoryTime.length=0;
+    this.assetValueHistory.length=0;
+    this.investmentHistory.length=0;
+    this.dividendHistory.length=0;
+    this.eqCurrVal =0;
+    this.eqInvstVal=0; 
+      if(e=="share")
+      {
+        this.filterPortfolio =  this.portfolio.filter(s => s.equityType===1);
+     
+        for (var i = 0; i < this.filterPortfolio.length; i++) {
+          
+          this.eqInvstVal += this.filterPortfolio[i].qty*this.filterPortfolio[i].avgprice;
+          
+          this.eqCurrVal +=  this.filterPortfolio[i].qty*this.filterPortfolio[i].livePrice;
+        }
+      this._portfolio.getAssetHistory(this.folioId,1)
+        .subscribe(data=>{      
+          data.forEach(element => {              
+            this.assetHistoryTime.push(element.month.toString()+"-"+element.year.toString());
+            this.assetValueHistory.push(parseFloat(element.assetValue.toString()).toFixed(2));        
+            this.dividendHistory.push(element.dividend);
+            this.investmentHistory.push(parseFloat(element.investment.toString()).toFixed(2));        
+            let dt:Date = new Date(element.year,element.month);
+            if(this.previousMonthAsset==0)
+            {          
+            //  let a:returnonasset={ monthyear:dt,return:element.assetValue};        
+            //  this.assetReturn.push(a);
+              this.previousMonthAsset=element.assetValue;
+              this.previousMonthInvst = element.investment;          
+            }
+            else{
+              //console.log(element.assetValue+"--"+this.previousMonthAsset);
+           ////   let a:returnonasset={ monthyear:dt,return:((element.assetValue-this.previousMonthAsset-(element.investment-this.previousMonthInvst))*100/this.previousMonthAsset),
+           //   current:Number(element.assetValue.toFixed(2)),previous:Number(this.previousMonthAsset.toFixed(2))};          
+           //   this.assetReturn.push(a);
+              this.previousMonthAsset=element.assetValue;
+              this.previousMonthInvst=element.investment;                  
+            }
+          })      
+        });
+        }
         else  
+        {
           this.filterPortfolio =  this.portfolio.filter(s => s.equityType===2 ||s.equityType===5 );
+                
+          for (var i = 0; i < this.filterPortfolio.length; i++) {
+           
+            this.eqInvstVal += this.filterPortfolio[i].qty*this.filterPortfolio[i].avgprice;
+            this.eqCurrVal +=  this.filterPortfolio[i].qty*this.filterPortfolio[i].livePrice;
+            this.sdividend =0;        
+          }
+          this.eqPLPercent = (this.eqCurrVal -this.eqInvstVal)*100/this.eqInvstVal;
+          
+          this._portfolio.getAssetHistory(this.folioId,5)
+          .subscribe(data=>{      
+            data.forEach(element => {              
+              this.assetHistoryTime.push(element.month.toString()+"-"+element.year.toString());
+              this.assetValueHistory.push(parseFloat(element.assetValue.toString()).toFixed(2));        
+              
+              this.investmentHistory.push(parseFloat(element.investment.toString()).toFixed(2));        
+              let dt:Date = new Date(element.year,element.month);
+              if(this.previousMonthAsset==0)
+              {          
+            //    let a:returnonasset={ monthyear:dt,return:element.assetValue};        
+            //    this.assetReturn.push(a);
+                this.previousMonthAsset=element.assetValue;
+                this.previousMonthInvst = element.investment;          
+              }
+              else{
+                //console.log(element.assetValue+"--"+this.previousMonthAsset);
+            //    let a:returnonasset={ monthyear:dt,return:((element.assetValue-this.previousMonthAsset-(element.investment-this.previousMonthInvst))*100/this.previousMonthAsset),
+           //     current:Number(element.assetValue.toFixed(2)),previous:Number(this.previousMonthAsset.toFixed(2))};          
+            //    this.assetReturn.push(a);
+                this.previousMonthAsset=element.assetValue;
+                this.previousMonthInvst=element.investment;                  
+              }
+            })      
+          });
+        }
   }
   showdividend(e:string)
   {     
@@ -377,10 +456,9 @@ export class PortfolioComponent implements OnInit {
   {
     document.getElementById('sharedetails').style.display='none';
   }
- // Sector wise Chart
+ //.................... Sector wise Chart........................
   public barChartOptions: ChartOptions = {
-    responsive: true,
-    
+    responsive: true,    
   };
 
   public barChartLabels: Label[] = this.sector; 
@@ -396,7 +474,7 @@ export class PortfolioComponent implements OnInit {
     
   ];
 
-  //Asset History Chart 
+  //--------------------Asset History Chart -----------------------
   public barChartOptions2: ChartOptions = {
     responsive: true,
   };
@@ -411,7 +489,7 @@ export class PortfolioComponent implements OnInit {
     { data:this.dividendHistory, label: 'Dividend' },
   ];
 
-  //Equity Investment History
+  //---------------------Equity Investment History--------------------
   public eqtyHistorylbl: Label[] = this.eqtTrandt; 
   public barChartType3: ChartType = 'line';
   public barChartPlugins3 = [];

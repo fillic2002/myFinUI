@@ -145,7 +145,7 @@ export class BankdetailComponent implements OnInit {
   onChange(item:string,event:any)
   {
     //console.log(item);
-    if(item=='amt')
+    if(item=='amt') 
     {
       this.tAmt = event.target.value;      
     }

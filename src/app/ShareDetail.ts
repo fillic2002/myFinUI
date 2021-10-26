@@ -58,7 +58,7 @@ export interface IAssetHistory
     assetValue: number,
     dividend: number,
     investment:number,
-    qtr: number,
+    month: number,
     year: number,
     qty: number,
     assettype:number
@@ -78,5 +78,10 @@ export interface ICashflow
     year: number,    
     assettype:number
 }
-
+export interface IAssetReturn
+{
+    portfolioId: number,    
+    year: number,    
+    return:number
+}
      
