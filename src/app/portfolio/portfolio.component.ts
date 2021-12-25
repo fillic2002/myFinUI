@@ -20,6 +20,11 @@ export interface returnonassets{
   year:number;
   return:number;  
 }
+export interface divHistory{
+  year:number;
+  return:number;  
+}
+
 @Component({
   selector: 'app-portfolio',
   templateUrl: './portfolio.component.html',
@@ -33,6 +38,8 @@ export class PortfolioComponent implements OnInit {
   public eqtTransaction=[] as any;
   eqtQty=[] as number[];
   eqtTrandt=[] as Date[];
+  divDt=[] as any[];
+  divVal=[] as number[]
   
   public sharecount:number=0;
   public sdividend:number=0;
@@ -51,9 +58,10 @@ export class PortfolioComponent implements OnInit {
   public assetValueHistory=[] as number[];
   public investmentHistory=[] as number[];
   public assetHistoryTime=[] as string[];
-  public companyDividend=[] as number[];
+  public companyDividend=[] as divHistory[];
  // assetReturn=[] as returnonasset[];
   assetReturns=[] as returnonassets[];
+  
   isMF:boolean=false;
   isShare:boolean=true;
   direction:string="asc";
@@ -65,7 +73,7 @@ export class PortfolioComponent implements OnInit {
   pastYearReturn:number=0;
   shareName:string="";
   trnDt:Date=new Date();
-
+ 
   constructor(private _portfolio:SharesService,private route:ActivatedRoute,private router:Router, public datepipe: DatePipe) {  }
 
   ngOnInit(): void {    
@@ -88,7 +96,7 @@ export class PortfolioComponent implements OnInit {
       data.forEach(element => {
         element.profit= element.qty*(element.livePrice - element.avgprice);
         element.percentage = (element.livePrice - element.avgprice)*100/element.avgprice;
-        if(element.sector!="undefined")
+        if(element.sector!="Debt" && element.sector!="Equity" )
         {           
           if(this.sector.indexOf(element.sector)<=-1 )
           {
@@ -154,31 +162,22 @@ export class PortfolioComponent implements OnInit {
     
     this._portfolio.getAssetHistory(e.target.value,this.option)
     .subscribe(data=>{      
-      data.forEach(element => {              
-        this.assetHistoryTime.push(element.month+"-"+element.year);
-         this.assetValueHistory.push(parseFloat(element.assetValue.toString()).toFixed(2));        
+      data.forEach(element => {               
+        this.assetHistoryTime.push(element.qtr+"-"+element.year); 
+        
+        this.assetValueHistory.push(parseFloat(element.assetValue.toFixed(2)));        
         this.dividendHistory.push(element.dividend);
-        this.investmentHistory.push(parseFloat(element.investment.toString()).toFixed(2));        
-        let dt:Date = new Date(element.year,element.month);
-        if(this.previousMonthAsset==0)
-        {          
-      //    let a:returnonasset={ monthyear:dt,return:element.assetValue};        
-      //    this.assetReturn.push(a);
-          this.previousMonthAsset=element.assetValue;
-          this.previousMonthInvst = element.investment;          
-        }
-        else{
-          //console.log(element.assetValue+"--"+this.previousMonthAsset);
-        //  let a:returnonasset={ monthyear:dt,return:((element.assetValue-this.previousMonthAsset-(element.investment-this.previousMonthInvst))*100/this.previousMonthAsset),
-        //  current:Number(element.assetValue.toFixed(2)),previous:Number(this.previousMonthAsset.toFixed(2))};          
-       //   this.assetReturn.push(a);
-          this.previousMonthAsset=element.assetValue;
-          this.previousMonthInvst=element.investment;                  
-        }
+        this.investmentHistory.push(parseFloat(element.investment.toString()).toFixed(2));
+        console.log(element.qtr+"-"+element.year+" invst:"+element.investment);    
+        let dt:Date = new Date(element.year,element.qtr);
+        
+        this.previousMonthAsset=element.assetValue;
+        this.previousMonthInvst=element.investment;                  
+        
       })      
     });
 
-console.log(this.folioId);
+ 
     this._portfolio.getAssetReturn(this.folioId,this.option)
     .subscribe(data=>{      
       data.forEach(element => {            
@@ -355,85 +354,138 @@ console.log(this.folioId);
      
         for (var i = 0; i < this.filterPortfolio.length; i++) {
           
-          this.eqInvstVal += this.filterPortfolio[i].qty*this.filterPortfolio[i].avgprice;
-          
+          this.eqInvstVal += this.filterPortfolio[i].qty*this.filterPortfolio[i].avgprice;          
           this.eqCurrVal +=  this.filterPortfolio[i].qty*this.filterPortfolio[i].livePrice;
+          this.sdividend+= this.filterPortfolio[i].dividend;
+           
         }
       this._portfolio.getAssetHistory(this.folioId,1)
         .subscribe(data=>{      
-          data.forEach(element => {              
-            this.assetHistoryTime.push(element.month.toString()+"-"+element.year.toString());
-            this.assetValueHistory.push(parseFloat(element.assetValue.toString()).toFixed(2));        
+          data.forEach(element => {
+                     
+            this.assetHistoryTime.push(element.qtr.toString()+"-"+element.year.toString());
+            this.assetValueHistory.push(parseFloat(element.assetValue).toFixed(2));        
             this.dividendHistory.push(element.dividend);
-            this.investmentHistory.push(parseFloat(element.investment.toString()).toFixed(2));        
-            let dt:Date = new Date(element.year,element.month);
+            this.investmentHistory.push(parseFloat(element.investment).toFixed(2));        
+            let dt:Date = new Date(element.year,element.qtr);
             if(this.previousMonthAsset==0)
             {          
-            //  let a:returnonasset={ monthyear:dt,return:element.assetValue};        
-            //  this.assetReturn.push(a);
+           
               this.previousMonthAsset=element.assetValue;
               this.previousMonthInvst = element.investment;          
             }
             else{
-              //console.log(element.assetValue+"--"+this.previousMonthAsset);
-           ////   let a:returnonasset={ monthyear:dt,return:((element.assetValue-this.previousMonthAsset-(element.investment-this.previousMonthInvst))*100/this.previousMonthAsset),
-           //   current:Number(element.assetValue.toFixed(2)),previous:Number(this.previousMonthAsset.toFixed(2))};          
-           //   this.assetReturn.push(a);
+      
               this.previousMonthAsset=element.assetValue;
               this.previousMonthInvst=element.investment;                  
             }
           })      
         });
+        this.assetReturns.length=0;
+          this._portfolio.getAssetReturn(this.folioId, 1)
+            .subscribe(data=>{      
+              data.forEach(element => {            
+                  let a:returnonassets={ year:element.year,return:element.return};        
+                  this.assetReturns.push(a);
+              })
+            });
         }
-        else  
+        else if(e=="MF")
         {
-          this.filterPortfolio =  this.portfolio.filter(s => s.equityType===2 ||s.equityType===5 );
+          this.filterPortfolio =  this.portfolio.filter(s => s.equityType===2);
                 
-          for (var i = 0; i < this.filterPortfolio.length; i++) {
-           
+          for (var i = 0; i < this.filterPortfolio.length; i++){           
             this.eqInvstVal += this.filterPortfolio[i].qty*this.filterPortfolio[i].avgprice;
             this.eqCurrVal +=  this.filterPortfolio[i].qty*this.filterPortfolio[i].livePrice;
-            this.sdividend =0;        
+            this.sdividend =0;
           }
-          this.eqPLPercent = (this.eqCurrVal -this.eqInvstVal)*100/this.eqInvstVal;
+          this.assetReturns.length=0;
+          this._portfolio.getAssetReturn(this.folioId, 2)
+            .subscribe(data=>{      
+              data.forEach(element => {            
+                  let a:returnonassets={ year:element.year,return:element.return};        
+                  this.assetReturns.push(a);
+              })
+            });
+          //this.eqPLPercent = (this.eqCurrVal -this.eqInvstVal)*100/this.eqInvstVal;
           
-          this._portfolio.getAssetHistory(this.folioId,5)
+          this._portfolio.getAssetHistory(this.folioId,2)
           .subscribe(data=>{      
             data.forEach(element => {              
-              this.assetHistoryTime.push(element.month.toString()+"-"+element.year.toString());
+              this.assetHistoryTime.push(element.qtr.toString()+"-"+element.year.toString());
               this.assetValueHistory.push(parseFloat(element.assetValue.toString()).toFixed(2));        
               
               this.investmentHistory.push(parseFloat(element.investment.toString()).toFixed(2));        
-              let dt:Date = new Date(element.year,element.month);
+              let dt:Date = new Date(element.year,element.qtr);
               if(this.previousMonthAsset==0)
               {          
-            //    let a:returnonasset={ monthyear:dt,return:element.assetValue};        
-            //    this.assetReturn.push(a);
+           
                 this.previousMonthAsset=element.assetValue;
                 this.previousMonthInvst = element.investment;          
               }
               else{
-                //console.log(element.assetValue+"--"+this.previousMonthAsset);
-            //    let a:returnonasset={ monthyear:dt,return:((element.assetValue-this.previousMonthAsset-(element.investment-this.previousMonthInvst))*100/this.previousMonthAsset),
-           //     current:Number(element.assetValue.toFixed(2)),previous:Number(this.previousMonthAsset.toFixed(2))};          
-            //    this.assetReturn.push(a);
+           
+                this.previousMonthAsset=element.assetValue;
+                this.previousMonthInvst=element.investment;                  
+              }
+            })      
+          });
+        }else if(e=="debt")
+        {
+          this.filterPortfolio =  this.portfolio.filter(s=> s.equityType==5);
+           
+          for (var i = 0; i < this.filterPortfolio.length; i++){           
+            this.eqInvstVal += this.filterPortfolio[i].qty*this.filterPortfolio[i].avgprice;
+            this.eqCurrVal +=  this.filterPortfolio[i].qty*this.filterPortfolio[i].livePrice;
+            this.sdividend =0;
+          }
+          this.assetReturns.length=0;
+          this._portfolio.getAssetReturn(this.folioId, 5)
+            .subscribe(data=>{      
+              data.forEach(element => {            
+                  let a:returnonassets={ year:element.year,return:element.return};        
+                  this.assetReturns.push(a);
+              })
+            });
+
+           this._portfolio.getAssetHistory(this.folioId,5)
+          .subscribe(data=>{      
+            data.forEach(element => {              
+              this.assetHistoryTime.push(element.qtr.toString()+"-"+element.year.toString());
+              this.assetValueHistory.push(parseFloat(element.assetValue.toString()).toFixed(2));        
+              
+              this.investmentHistory.push(parseFloat(element.investment.toString()).toFixed(2));        
+              let dt:Date = new Date(element.year,element.qtr);
+              if(this.previousMonthAsset==0)
+              {          
+           
+                this.previousMonthAsset=element.assetValue;
+                this.previousMonthInvst = element.investment;          
+              }
+              else{
+           
                 this.previousMonthAsset=element.assetValue;
                 this.previousMonthInvst=element.investment;                  
               }
             })      
           });
         }
-  }
+        this.eqPLPercent = (this.eqCurrVal -this.eqInvstVal)*100/this.eqInvstVal;
+  } 
   showdividend(e:string)
   {     
-    this._portfolio.getDividend(e)
+    this.divVal.length=0;
+    this.divDt.length=0;
+    this._portfolio.getDividend(e) 
     .subscribe(data => { 
       this.share = data;
       this.companyDividend=data;
       data.forEach(element => {
         this.dividendTotal += element.value;
-       // console.log( element.value);
-      });
+         this.divDt.push(new Date(element.dt).getMonth()+"-"+new Date(element.dt).getFullYear());
+         this.divVal.push(element.value);
+         console.log(new Date(element.dt).getMonth());
+      }); 
      });
      
     this._portfolio.getEqtTransaction(this.folioId, e)
@@ -444,12 +496,14 @@ console.log(this.folioId);
       data.forEach(element=>{
         this.eqtQty.push(element.qty);
         let ss = this.datepipe.transform(element.tranDate, 'yyyy-MM-dd');//!=null?this.datepipe.transform(element.tranDate, 'yyyy/MM/dd'):new Date();
-        this.eqtTrandt.push( ss!=null?new Date(ss):new Date() );
+        this.eqtTrandt.push( ss!=null?new Date(ss).getMonth()+"-"+new Date(ss).getFullYear():new Date() );
         //console.log(this.eqtTransaction);
       });      
      });
      document.getElementById('sharedetails').style.display='block';
      
+
+
     this.shareName = e;
   }
   hideShareDetails()
@@ -471,7 +525,7 @@ console.log(this.folioId);
   ]
   public barChartData: ChartDataSets[] = [
     { data:this.assetValue, label: 'Sector Invested',stack:'a' }
-    
+     
   ];
 
   //--------------------Asset History Chart -----------------------
@@ -491,10 +545,27 @@ console.log(this.folioId);
 
   //---------------------Equity Investment History--------------------
   public eqtyHistorylbl: Label[] = this.eqtTrandt; 
-  public barChartType3: ChartType = 'line';
-  public barChartPlugins3 = [];
+  public barChartType3: ChartType = 'bar';
+  public barChartPlugins3 = []; 
+  public barChartColors3: Color[] = [
+    { backgroundColor: '#a05195 ' },
+    { backgroundColor: '#08b100db' },     
+  ]
   public getEquityInvstmt:ChartDataSets[] = [
-    { data:this.eqtQty, label: 'Invstmt',stack:'a' }    
+    { data:this.eqtQty, label: 'No Of Shares',stack:'a' }    
   ];
+
+  //-------------------  Dividend Snapshot ----------------------------
+  public eqtyHstryDiv: Label[] = this.divDt; 
+  public barChartType3: ChartType = 'bar';
+  public barChartPlugins3 = [];
+  public barChartColors4: Color[] = [
+    { backgroundColor: 'green ' },
+    { backgroundColor: '#08b100db' },     
+  ]
+  public getDivReturn:ChartDataSets[] = [
+    { data:this.divVal, label: 'Dividend',stack:'a' }    
+  ];
+
 
 }

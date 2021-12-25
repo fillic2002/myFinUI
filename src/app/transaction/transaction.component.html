@@ -15,6 +15,7 @@
         <td>
             <div style="padding-left: 20px;">            
                 <select style="cursor: pointer; background-color: #eaea25de;"  id="portfolio" (change)="changeFolio($event)">
+                <option value=0 >All</option>
                 <option value=1 >Fillic_gov</option>
                 <option value=2>Renuka</option>
                 <option value=3>Fillic</option>
@@ -86,6 +87,44 @@
 </table>
 </ng-container>
 <div (click)="showTrans(option)" class="dml">{{trnStatus}}</div><br>
+<table>
+    <tr>
+        <td><div style="width: 450px;height: 280px;" >
+            <canvas baseChart 
+            [datasets]="invstShrDataSet"
+            [labels]="barChartLabels"
+            [options]="barChartOptions"
+            [plugins]="barChartPlugins"
+            [legend]="barChartLegend"
+            [colors]="barChartColors"
+            [chartType]="barChartType">
+            </canvas>                             
+        </div></td>
+        <td><div style="width: 450px;height: 280px;" >
+            <canvas baseChart 
+            [datasets]="invstMFDataSet"
+            [labels]="barChartLabels1"
+            [options]="barChartOptions1"
+            [plugins]="barChartPlugins1"
+            [legend]="barChartLegend1"
+            [colors]="barChartColors1"
+            [chartType]="barChartType1">
+            </canvas>                             
+        </div></td>
+        <td><div style="width: 450px;height: 280px;" >
+            <canvas baseChart 
+            [datasets]="invstDebtDataSet"
+            [labels]="barChartLabels2"
+            [options]="barChartOptions2"
+            [plugins]="barChartPlugins2"
+            [legend]="barChartLegend2"
+            [colors]="barChartColors2"
+            [chartType]="barChartType2">
+            </canvas>                             
+        </div></td>
+    </tr>
+</table>
+ 
 <table >
     <tr class="header1">
         <td (click)="sort('purchaseDt')" class="headerdt">Date of Purchase</td>

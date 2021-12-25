@@ -1,7 +1,7 @@
 <table style="width: 100%;">
     <tr>
         <td style="width: 15%;">
-            <span value="H" (click)="onSelect(option)" style="font-size: 20px;">my<span style="color: orange; cursor: pointer;">f</span>in</span>
+            <span value="H" (click)="onSelect(option)" style="font-size: 22px;cursor: pointer;">my<span style="color: orange; ">f</span>in</span>
         </td>
         <td style="width: 70%;">
             <span class="title" style="padding-left: 30%;" (click)="onClick($event)">Portfolio</span>
@@ -11,6 +11,7 @@
         </td>
     </tr>
 </table><hr size="1"  color="lightgrey"> 
+
 <table style="border-style: solid;border-color: white; width: 100%;">   
     <tr>
         <td colspan="2">
@@ -38,7 +39,8 @@
             <tr>
                 <td>
                     <input (click)="setradio('share')" type="radio" id="Share" name="equity" value="Share" checked> <label for="Share">Share</label>
-                    <input (click)="setradio('MF')"type="radio" id="MF" name="equity" value="MF"> <label for="MF">MF</label>
+                    <input (click)="setradio('MF')" type="radio" id="MF" name="equity" value="MF"> <label for="MF">MF</label>
+                    <input (click)="setradio('debt')" type="radio" id="debt" name="equity" value="debt"> <label for="debt">Debt MF</label>
         
                 </td>
                 <td >
@@ -80,21 +82,20 @@
                             [legend]="barChartLegend"
                             [colors]="barChartColors"
                             [chartType]="barChartType">
-                            </canvas>               
-                             
+                            </canvas>                             
                         </div>
                     </td>                    
                     <td style="width: 40%;">
                         <table style="padding-left: 10px;width: 80%;">
-                            <tr class="header1" style="width:60%;" >
-                                <td (click)="sort('Year')" >Year</td>
+                            <tr class="header1" style="width:60%; " >
+                                <td style="cursor: pointer;" (click)="sort('Year')" >Year</td>
                                 <td>Return</td>                            
                                 <!--<td (click)="sort('current')" style="width:50px;height: 10px;">Current</td>
                                 <td style="width:50px;height: 10px;">Previous</td>-->
                             </tr>
-                            <tr style="height: 25px;" *ngFor ="let q of assetReturns" >
+                            <tr style="height: 24px;" *ngFor ="let q of assetReturns" >
                                 <td class="dt">{{q.year}}</td>
-                                <td class="amt" [ngStyle]="{color: getTrColor(q.return),'font-weight':'bold'}" >{{q.return|number:'1.2-2'}}%</td>                       
+                                <td class="percent" [ngStyle]="{color: getTrColor(q.return),'font-weight':'bold'}" >{{q.return|number:'1.2-2'}}%</td>                       
                                 <!--<td style="width:50px;height: 10px;">{{q.current}}</td>                            
                                 <td style="width:50px;height: 10px;">{{q.previous}}</td>-->
                             </tr>
@@ -139,7 +140,7 @@
 
 <table id="sharedetails" class="popup">
     <tr style="height: 25px;">
-        <td colspan="2" (click)="hideShareDetails()" style="text-align: right;cursor: pointer;font-weight: bold;">X</td>
+        <td colspan="2" style="color: white; text-align: right;font-weight: bold;"><span style="cursor: pointer;" (click)="hideShareDetails()">X</span></td>
     </tr>
     <tr>
         <td>
@@ -191,17 +192,33 @@
                 </tr>-->
                 <tr>
                     <td>
-                        <div style="width: 650px;height:350px; " >
+                        <div style="width: 450px;height:150px; " >
                             <canvas baseChart
                                 [datasets]="getEquityInvstmt"
                                 [labels]="eqtyHistorylbl"
                                 [options]="barChartOptions2"
                                 [plugins]="barChartPlugins3"
                                 [legend]="barChartLegend2"
-                                [colors]="barChartColors2"
+                                [colors]="barChartColors3"
                                 [chartType]="barChartType3">
                             </canvas>
                         </div>
+                    </td>
+                </tr>
+                <tr style="height: 100px;"><td></td></tr>
+                <tr>
+                    <td>
+                        <div style="width: 450px;height:150px; " >
+                        <canvas baseChart
+                        [datasets]="getDivReturn"
+                        [labels]="eqtyHstryDiv"
+                        [options]="barChartOptions2"
+                        [plugins]="barChartPlugins3"
+                        [legend]="barChartLegend2"
+                        [colors]="barChartColors4"
+                        [chartType]="barChartType3">
+                    </canvas>
+                </div>
                     </td>
                 </tr>
             </table>

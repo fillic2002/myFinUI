@@ -27,8 +27,7 @@ export interface ITransaction
     qty:number
     tranDate:Date
     tranType:string
-    assetType:number
-     
+    assetType:number     
 }
 export interface IDashboard
 {
@@ -58,17 +57,19 @@ export interface IAssetHistory
     assetValue: number,
     dividend: number,
     investment:number,
-    month: number,
+    qtr: number,
     year: number,
     qty: number,
     assettype:number
 }
+
 export interface IDividend
 {
     dt: Date,
     value: number,
     companyid: string
 }
+
 export interface ICashflow
 {
     portfolioId: number,
@@ -78,10 +79,20 @@ export interface ICashflow
     year: number,    
     assettype:number
 }
+
 export interface IAssetReturn
 {
-    portfolioId: number,    
-    year: number,    
-    return:number
+    portfolioId: number,
+    year: number,
+    return:number,
 }
+export interface IPfAcct
+{
+    dtofchange: Date,    
+    empshr: number,    
+    emplrshr:number,
+    pension:number,
+    folioid:number
+}
+
      

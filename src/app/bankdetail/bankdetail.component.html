@@ -15,17 +15,17 @@
                         <select style="cursor: pointer; background-color: #eaea25de;"  id="portfolio" (change)="onFilter($event)">
                             <option value=0>Account</option>    
                             <option value=2>Renuka</option>
-                            <option value=1>Fillic</option>    
+                            <option value=3>Fillic</option>    
                         </select>
                     </div>
                 </td>
-                <td style="display: inline-block;width: 170px;padding:2px;">
+                <td style="display: inline-block;width: 180px;padding:2px;">
                     <span class="shatusContent2">{{cash|number:'1.2-2'}}</span>
                 </td>
-                <td style="display: inline-block;width: 170px;padding:2px;">
+                <td style="display: inline-block;width: 180px;padding:2px;">
                     <span class="shatusContent2">{{pf|number:'1.2-2'}}</span>
                 </td>
-                <td style="display: inline-block;width: 170px;padding:2px;">
+                <td style="display: inline-block;width: 180px;padding:2px;">
                     <span class="shatusContent2">{{ppf|number:'1.2-2'}}</span>
                 </td>
             </tr>
@@ -45,7 +45,7 @@
   <table style="width: 100%;">
       <tr>
           <td style="width: 5%;"></td>
-          <td style="width: 90%;">
+          <td style="width: 70%;">
             <table style="width: 50%;" >
                 <tr>       
                     <td colspan="5"><div style="font-size: 20px;color: green;">{{status}}</div></td>
@@ -100,12 +100,27 @@
                 <td class="amt">{{p.userid}}</td>        
                 <td class="amt">{{p.acctName}}</td>
                 <td class="amt">{{p.acctType}}</td>
-                <td contenteditable="true" (keydown.Tab)="updateList($event,roi,'roi',p.userid,p.roi,p.amt)" (blur)="updateList(p.acctId, 'roi', $event)" class="amt">{{p.roi|number:'1.1-2'}}%</td>
+                <td contenteditable="true" (keydown.Tab)="updateList($event,p.acctId,'roi',p.userid,p.roi,p.amt)" (blur)="updateList(p.acctId, 'roi', $event)" class="amt">{{p.roi|number:'1.1-2'}}%</td>
                 <td contenteditable="true" (keydown.Tab)="updateList($event,p.acctId,'amt',p.userid,p.roi,p.amt)" (blur)="onChange('amt',$event)"  class="amt">{{p.amt|number:'1.2-2'}}</td>    
               </tr>
             </table>
             
           </td>
+          
+        <td style="width: 20%;">
+            <table>
+                <tr>
+                    <td>Date Of Change</td>                    
+                    <td>Emp Share</td>
+                    <td>Employer Share</td>
+                </tr>
+                <tr class="header1" *ngFor ="let p of ofAcctDetails;">
+                    <td>Date Of Change</td>                    
+                    <td class="amt">Emp Share</td>
+                    <td class="amt">Employer Share</td>
+                </tr>
+            </table>
+        </td>
           <td style="width: 5%;"></td>
       </tr>
   </table>

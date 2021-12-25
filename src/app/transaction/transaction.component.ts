@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SharesService } from '../shares.service';
 import {Router} from '@angular/router';
+import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
+import {Color, Label } from 'ng2-charts';
 
 @Component({
   selector: 'app-transaction',
@@ -28,6 +30,12 @@ export class TransactionComponent implements OnInit {
   public trnStatus:string='Add >'
   public result=[] as any;
   public companyid: string="";
+  public yearEqt =[] as number[];
+  public invstEqt =[] as number[];
+  public yearMF =[] as number[];
+  public invstMF =[] as number[];
+  public yearDebt =[] as number[];
+  public invstDebt =[] as number[];
   showresult: boolean = false ;
   qty: any;
   direction:string="asc";
@@ -46,9 +54,31 @@ export class TransactionComponent implements OnInit {
      for (var i = 0; i < this.equitytransaction.length; i++) {
        to= to + parseFloat(this.equitytransaction[i].price)*parseFloat(this.equitytransaction[i].qty);        
      }
-     this.eqtotal=to.toFixed(2);
-     
+     this.eqtotal=to.toFixed(2);     
     }); 
+
+    this._eqTransaction.getYearlyInvestment(1)
+    .subscribe(data =>{
+      data.forEach(element => {
+        console.log(element);
+        if(element.assettype==1)
+          {
+            this.yearEqt.push(element.year)
+            this.invstEqt.push(element.investment.toFixed(2));
+          }
+          if(element.assettype==2)
+          {
+            this.yearMF.push(element.year)
+            this.invstMF.push(element.investment.toFixed(2));
+          }
+          if(element.assettype==5)
+          {
+            this.yearDebt.push(element.year)
+            this.invstDebt.push(element.investment.toFixed(2));
+          }
+      });
+    }); 
+
   }
   
   AddTransaction():void  {
@@ -232,7 +262,7 @@ export class TransactionComponent implements OnInit {
       {
         this.filterPortfolio.sort((a,b)=>(b.equityId>a.equityId)?1:-1);
         this.direction ="asc"; 
-      } 
+      }
    }
    if(e=="purchaseDt")
    {
@@ -241,7 +271,7 @@ export class TransactionComponent implements OnInit {
      {
        this.filterPortfolio.sort((a,b)=>(a.tranDate>b.tranDate)?1:-1);
        this.direction ="desc";
-     }
+     }  
      else 
      {
        this.filterPortfolio.sort((a,b)=>(b.tranDate>a.tranDate)?1:-1);
@@ -257,5 +287,60 @@ export class TransactionComponent implements OnInit {
           this.filterPortfolio =  this.equitytransaction.filter(s => s.assetType===1);
         else  
           this.filterPortfolio =  this.equitytransaction.filter(s => s.assetType===2 ||s.assetType===5 );
+
+          //console.log(this.filterPortfolio );
   }
+   //.................... Shares Investment........................
+   public barChartOptions: ChartOptions = {
+    responsive: true,    
+  };
+
+  public barChartLabels: Label[] = this.yearEqt; 
+  public barChartType: ChartType = 'bar';
+  public barChartLegend = true;
+  public barChartPlugins = [];
+  public barChartColors: Color[] = [
+    { backgroundColor: '#4b7260' },
+    { backgroundColor: '#08b100db' },     
+  ]
+  public invstShrDataSet: ChartDataSets[] = [
+    { data:this.invstEqt, label: 'Investment in Shares',stack:'a' }
+     
+  ];
+
+   //.................... MF Investment........................
+   public barChartOptions1: ChartOptions = {
+    responsive: true,    
+  };
+
+  public barChartLabels1: Label[] = this.yearMF; 
+  public barChartType1: ChartType = 'bar';
+  public barChartLegend1 = true;
+  public barChartPlugins1 = [];
+  public barChartColors1: Color[] = [
+    { backgroundColor: '#4d4b72' },
+    { backgroundColor: '#08b100db' },     
+  ]
+  public invstMFDataSet: ChartDataSets[] = [
+    { data:this.invstMF, label: 'Investment in Eqty MF',stack:'a' }
+     
+  ];
+  //.................... Debt Investment........................
+  public barChartOptions2: ChartOptions = {
+    responsive: true,    
+  };
+
+  public barChartLabels2: Label[] = this.yearDebt; 
+  public barChartType2: ChartType = 'bar';
+  public barChartLegend2 = true;
+  public barChartPlugins2 = [];
+  public barChartColors2: Color[] = [
+    { backgroundColor: '#10486b' },
+    { backgroundColor: '#9b2a22' },     
+  ]
+  public invstDebtDataSet: ChartDataSets[] = [
+    { data:this.invstDebt, label: 'Investment in Debt MF',stack:'a' }
+     
+  ];
+
 }

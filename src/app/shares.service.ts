@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { IPortfolio, ITransaction,IDashboard,IFolio,IBankAcDetail, IShareDetail, IAssetHistory } from './ShareDetail';
+import { IPortfolio, ITransaction,IDashboard,IFolio,IBankAcDetail, IShareDetail, IAssetHistory, IAssetReturn, ICashflow } from './ShareDetail';
 
 @Injectable({
     providedIn: 'root'
 })
 export class SharesService {
-   constructor(private client:HttpClient) { }
+   constructor(private client:HttpClient) { } 
 
   getPortfolio(id:number):Observable<IPortfolio[]>{
     return this.client.get<IPortfolio[]>("http://localhost:59921/portfolio/Getfolio/"+id)  
@@ -21,6 +21,9 @@ export class SharesService {
   getEqtTransaction(folioid:Number,eqtId:string):Observable<ITransaction[]>{
     return this.client.get<ITransaction[]>("http://localhost:59921/transaction/tran/"+folioid+"/"+eqtId)  
   }
+  getYearlyInvestment(folioid:Number):Observable<IAssetHistory[]>{
+    return this.client.get<IAssetHistory[]>("http://localhost:59921/transaction/getInvestment")  
+  }
   getCashFlow(folioId:number,pastmonth:number):Observable<ICashflow[]>{    
     return this.client.get<ICashflow[]>("http://localhost:59921/portfolio/GetCashFlowStatment/"+folioId+"/"+pastmonth)  
   }
@@ -29,6 +32,9 @@ export class SharesService {
   }
   getAssetReturn(folioId:number,isShare:number):Observable<IAssetReturn[]>{    
     return this.client.get<IAssetReturn[]>("http://localhost:59921/portfolio/getAssetsReturn/"+folioId+"/"+isShare);
+  }
+  getAssetsReturn(assetId:number):Observable<IAssetReturn[]>{    
+    return this.client.get<IAssetReturn[]>("http://localhost:59921/portfolio/getAssetsReturn/"+assetId);
   }
   getAssetsHistory(folioId:number):Observable<IAssetHistory[]>{    
     return this.client.get<IAssetHistory[]>("http://localhost:59921/portfolio/getAssetsHistory/");
@@ -47,7 +53,7 @@ export class SharesService {
   postAcTransaction(userid:any,Id:any,roi:any,amt:any,dt:any):Observable<any>{
     if(dt == null)
     {     
-      dt= new Date();
+      dt= new Date(); 
     }
     //console.log("Date:"+Date.parse(dt));
     return this.client.post("http://localhost:59921/BankAsset/SaveAcctStatus",{ 
@@ -78,6 +84,9 @@ export class SharesService {
  }
  getDividend(name:string):Observable<IDividend[]>{
   return this.client.get<IShareDetail[]>("http://localhost:59921/Shares/getdividend/"+name)  
+ }
+ getPFAcDetails(name:string):Observable<IpfAcct[]>{
+  return this.client.get<IShareDetail[]>("http://localhost:59921/Shares/getdividend/"+name)    
  }
  deleteTransaction(id:string,dt:Date):Observable<any>{
    console.log(new Date(dt));

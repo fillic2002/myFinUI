@@ -1,11 +1,12 @@
 .square {
-    height: 16px;
-    width: 16px;    
-    background-color:lightgrey;
+    height: 22px;
+    width: 46px;    
+    
     border-left: 2px solid white;
-    border-top: 1px solid white;
+    
     display: inline-block;
     cursor: pointer;
+    text-align: center;
   }
   .gap
   {

@@ -13,6 +13,7 @@ registerLocaleData(localeIn);
 export class BankdetailComponent implements OnInit {
   public accDetail =[] as any;
   public filterAcct =[] as any;
+  public ofAcctDetails =[] as any;
   public at:any;
   public rcash:number=0;
   public rpf:number=0;
@@ -40,36 +41,22 @@ export class BankdetailComponent implements OnInit {
     this._acct.getBankAcDetails()
     .subscribe(data =>{ 
       this.accDetail = data;    
-      var to:number=0;
+      var to:number=0; 
       
-      for (var i = 0; i < this.accDetail.length; i++) {        
-        
-        if(this.accDetail[i].userid==1)
-        { 
-          //console.log(this.accDetail[i].acctType)
-          if(this.accDetail[i].acctType=="Liquid" || this.accDetail[i].acctType=="FD")
-            {
-              this.rcash += parseFloat(this.accDetail[i].amt);
-              
-            }
-          else if(this.accDetail[i].acctType=="people provident fund")
-            {this.rppf += parseFloat(this.accDetail[i].amt);}
-          else if(this.accDetail[i].acctType=="providend fund")
-            {this.rpf += parseFloat(this.accDetail[i].amt);}
-        }
-        else
-        {
+      for (var i = 0; i < this.accDetail.length; i++) {       
+         
           if(this.accDetail[i].acctType=="Liquid"|| this.accDetail[i].acctType=="FD")
-            {this.gcash += parseFloat(this.accDetail[i].amt);}
-          else if(this.accDetail[i].acctType=="people provident fund")
-            {this.gppf += parseFloat(this.accDetail[i].amt);}
-          else if(this.accDetail[i].acctType=="providend fund")
-            {this.gpf += parseFloat(this.accDetail[i].amt);}
-        }
+            {this.cash += parseFloat(this.accDetail[i].amt);}
+          else if(this.accDetail[i].acctType=="People Provident Fund")
+            {this.ppf += parseFloat(this.accDetail[i].amt);}
+          else if(this.accDetail[i].acctType=="Providend Fund")
+            {this.pf += parseFloat(this.accDetail[i].amt);}
+        
       }
-      this.at=this.rcash+this.rpf+this.rppf+this.gcash+this.gpf+this.gppf;
+      this.at=this.cash+this.pf+this.ppf;
       this.filterAcct = this.accDetail;
     });
+    
   }
   AddTransaction():void  {    
     this._acct.postAcTransaction(
@@ -83,31 +70,46 @@ export class BankdetailComponent implements OnInit {
      // var status= document.getElementById('status')
       //status=data;                
     })
-    this.ngOnInit();
+    this.ngOnInit(); 
   }
   public onSelect(option:any)
   {    
     this.router.navigate(['/']);
   }
   public onFilter(e:any)
-  {
-    console.log(e.target.value);
-    if(e.target.value==2)
-    {
-      this.cash=this.gcash;
-      this.pf=this.gpf;
-      this.ppf =this.gppf;
-    }
-    else{
-      this.cash=this.rcash;
-      this.pf=this.rpf;
-      this.ppf =this.rppf;
-    }
+  {    
     this.at=0;
+    
     this.filterAcct=this.accDetail.filter((acct: { userid: number; }) => acct.userid==e.target.value);
     for (var i = 0; i < this.filterAcct.length; i++) {
       this.at=this.at+parseFloat(this.accDetail[i].amt);
     }
+    this.filterPF(e.target.value);
+  }
+  public filterPF(act:number)
+  {
+    this.pf =0;
+    this.ppf=0;
+    this.cash=0;
+
+    this.accDetail.forEach((x:any) => {
+     if(x.acctType=="People Provident Fund" && x.userid==act)
+      {
+        this.ppf+=x.amt;
+      }else if(x.acctType=="Providend Fund" && x.userid==act)
+      {
+        this.pf+=x.amt;
+      }else if((x.acctType=="Liquid" || x.acctType=="FD")&& x.userid==act)
+      {
+        this.cash +=x.amt;   
+      }
+    });
+    this._acct.getPFAcDetails()
+    .subscribe(data =>{ 
+      this.accDetail = data;    
+      var to:number=0; 
+    });
+
   }
   
   public showTrans() {
@@ -138,7 +140,7 @@ export class BankdetailComponent implements OnInit {
       this.tRoi=editField;
       this.tAmt=amt;
     }
-    console.log(this.tRoi+","+this.tAmt+","+this.tId ); 
+    //console.log(this.tRoi+","+this.tAmt+","+this.tId ); 
     this.AddTransaction();
     this.status="Account Updated Successfully!";
   }
@@ -147,7 +149,7 @@ export class BankdetailComponent implements OnInit {
     //console.log(item);
     if(item=='amt') 
     {
-      this.tAmt = event.target.value;      
+      this.tAmt = event.target.value;       
     }
     else if(item=='roi')
     {
