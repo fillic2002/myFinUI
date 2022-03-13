@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SharesService } from '../shares.service';
 import { registerLocaleData } from '@angular/common';
+import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
+import {Color, Label } from 'ng2-charts';
 import localeIn from '@angular/common/locales/en-IN';
 registerLocaleData(localeIn);
 
@@ -13,7 +15,10 @@ registerLocaleData(localeIn);
 export class BankdetailComponent implements OnInit {
   public accDetail =[] as any;
   public filterAcct =[] as any;
-  public ofAcctDetails =[] as any;
+  public PFAcctDetails =[] as any;
+  invstmnt=[] as number[];
+  intrest=[] as number[];
+  year=[] as number[];
   public at:any;
   public rcash:number=0;
   public rpf:number=0;
@@ -33,7 +38,15 @@ export class BankdetailComponent implements OnInit {
   public tUserid:number=1;
   public tId:number=1;
   public tdt:Date= new Date();
-  status:string="";  
+  status:string="";
+  private _userselected: string = "";
+  public get userselected(): string {
+    return this._userselected;
+  }
+  public set userselected(value: string) {
+    this._userselected = value;
+  }
+  accountselected:string="";
   
   constructor(private _acct:SharesService, private route:ActivatedRoute,private router:Router) { }
 
@@ -76,10 +89,10 @@ export class BankdetailComponent implements OnInit {
   {    
     this.router.navigate(['/']);
   }
-  public onFilter(e:any)
+  public ChangeAccount(e:any)
   {    
     this.at=0;
-    
+    console.log(this.accDetail.length);
     this.filterAcct=this.accDetail.filter((acct: { userid: number; }) => acct.userid==e.target.value);
     for (var i = 0; i < this.filterAcct.length; i++) {
       this.at=this.at+parseFloat(this.accDetail[i].amt);
@@ -104,14 +117,51 @@ export class BankdetailComponent implements OnInit {
         this.cash +=x.amt;   
       }
     });
-    this._acct.getPFAcDetails()
-    .subscribe(data =>{ 
-      this.accDetail = data;    
-      var to:number=0; 
-    });
+   // this._acct.getPFAcDetails()
+   // .subscribe(data =>{ 
+   //   this.accDetail = data;    
+   //   var to:number=0; 
+   // });
 
   }
-  
+  public SelectAccount(actname:string, userid:string)
+  {     
+    this._userselected = userid;
+    this.year.length=0;this.intrest.length=0;this.invstmnt.length=0;
+    this.accountselected = actname;    
+    var actType;
+    if(actname=='PPF')
+      actType=4; 
+      if(actname=='PF')
+      actType=3;
+    this._acct.getPFAcDetails(userid, actType)
+    .subscribe(data =>{
+           
+      this.PFAcctDetails=data;
+      data.forEach(element=>{
+        //console.log(element);
+        this.addYear(element.year); 
+        
+        if(element.typeOfTransaction=="int")
+        {                    
+          this.intrest.push(element.investmentEmp); 
+         // console.log(element.investmentEmp);  
+        }else if(element.typeOfTransaction=="Deposit")
+        {
+          this.invstmnt.push(element.investmentEmp);        
+        }
+      }); 
+      
+    });
+  }
+  private addYear(yr:number)
+  {     
+    var found=this.year.indexOf(yr);
+    if(found < 0)
+    {
+      this.year.push(yr);
+    }   
+  }
   public showTrans() {
     this.show = !this.show;
 
@@ -140,13 +190,13 @@ export class BankdetailComponent implements OnInit {
       this.tRoi=editField;
       this.tAmt=amt;
     }
-    //console.log(this.tRoi+","+this.tAmt+","+this.tId ); 
+  
     this.AddTransaction();
     this.status="Account Updated Successfully!";
   }
   onChange(item:string,event:any)
   {
-    //console.log(item);
+     
     if(item=='amt') 
     {
       this.tAmt = event.target.value;       
@@ -168,4 +218,24 @@ export class BankdetailComponent implements OnInit {
       this.tdt = event.target.value;
     }    
   }
+  
+  //--------------------Investment vs intrest data -----------------------
+  public ChartOptions: ChartOptions = {
+    responsive: true,
+  };
+  public ChartLabels: Label[] = this.year; 
+  public ChartType: ChartType = 'bar';
+  public ChartLegend = true;
+  public ChartPlugins = [];
+  public ChartColors: Color[] = [
+    { backgroundColor: 'skyblue ' },
+    { backgroundColor: '#08b100db' },     
+  ]
+  
+  public invstVsintrestData: ChartDataSets[] = [
+    { data:this.invstmnt, label: 'Investment',stack:'a' },        
+    { data:this.intrest, label: 'Intrest',stack:'a' },     
+    
+  ];
+
 }

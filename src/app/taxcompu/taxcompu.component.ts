@@ -21,6 +21,8 @@ export interface cashflow{
 export class TaxcompuComponent {  
   
   public cashflw =[] as cashflow[];
+  public salryFlw =[] as number[];
+  public flw =[] as any[];
   public cashflwMF =[] as cashflow[];
   public cashflwDMF =[] as cashflow[];
   public cashFlwTotal =[] as cashflow[]; 
@@ -36,12 +38,13 @@ export class TaxcompuComponent {
   prevMonthInvst:number=0;
   cumMonthlyAsst:number=0;
   ConsolidatedCashflow:number=0;
-  pastMonth:number=6;
+  pastMonth:number=12;
    
   cumDiv:number=0;
   avgDiv:number=0;
   netInvestAdded:number=0;
   timeLine=[] as string[];
+  timeLineCashOut=[] as string[];
   timeLinemaster=[] as string[];
   timeLineMF=[] as string[];
   timeLineMFmaster=[] as string[];
@@ -49,8 +52,11 @@ export class TaxcompuComponent {
   timeLineMFDmaster=[] as string[];
 
   monthlyCashflowShr =[] as number[];
+  
+  monthlyCashflowOut =[] as number[];
   monthlyCashflowMaster =[] as number[];
-  monthlyDiv =[] as number[];
+  monthlySalary =[] as number[];
+  monthlyDividend =[] as number[];
   monthlyDivMaster =[] as number[];
   avgDebtCashflow:number=0;
   avgEqtCashflow:number=0;
@@ -64,25 +70,24 @@ export class TaxcompuComponent {
     sortDirection: string = '';     
 
     ngOnInit() { 
-      this._portfolio.getCashFlow(1,6)
+      this._portfolio.getCashFlow({ folioId: 0, pastmonth: 12 })
       .subscribe(data=>{
-        data.forEach(element => {          
-          if(element.assettype==1)
-          {
-            this.netInvestAdded = element.investment-this.prevMonthInvst;
-            this.currentMonthCashflowShr = element.assetValue-this.cumMonthlyAsst-this.netInvestAdded;
-            let a:cashflow={ monthyear:element.qtr.toString()+"-"+element.year.toString(),cash:this.currentMonthCashflowShr,dividend:element.dividend};
+        data.forEach(element => {      
+          //console.log(element.flow);  
+          var cashF=0;
+          var div=0;
+          this.flw = element.flow;   
+          element.flow.forEach(e => {
+           
+            cashF+= e.cashflow +e.dividend;
+            //div+=e.dividend;
+          });
+         
+            let a:cashflow={ monthyear:element.qtr.toString()+"-"+element.year.toString(),cash:cashF,dividend:div};
             this.cashflw.push(a);
 
             this.timeLine.push(element.qtr.toString()+"-"+element.year.toString());
-               this.monthlyCashflowShr.push(this.currentMonthCashflowShr);
-
-            this.cumDiv = element.dividend;
-            this.cumMonthlyAsst = element.assetValue;
-            this.prevMonthInvst = element.investment;
-          }
-          else{
-          }
+             
         });
       });
     }
@@ -93,7 +98,7 @@ export class TaxcompuComponent {
       this.cashflwDMF.length=0;
       this.cashflw.length=0;
       this.monthlyCashflowEMF.length=0;
-      this.monthlyDiv.length=0;
+      this.monthlySalary.length=0;
       this.timeLine.length=0;
       this.timeLineMF.length=0;
       this.timeLineMFD.length=0;
@@ -108,69 +113,64 @@ export class TaxcompuComponent {
       this.avgDebtCashflow=0;
       this.avgEqtCashflow=0;
       this.cashFlwMonthlyTotal.length=0;
+      this.monthlyDividend.length=0;
+      this.timeLineCashOut.length=0;
+      this.monthlyCashflowOut.length=0; 
 
 
-      this._portfolio.getCashFlow(e.target.value,this.pastMonth)
+      this._portfolio.getCashFlow({ folioId: e.target.value, pastmonth: this.pastMonth })
       .subscribe(data=>{
         data.forEach(element => {           
-                   //For share cash flow
-          if(element.assettype == 1)
-          {           
-            this.timeLine.push(element.qtr.toString()+"-"+element.year.toString());
-            this.monthlyCashflowShr.push(element.cashflow);
-            this.monthlyDiv.push(element.dividend);
-            
-            let a:cashflow={ monthyear:element.qtr.toString()+"-"+element.year.toString(),cash:element.cashflow,dividend:element.dividend};
-            this.cashflw.push(a);
-   
-           // console.log(element.cashflow);
-            this.cashFlwMonthlyTotal.push(a);
-            this.avgMonthCashflow +=  element.dividend+element.cashflow;
-            this.avgDiv+= element.dividend;
-                      
-          }
-          // For Equity MF cash flow
-          else if(element.assettype==2){              
-
-            this.timeLineMF.push(element.qtr.toString()+"-"+element.year.toString());
-            this.monthlyCashflowEMF.push(element.cashflow);
-            
-            let a:cashflow={ monthyear:element.qtr.toString()+"-"+element.year.toString(),cash:element.cashflow,dividend:0};
-            this.cashflwMF.push(a);
-            this.avgEqtCashflow +=  element.cashflow;
-
-            this.avgMonthCashflow += element.cashflow;
-            let ass:string=element.qtr.toString()+"-"+element.year.toString();
-
-            let objs=this.cashFlwMonthlyTotal.find(obj=>obj.monthyear===ass) as cashflow ;
-           console.log(this.cashFlwMonthlyTotal.length);    
-            if(objs)
-            {             
-              console.log("IN::"+ objs);    
+          var cashF:number=0;
+          var salary=0;
+          var div=0;
+          this.flw = element.flow;   
+          element.flow.forEach(e => {
+            //console.log(e);
+            if(e.assettype==6)
+              salary +=e.cashflow;
+            else
+            {
+              cashF+= e.cashflow;              
+              div+= e.dividend;
             }
+          }); 
+          //console.log(element.qtr.toString()+"-"+element.year.toString());    
+          this.timeLine.push(element.month.toString()+"-"+element.year.toString());
+          this.monthlyCashflowShr.push(cashF.toFixed(2));
+          this.monthlySalary.push(salary);
+          this.monthlyDividend.push(div);
             
-          }
-          //For Debt MF cash flow
-          else if(element.assettype==5)
-          {
-            this.timeLineMFD.push(element.qtr.toString()+"-"+element.year.toString());
-            this.monthlyCashflowDMF.push(element.cashflow);
-
-            let a:cashflow={ monthyear:element.qtr.toString()+"-"+element.year.toString(),cash:element.cashflow,dividend:0};
-            this.cashflwDMF.push(a); 
-            this.avgMonthCashflow += element.cashflow;
-            this.avgDebtCashflow+= element.cashflow;
-          }
+          let a:cashflow={ monthyear:element.month.toString()+"-"+element.year.toString(),cash:cashF,dividend:salary};
+          this.cashflw.push(a);
+  
+          //console.log(element.cashflow);
+          this.cashFlwMonthlyTotal.push(a);
+          this.avgMonthCashflow +=  salary+cashF;
+          this.avgDiv+= salary;                       
+          
         });
         this.timeLineMFmaster = Array.from( this.timeLineMF);
         this.timeLinemaster = Array.from( this.timeLine);
         this.monthlyCashflowMFDmaster = Array.from(this.monthlyCashflowDMF);
-        this.monthlyCashflowMFmaster = Array.from(this.monthlyCashflowEMF);
-        this.monthlyDivMaster = Array.from(this.monthlyDiv);
-        this.monthlyCashflowMaster=Array.from(this.monthlyCashflowShr);
-         
-      });
-    }
+        this.monthlyCashflowMFmaster = Array.from(this.monthlyCashflowEMF); 
+        this.monthlyDivMaster = Array.from(this.monthlySalary);
+        this.monthlyCashflowMaster=Array.from(this.monthlyCashflowShr);         
+      }); 
+
+     this._portfolio.getCashFlowOut( e.target.value, this.pastMonth)
+      .subscribe(
+        data=>{          
+          data.forEach(element => {  
+            var cashF:number=0; 
+            this.timeLineCashOut.push(element.month.toString()+"-"+element.year.toString());
+            element.flow.forEach(e => {               
+              cashF +=e.cashflow;              
+            }); 
+            this.monthlyCashflowOut.push(cashF.toFixed(2));
+          });
+        });
+      }
 
     public onSelect(option:any)
     {    
@@ -193,7 +193,7 @@ export class TaxcompuComponent {
         this.timeLineMF.length=0;
         this.timeLine.length=0;
         this.monthlyCashflowShr.length=0;
-        this.monthlyDiv.length=0;
+        this.monthlySalary.length=0;
 
         //console.log(this.timeLineMFmaster);
 
@@ -202,7 +202,7 @@ export class TaxcompuComponent {
           this.timeLineMF[i]=this.timeLineMFmaster[totoalItemEMF-option+i-1];
           this.timeLine[i]=this.timeLineMFmaster[totoalItemShr-option+i-1];
           this.monthlyCashflowEMF[i]= this.monthlyCashflowMFmaster[totoalItemEMF-option+i-1];
-          this.monthlyDiv[i]= this.monthlyDivMaster[totoalItemShr-option+i-1];
+          this.monthlySalary[i]= this.monthlyDivMaster[totoalItemShr-option+i-1];
           this.monthlyCashflowDMF[i]=this.monthlyCashflowMFDmaster[totoalItemDMF-option+i-1];
           this.monthlyCashflowShr[i] = this.monthlyCashflowMaster[totoalItemShr-option+i-1];
         }
@@ -225,27 +225,27 @@ export class TaxcompuComponent {
       
     ]
     public barChartData: ChartDataSets[] = [
-      { data:this.monthlyCashflowShr, label: 'Shares',stack:'a' },
-      { data:this.monthlyDiv, label: 'Div',stack:'a' }
-      
+      { data:this.monthlySalary, label: 'Salary',stack:'a' },
+      { data:this.monthlyCashflowShr, label: 'Rest',stack:'a' },
+      { data:this.monthlyDividend, label: 'Dividend',stack:'a' }      
+     
     ];
     
  // Showing cash flow from MF
  public barChartOptionsMF: ChartOptions = {
   responsive: true,  
 };
-public barChartLabelsMF: Label[] = this.timeLineMF; 
+public barChartLabelsMF: Label[] = this.timeLineCashOut; 
 public barChartTypeMF: ChartType = 'bar';
 public barChartLegendMF = true;
 public barChartPluginsMF = [];
 public barChartColorsMF: Color[] = [
-  { backgroundColor: 'green' },
-  { backgroundColor: 'blue' },
+  { backgroundColor: '#cfa46b' },
+  { backgroundColor: '#cfa46b' },
   
 ]
 public barChartDataMF: ChartDataSets[] = [
-  { data:this.monthlyCashflowEMF, label: 'Equity MF',stack:'a' },
-  { data:this.monthlyCashflowDMF, label: 'Debt MF',stack:'a' }
+  { data:this.monthlyCashflowOut, label: 'Cash Out',stack:'a' },
   
   
 ];

@@ -26,13 +26,13 @@
             <td class="headername">Asset Type</td>
             <td class="headeramt">Invested</td>    
             <td class="headeramt">Current</td>
-            <td class="headeramt">Return</td>    
+            <td class="headeramt">XiRR Return</td>    
         </tr>
         <tr class="header2" *ngFor ="let d of dbDetail">        
                 <td class="naming" style="cursor: pointer;" (click)="showReturn(d.assetName)">{{d.assetName}}</td>
                 <td class="amt">{{d.invested|number : '1.2-2'}}</td>
                 <td class="amt">{{d.currentValue|number : '1.2-2'}}</td>
-                <td class="amt" [ngStyle]="{color: getTrColor(d.currentValue-d.invested)}" >{{(d.currentValue-d.invested)*100/d.invested|number : '1.2-2'}}%</td>
+                <td class="amt" [ngStyle]="{color: getTrColor(d.currentValue-d.invested)}" >{{d.xirrReturn|number : '1.2-2'}}%</td>
         </tr>
       </table>
     </td>
@@ -40,7 +40,7 @@
       <span style="text-align: center;font-size:14px; font-weight: bold;" >Asset Distribution</span>       
           <div style="width: 650px; height: 450px;padding-left: 50px;" >
           <canvas baseChart 
-            [datasets]="barChartData"
+            [datasets]="assetHistory"
             [labels]="barChartLabels"
             [options]="barChartOptions"
             [colors]="barChartColors"

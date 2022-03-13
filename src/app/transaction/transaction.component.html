@@ -12,7 +12,7 @@
 <!--<div id="comment" class="comment">{{status}}</div>-->
 <table style="width: 90%;" class="status">
     <tr >
-        <td>
+        <td style="width: 20%;">
             <div style="padding-left: 20px;">            
                 <select style="cursor: pointer; background-color: #eaea25de;"  id="portfolio" (change)="changeFolio($event)">
                 <option value=0 >All</option>
@@ -28,20 +28,29 @@
            <td>
                <div class="shatusContent2">{{eqtotal|number : '1.2-2'}}</div>               
             </td>
+            <td style="width: 10%;"></td>
     </tr>
     <tr>
         <td>
             <div style="padding-left: 70px;">
-            <input (click)="setradio('share')" type="radio" id="Share" name="equity" value="Share" checked> 
-            <label for="Share">Share</label>
-        <input (click)="setradio('MF')"type="radio" id="MF" name="equity" value="MF"> 
-            <label for="MF">MF</label>
-        <input (click)="setradio('Gold')"type="radio" id="Gold" name="equity" value="Gold"> 
-            <label for="Gold">Gold</label>  
+            <input (click)="SelectAssetType('share')" type="radio" id="Share" name="equity" value="Share" checked> 
+                <label for="Share">Share</label>
+            <input (click)="SelectAssetType('MF')"type="radio" id="MF" name="equity" value="MF"> 
+                 <label for="MF">MF</label>
+             <input (click)="SelectAssetType('Gold')"type="radio" id="Gold" name="equity" value="Gold"> 
+                 <label for="Gold">Gold</label>  
         </div>
         </td>
         <td>
             <span style="display: inline-block;width: 170px;padding:2px;">Net Investment</span>
+        </td>
+        <td>
+            <span>
+                <input (click)="selectInvstOption('y')" type="radio" id="yearly" name="option" value="yearly" checked> 
+                <label for="yearly">Yearly</label>
+                <input (click)="selectInvstOption('m')" type="radio" id="monthly" name="option" value="monthly" > 
+                <label>Monthly</label>
+            </span>
         </td>
     </tr>   
 </table>
@@ -50,7 +59,8 @@
 <ng-container *ngIf="show">
 <table>
     <tr >        
-        <td><span class="naming">Asset Type:</span><select class="headeramt" id="portfolio" (change)="changeAsset($event)">
+        <td><span class="naming" style="font-weight: 600;padding-right: 3px;">Asset Type:</span>
+            <select class="inputT" id="portfolio" (change)="changeAsset($event)">
                 <option value=1 >Shares</option>
                 <option value=2>Equity MF</option>
                 <option value=3>PF</option>
@@ -63,23 +73,28 @@
          </select>
         
         
-        <span class="naming" >Option:</span>
-            <select id="option" (change)="selectOption($event)"> 
+        <span class="naming" style="font-weight: 600;padding-right: 3px;" >Option:</span>
+            <select id="option" class="inputT"  (change)="selectOption($event)"> 
             <option value="B">Buy</option> 
             <option value="S">Sell</option>
         </select>
         </td>        
-        <td *ngIf="isShown"> <span class="naming" >Asset ID/Name:</span>
+        <td *ngIf="isShown"> 
+            <span class="naming" style="font-weight: 600;padding-right: 3px;">Asset ID/Name:</span>
             <div style="z-index: -1" *ngIf="showresult"> 
                 <div  id="result" *ngFor="let t of result">    
                     <span (click)="getId(t.id)" class="dt">{{t.id}}</span>
                     <span class="naming">{{t.fullName}}</span>                
                 </div>
-            </div><input *ngIf="isShown" id="txtName" class="headeramt" type="text"  (keypress)="getasset($event)" value="{{companyid}}" >
+            </div><input *ngIf="isShown" id="txtName" class="inputT" type="text"  (keypress)="getasset($event)" value="{{companyid}}" >
             
-            <span class="naming">Date:</span><input id="txtDt" type="date" (change)="changeDate($event)">
-            <span class="naming">Quantity:</span><input id="txtQty" class="headeramt" type="text"> 
-            <span class="naming">Price:</span><input id="txtPrice" class="headeramt" type="text">
+            <span class="naming" style="font-weight: 600;padding-right: 3px;">Date:</span>
+                <input class="inputT" id="txtDt" type="date" (change)="changeDate($event)">
+            <span class="naming" style="font-weight: 600;padding-right: 3px;">Quantity:</span>
+                <input class="inputT" id="txtQty"  type="text"> 
+            <span class="naming" style="font-weight: 600;padding-right: 3px;">Price:</span><input class="inputT" id="txtPrice"   type="text">
+            <span class="naming" style="font-weight: 600;padding-right: 3px;">PB:</span><input class="inputT" id="txtPB"   type="text">
+            <span class="naming" style="font-weight: 600;padding-right: 3px;">MarketCap:</span><input class="inputT" id="txtMaretCap"  type="text">
             <input class="savebtn" type="button" value="Save" (click)="AddTransaction()">
         </td>
     </tr>
@@ -89,7 +104,7 @@
 <div (click)="showTrans(option)" class="dml">{{trnStatus}}</div><br>
 <table>
     <tr>
-        <td><div style="width: 450px;height: 280px;" >
+        <td><div style="width: 850px;height: 550px;" >
             <canvas baseChart 
             [datasets]="invstShrDataSet"
             [labels]="barChartLabels"
@@ -100,7 +115,8 @@
             [chartType]="barChartType">
             </canvas>                             
         </div></td>
-        <td><div style="width: 450px;height: 280px;" >
+        <td>
+            <!--<div style="width: 450px;height: 280px;" >
             <canvas baseChart 
             [datasets]="invstMFDataSet"
             [labels]="barChartLabels1"
@@ -110,8 +126,8 @@
             [colors]="barChartColors1"
             [chartType]="barChartType1">
             </canvas>                             
-        </div></td>
-        <td><div style="width: 450px;height: 280px;" >
+        </div>--></td>
+        <td><!--<div style="width: 450px;height: 280px;" >
             <canvas baseChart 
             [datasets]="invstDebtDataSet"
             [labels]="barChartLabels2"
@@ -121,7 +137,7 @@
             [colors]="barChartColors2"
             [chartType]="barChartType2">
             </canvas>                             
-        </div></td>
+        </div>--></td>
     </tr>
 </table>
  
@@ -129,10 +145,12 @@
     <tr class="header1">
         <td (click)="sort('purchaseDt')" class="headerdt">Date of Purchase</td>
         <td class="headername">Equity Name</td>
-        <td (click)="sort('ID')" class="headeramt"> ID</td>
-        <td class="headeramt">Purchase Price</td>
+        <td class="headeramt" (click)="sort('ID')"> ID</td>        
         <td class="headeramt">Quantity</td>
+        <td class="headeramt">Purchase Price</td>
         <td class="headeramt">Invested amt</td>
+        <td class="headeramt" (click)="sort('pb')">PB</td>
+        <td class="headeramt" (click)="sort('mc')">MarketCap</td>
         <td class="headeramt">Transation Type</td>
         <td class="headeramt">Action</td>
     </tr>
@@ -141,9 +159,12 @@
         <td class="dt">{{t.tranDate|date}}</td>
         <td class="naming">{{t.equityName}}</td>
         <td class="amt">{{t.equityId}}</td>
-        <td class="amt">{{t.price|number : '1.2-2'}}</td>
+        
         <td class="amt">{{t.qty}}</td>
+        <td class="amt">{{t.price|number : '1.2-2'}}</td>
         <td class="amt">{{t.qty*t.price|number : '1.2-2'}}</td>
+        <td class="amt">{{t.pb}}</td>
+        <td class="amt">{{t.marketCap}}</td>
         <td class="amt" [ngStyle]="{color: getTrColor(t.tranType)}">{{t.tranType}}</td>
         <td (click)="deleterecord(t.equityId, t.tranDate)" style="cursor: pointer" class="action" >Delete</td>
     </tr>

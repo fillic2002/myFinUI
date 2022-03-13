@@ -12,7 +12,7 @@
             <tr>
                 <td style="width: 45%;">
                     <div>
-                        <select style="cursor: pointer; background-color: #eaea25de;"  id="portfolio" (change)="onFilter($event)">
+                        <select style="cursor: pointer; background-color: #eaea25de;"  id="portfolio" (change)="ChangeAccount($event)">
                             <option value=0>Account</option>    
                             <option value=2>Renuka</option>
                             <option value=3>Fillic</option>    
@@ -44,9 +44,9 @@
 
   <table style="width: 100%;">
       <tr>
-          <td style="width: 5%;"></td>
-          <td style="width: 70%;">
-            <table style="width: 50%;" >
+        <td style="width: 5%;"></td>
+        <td style="width: 43%; vertical-align: top;">
+            <table style="width: 100%;" >
                 <tr>       
                     <td colspan="5"><div style="font-size: 20px;color: green;">{{status}}</div></td>
                 </tr>
@@ -62,7 +62,7 @@
                                 <td><input id="txtAmt" class="headeramt" type="text" (blur)="onChange('amt',$event)"></td>
                                 <td><input id="txtRoi" class="headeramt" type="text" (blur)="onChange('roi',$event)"></td>
                                 <td><input id="txtDt"  type="date" (blur)="onChange('dt',$event)"></td>
-                                <input class="savebtn" type="button" value="Save" (click)="AddTransaction()">
+                                <input class="savebtn" type="button" value="Add Account" (click)="AddTransaction()">
                             </tr>
                             <tr style="text-align: center;">
                                 <td class="naming">User Id</td>
@@ -73,12 +73,12 @@
                             </tr>
                         </table>
                     </ng-container>
-                       <!--
+                    <!--
                             <ng-container *ngIf="show"> 
                                 <div style="display: inline;"> 
-                                 
-                             
-                                 <input id="txtId" class="headeramt" ref-sname type="text" (blur)="onChange('id',$event)">
+                                
+                            
+                                <input id="txtId" class="headeramt" ref-sname type="text" (blur)="onChange('id',$event)">
                             <span class="naming">ROI:</span><input id="txtRoi" class="headeramt" type="text" (blur)="onChange('roi',$event)">
                             <span class="naming">Total Amt:</span><input id="txtAmt" class="headeramt" type="text" (blur)="onChange('amt',$event)">
                             <span class="naming">Date of Update:</span><input id="txtDt"  type="date" (blur)="onChange('dt',$event)">
@@ -89,35 +89,56 @@
                     <td class="header4" style="text-align: left;" >Detail Statement:</td>
                     <td  ></td>
                 </tr>
-              <tr class="header1"> 
+            <tr class="header1"> 
                 <td class="headeramt">UserId</td>    
                 <td class="headeramt">Acct Name</td>
                 <td class="headeramt">Accout Type</td>       
                 <td class="headeramt">Rate Of Intreset</td>
                 <td class="headeramt">Accout Balance</td>      
-             </tr>
-             <tr class="header2" *ngFor ="let p of filterAcct;">
+            </tr>
+            <tr class="header2" *ngFor ="let p of filterAcct;">
                 <td class="amt">{{p.userid}}</td>        
-                <td class="amt">{{p.acctName}}</td>
+                <td class="amt" (click)="SelectAccount(p.acctName,p.userid)">{{p.acctName}}</td>
                 <td class="amt">{{p.acctType}}</td>
                 <td contenteditable="true" (keydown.Tab)="updateList($event,p.acctId,'roi',p.userid,p.roi,p.amt)" (blur)="updateList(p.acctId, 'roi', $event)" class="amt">{{p.roi|number:'1.1-2'}}%</td>
                 <td contenteditable="true" (keydown.Tab)="updateList($event,p.acctId,'amt',p.userid,p.roi,p.amt)" (blur)="onChange('amt',$event)"  class="amt">{{p.amt|number:'1.2-2'}}</td>    
-              </tr>
-            </table>
-            
-          </td>
-          
-        <td style="width: 20%;">
-            <table>
+            </tr>
+            </table>            
+        </td>          
+        <td style="width: 5%;">
+             
+        </td>
+        <td style="width: 40%;">
+            <table style="width: 80%;">
                 <tr>
-                    <td>Date Of Change</td>                    
-                    <td>Emp Share</td>
-                    <td>Employer Share</td>
+                    <td colspan="4">
+                        <div style="width: 450px;height: 280px;" >
+                            <canvas baseChart 
+                            [datasets]="invstVsintrestData"
+                            [labels]="ChartLabels"
+                            [options]="ChartOptions"
+                            [plugins]="ChartPlugins"
+                            [legend]="ChartLegend"
+                            [colors]="ChartColors"
+                            [chartType]="ChartType">
+                            </canvas>                             
+                        </div>
+                    </td>
                 </tr>
-                <tr class="header1" *ngFor ="let p of ofAcctDetails;">
+                <tr class="header1">
+                    <td colspan="4">User: {{userselected}}, Account: {{accountselected}}</td>                                        
+                </tr>
+                <tr class="header1">
                     <td>Date Of Change</td>                    
-                    <td class="amt">Emp Share</td>
-                    <td class="amt">Employer Share</td>
+                    <td class="headeramt">Emp Share</td>
+                    <td class="headeramt">Type Of Transaction</td>
+                    <td class="headeramt">Balance</td>
+                </tr>
+                <tr class="header2" *ngFor ="let p of PFAcctDetails;">
+                    <td class="dt">{{p.dateOfTransaction|date:'MMM, y'}}</td>                    
+                    <td class="amt">{{p.investmentEmp|number:'1.0-2'}}</td>
+                    <td class="amt">{{p.typeOfTransaction}}</td>
+                    <td class="amt">{{p.balance|number:'1.1-2'}}</td>
                 </tr>
             </table>
         </td>

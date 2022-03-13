@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { IPortfolio, ITransaction,IDashboard,IFolio,IBankAcDetail, IShareDetail, IAssetHistory, IAssetReturn, ICashflow } from './ShareDetail';
+import { IPortfolio, ITransaction,IDashboard,IFolio,IBankAcDetail, IShareDetail, IAssetHistory, IAssetReturn, ICashflow,IPfAcct, IDividend } from './ShareDetail';
+import { __core_private_testing_placeholder__ } from '@angular/core/testing';
+import * as _ from 'lodash';
 
 @Injectable({
     providedIn: 'root'
@@ -17,15 +19,18 @@ export class SharesService {
   }
   getTransaction(id:Number):Observable<ITransaction[]>{
     return this.client.get<ITransaction[]>("http://localhost:59921/transaction/getfolio/"+id)  
-  }
+  } 
   getEqtTransaction(folioid:Number,eqtId:string):Observable<ITransaction[]>{
     return this.client.get<ITransaction[]>("http://localhost:59921/transaction/tran/"+folioid+"/"+eqtId)  
   }
-  getYearlyInvestment(folioid:Number):Observable<IAssetHistory[]>{
-    return this.client.get<IAssetHistory[]>("http://localhost:59921/transaction/getInvestment")  
+  getYearlyInvestment(flag:string):Observable<IAssetHistory[]>{
+    return this.client.get<IAssetHistory[]>("http://localhost:59921/transaction/getInvestment/"+flag)  
   }
-  getCashFlow(folioId:number,pastmonth:number):Observable<ICashflow[]>{    
+  getCashFlow({ folioId, pastmonth }: { folioId: number; pastmonth: number; }):Observable<ICashflow[]>{    
     return this.client.get<ICashflow[]>("http://localhost:59921/portfolio/GetCashFlowStatment/"+folioId+"/"+pastmonth)  
+  }
+  getCashFlowOut( folioId: number, pastmonth: number):Observable<ICashflow[]>{    
+    return this.client.get<ICashflow[]>("http://localhost:59921/portfolio/GetCashFlowOutStatment/"+folioId+"/"+pastmonth)  
   }
   getAssetHistory(folioId:number,isShare:number):Observable<IAssetHistory[]>{    
     return this.client.get<IAssetHistory[]>("http://localhost:59921/portfolio/getAssetHistory/"+folioId+"/"+isShare);
@@ -39,7 +44,7 @@ export class SharesService {
   getAssetsHistory(folioId:number):Observable<IAssetHistory[]>{    
     return this.client.get<IAssetHistory[]>("http://localhost:59921/portfolio/getAssetsHistory/");
   }
-  postTransaction(price:any,name:any,qty:any,dt:any,folioId: any,option:any,assetType:any):Observable<any>{   
+  postTransaction(price:any,name:any,qty:any,dt:any,folioId: any,option:any,assetType:any,pb:any,mv:any):Observable<any>{   
     return this.client.post("http://localhost:59921/transaction/updatefolio",{ 
     price: parseFloat(price.value),
     equityId:name.value,
@@ -47,11 +52,25 @@ export class SharesService {
     tranDate:new Date(Date.parse(dt.value)),
     tranType: option,
     portfolioId:parseInt(folioId),
-    typeAsset:parseInt(assetType)
-     })
+    assetType:parseInt(assetType),
+    PB:parseFloat(pb.value),
+    MarketCap:parseFloat(mv.value),
+     });
   }
+  postBankTransaction(salary:any,desc:string,txtDt:any,txtType:any,txtAcctType:any,folioId:number):Observable<IAssetHistory[]>{
+    
+    return this.client.post<IAssetHistory[]>("http://localhost:59921/transaction/AddBankTransaction",{
+      tranDate: new Date(Date.parse(txtDt)),
+      Amt:parseInt(salary.value),
+      folioId:folioId,
+       tranType:txtType,
+       Description:desc,
+       AcctId:txtAcctType
+    })  
+  }
+ 
   postAcTransaction(userid:any,Id:any,roi:any,amt:any,dt:any):Observable<any>{
-    if(dt == null)
+    if(dt == null) 
     {     
       dt= new Date(); 
     }
@@ -83,10 +102,10 @@ export class SharesService {
   return this.client.get<IShareDetail[]>("http://localhost:59921/Shares/search/"+name)  
  }
  getDividend(name:string):Observable<IDividend[]>{
-  return this.client.get<IShareDetail[]>("http://localhost:59921/Shares/getdividend/"+name)  
+  return this.client.get<IDividend[]>("http://localhost:59921/Shares/getdividend/"+name)  
  }
- getPFAcDetails(name:string):Observable<IpfAcct[]>{
-  return this.client.get<IShareDetail[]>("http://localhost:59921/Shares/getdividend/"+name)    
+ getPFAcDetails(folioid:string,acttype:any):Observable<IPfAcct[]>{
+  return this.client.get<IPfAcct[]>("http://localhost:59921/bankasset/GetPfYearlyDetails/"+folioid+"/"+acttype)    
  }
  deleteTransaction(id:string,dt:Date):Observable<any>{
    console.log(new Date(dt));
@@ -98,6 +117,15 @@ export class SharesService {
     tranType: 'B',
     portfolioId:1,
     typeAsset:1
-  })
- }
+  });
+ } 
+ getDropDownText(id, object){
+  const selObj = _.filter(object, function (o) {
+      return (_.includes(id,o.id));
+  });
+  return selObj;
+}
+getBankType(){
+  return this.client.get<IAcctType[]>("http://localhost:59921/bankasset/GetAccoutType/"); 
+}
 }

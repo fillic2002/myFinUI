@@ -115,9 +115,7 @@ html { background-color: rgba(0, 0, 0, 0.007); }
     padding-left: 5px;     
     font: 13px 550 bold arial;    
     color: #3b3a3a;
-    border-bottom: 1px dotted #bfbfbf;
-   
-    
+    border-bottom: 1px dotted #bfbfbf;    
   }
   .amt{    
     height: 30px;
@@ -225,4 +223,16 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .pipe:hover{
   color: goldenrod;
   cursor: pointer;
+}
+.inputT{
+  font-weight: 7px;
+  border: 1px dotted;
+  background-color: palegoldenrod;
+  width: 100px;
+}
+.inputDt{
+  font-weight: 7px;
+  border: 1px dotted;
+  background-color: palegoldenrod;
+  width: 120px;
 }

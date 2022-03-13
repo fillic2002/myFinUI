@@ -30,7 +30,7 @@ export class TransactionComponent implements OnInit {
   public trnStatus:string='Add >'
   public result=[] as any;
   public companyid: string="";
-  public yearEqt =[] as number[];
+  public yearEqt: number[] = [];
   public invstEqt =[] as number[];
   public yearMF =[] as number[];
   public invstMF =[] as number[];
@@ -39,31 +39,32 @@ export class TransactionComponent implements OnInit {
   showresult: boolean = false ;
   qty: any;
   direction:string="asc";
-  isMF:boolean=false;
+  //isMF:boolean=false;
   isShare:boolean=true;
 
   constructor(private _eqTransaction:SharesService,private route:ActivatedRoute,private  router:Router) { }
 
   ngOnInit(): void {
-    this._eqTransaction.getTransaction(1)
+    this._eqTransaction.getTransaction(0)
     .subscribe(data =>{
      this.equitytransaction = data
      this.filterPortfolio=data;
      var to:number;
-     to=0;
+     to=0;  
      for (var i = 0; i < this.equitytransaction.length; i++) {
        to= to + parseFloat(this.equitytransaction[i].price)*parseFloat(this.equitytransaction[i].qty);        
      }
      this.eqtotal=to.toFixed(2);     
     }); 
 
-    this._eqTransaction.getYearlyInvestment(1)
+    this._eqTransaction.getYearlyInvestment("Yearly")
     .subscribe(data =>{
       data.forEach(element => {
-        console.log(element);
+         
         if(element.assettype==1)
           {
             this.yearEqt.push(element.year)
+             
             this.invstEqt.push(element.investment.toFixed(2));
           }
           if(element.assettype==2)
@@ -77,8 +78,13 @@ export class TransactionComponent implements OnInit {
             this.invstDebt.push(element.investment.toFixed(2));
           }
       });
-    }); 
-
+      this.yearEqt.reverse();
+      this.invstEqt.reverse();
+      this.invstMF.reverse();
+      this.yearMF.reverse();
+      this.yearDebt.reverse();
+      this.invstDebt.reverse();
+    });      
   }
   
   AddTransaction():void  {
@@ -89,17 +95,19 @@ export class TransactionComponent implements OnInit {
     else{
       this.assetId = document.getElementById('txtName');
     }
-    console.log(document.getElementById('txtQty'));
+    debugger;
     this.qty = document.getElementById('txtQty');
+    var PB = document.getElementById('txtPB');
     this.qty=this.qty.value.replace(',','');
-    
+    var mv=document.getElementById('txtMaretCap');
     this._eqTransaction.postTransaction(document.getElementById('txtPrice'),
           this.assetId,
           this.qty,
           document.getElementById('txtDt'),
           this.selectedfolio,
           this.purchaseOption,
-          this.assetType
+          this.assetType,
+          PB,mv
       )
     .subscribe(data => {
      var status= document.getElementById('status')
@@ -133,8 +141,7 @@ export class TransactionComponent implements OnInit {
       this.router.navigate(['/tax']);
   }
   public selectFolio()
-  {
-    
+  {    
     this.router.navigate(['/portfolio']);   
   }
   
@@ -143,17 +150,19 @@ export class TransactionComponent implements OnInit {
   }
   changeFolio(e :any) {
     this.status="";
-    //this.equitytransaction.length=0;
+    
     this.selectedfolio=e.target.value;
+    console.log(this.selectedfolio);
     this._eqTransaction.getTransaction(e.target.value)
     .subscribe(data =>{
       this.portfolio=data;
-     this.equitytransaction = data
-     var eqto:number;
-     var mfto:number;
-     eqto=0;
-     mfto=0;
-     for (var i = 0; i < this.equitytransaction.length; i++) {
+      this.equitytransaction = data
+      
+      var eqto:number;
+      var mfto:number;
+      eqto=0;
+      mfto=0;
+      for (var i = 0; i < this.equitytransaction.length; i++) {
        if(this.equitytransaction.equityType=1){
         eqto= eqto + parseFloat(this.equitytransaction[i].price)*parseFloat(this.equitytransaction[i].qty);        
        }
@@ -179,6 +188,7 @@ export class TransactionComponent implements OnInit {
   }
   changeAsset(e:any)
   {
+   
     this.assetType =e.target.value;
      if(e.target.value==12 || e.target.value==7|| e.target.value==8)
       {
@@ -225,8 +235,7 @@ export class TransactionComponent implements OnInit {
     }
   }
   public getId(e:any)
-  {
-    
+  {    
     this.showresult =false;
     this.companyid=e;
   }
@@ -253,8 +262,7 @@ export class TransactionComponent implements OnInit {
     if(e=="ID")
     {
       if(this.direction =="asc")
-      {
-         
+      {         
         this.filterPortfolio.sort((a,b)=>(a.equityId>b.equityId)?1:-1);
         this.direction ="desc";
       }
@@ -265,8 +273,7 @@ export class TransactionComponent implements OnInit {
       }
    }
    if(e=="purchaseDt")
-   {
-     console.log('in');
+   {      
      if(this.direction =="asc")
      {
        this.filterPortfolio.sort((a,b)=>(a.tranDate>b.tranDate)?1:-1);
@@ -278,11 +285,108 @@ export class TransactionComponent implements OnInit {
        this.direction ="asc";
      }
   } 
+  if(e=="pb")
+   { 
+     if(this.direction =="asc")
+     {
+       this.filterPortfolio.sort((a,b)=>(a.pb>b.pb)?1:-1);
+       this.direction ="desc";
+     }  
+     else 
+     {
+       this.filterPortfolio.sort((a,b)=>(b.pb>a.pb)?1:-1);
+       this.direction ="asc";
+     }
   }
-  setradio(e: string): void   
+  if(e=="mc")
+   { 
+     if(this.direction =="asc")
+     {
+       this.filterPortfolio.sort((a,b)=>(a.mv>b.mv)?1:-1);
+       this.direction ="desc";
+     }  
+     else 
+     {
+       this.filterPortfolio.sort((a,b)=>(b.mv>a.mv)?1:-1);
+       this.direction ="asc";
+     }
+  } 
+  }
+  selectInvstOption(e: string): void   
+  {
+    this.yearEqt.length=0;
+    this.invstEqt.length=0;
+    this.invstMF.length=0;
+    this.yearMF.length=0;
+    this.yearDebt.length=0;
+    this.invstDebt.length=0;
+     if(e=="m")
+     {
+      this._eqTransaction.getYearlyInvestment("Monthly")
+      .subscribe(data =>{
+        data.forEach(element => {
+           
+          if(element.assettype==1)
+            {
+              this.yearEqt.push(element.year+"-"+element.qtr);
+              this.invstEqt.push(element.investment.toFixed(2));
+            }
+            if(element.assettype==2)
+            {
+              this.yearMF.push(element.year+"-"+element.qtr)
+              this.invstMF.push(element.investment.toFixed(2));
+            }
+            if(element.assettype==5)
+            {
+              this.yearDebt.push(element.year+"-"+element.qtr)
+              this.invstDebt.push(element.investment.toFixed(2));
+            }
+        });
+        this.yearEqt.reverse();
+        this.invstEqt.reverse();
+        this.invstMF.reverse();
+        this.yearMF.reverse();
+        this.yearDebt.reverse();
+        this.invstDebt.reverse();
+      });  
+     }
+     else{
+      this._eqTransaction.getYearlyInvestment("Yearly")
+      .subscribe(data =>{
+        data.forEach(element => {
+           
+          if(element.assettype==1)
+            {
+              this.yearEqt.push(element.year)
+               
+              this.invstEqt.push(element.investment.toFixed(2));
+            }
+            if(element.assettype==2)
+            {
+              this.yearMF.push(element.year)
+              this.invstMF.push(element.investment.toFixed(2));
+            }
+            if(element.assettype==5)
+            {
+              this.yearDebt.push(element.year)
+              this.invstDebt.push(element.investment.toFixed(2));
+            }
+        });
+        this.yearEqt.reverse();
+        this.invstEqt.reverse();
+        this.invstMF.reverse();
+        this.yearMF.reverse();
+        this.yearDebt.reverse();
+        this.invstDebt.reverse();
+      }); 
+     }
+     
+  }
+  SelectAssetType(e: string): void   
   {            
-        this.isMF = !this.isMF;
+        //this.isMF = !this.isMF;
         this.isShare=!this.isShare;
+        console.log(this.isShare);
         if(this.isShare)
           this.filterPortfolio =  this.equitytransaction.filter(s => s.assetType===1);
         else  
@@ -294,22 +398,26 @@ export class TransactionComponent implements OnInit {
    public barChartOptions: ChartOptions = {
     responsive: true,    
   };
-
-  public barChartLabels: Label[] = this.yearEqt; 
+  public barChartLabels: Label[] = this.yearEqt.reverse(); 
   public barChartType: ChartType = 'bar';
   public barChartLegend = true;
   public barChartPlugins = [];
   public barChartColors: Color[] = [
-    { backgroundColor: '#4b7260' },
-    { backgroundColor: '#08b100db' },     
+    { backgroundColor: '#CE476B' },
+    { backgroundColor: '#08b100db' },
+    { backgroundColor: '#2AA7BC' },
+          
   ]
   public invstShrDataSet: ChartDataSets[] = [
-    { data:this.invstEqt, label: 'Investment in Shares',stack:'a' }
-     
+    { data:this.invstDebt, label: 'Investment in Debt MF' },
+    { data:this.invstMF, label: 'Investment in Eqty MF' },   
+    { data:this.invstEqt, label: 'Investment in Shares'  },
+    
+    
   ];
 
    //.................... MF Investment........................
-   public barChartOptions1: ChartOptions = {
+  /* public barChartOptions1: ChartOptions = {
     responsive: true,    
   };
 
@@ -318,7 +426,7 @@ export class TransactionComponent implements OnInit {
   public barChartLegend1 = true;
   public barChartPlugins1 = [];
   public barChartColors1: Color[] = [
-    { backgroundColor: '#4d4b72' },
+    { backgroundColor: '#D3BF8D' },
     { backgroundColor: '#08b100db' },     
   ]
   public invstMFDataSet: ChartDataSets[] = [
@@ -334,13 +442,13 @@ export class TransactionComponent implements OnInit {
   public barChartType2: ChartType = 'bar';
   public barChartLegend2 = true;
   public barChartPlugins2 = [];
-  public barChartColors2: Color[] = [
-    { backgroundColor: '#10486b' },
-    { backgroundColor: '#9b2a22' },     
+  public barChartColors2: Color[] = [ 
+    { backgroundColor: '#889BB8' },
+    { backgroundColor: '#D7E2E8' },     
   ]
   public invstDebtDataSet: ChartDataSets[] = [
     { data:this.invstDebt, label: 'Investment in Debt MF',stack:'a' }
      
-  ];
+  ];*/
 
 }

@@ -59,7 +59,7 @@
                       <td class="amt">{{p.cash|number:'1.2-2'}}</td>           
                     </tr>
                   </table>
-                  <table style="float: left; width: 25%;">
+                  <!--<table style="float: left; width: 25%;">
                     <tr  >
                       <td class="header1">From Equity MF<br>{{avgEqtCashflow/pastMonth|number:'1.2-2'}}</td>           
                     </tr>
@@ -74,10 +74,10 @@
                     <tr *ngFor ="let p of cashflwDMF">          
                       <td class="amt">{{p.cash|number:'1.2-2'}}</td>                                  
                     </tr>
-                  </table>
+                  </table>-->
                 </td>                  
-                  <td style="width: 40%;">
-                    <div style="width: 600px;height: 350px;" >
+                  <td style="width: 50%;">
+                    <div style="width: 650px;height: 400px;" >
                       <canvas baseChart 
                         [datasets]="barChartData"
                         [labels]="barChartLabels"

@@ -37,8 +37,9 @@ export class DashboardComponent implements OnInit {
     this._dashbrd.getDashBoard()
     .subscribe(data=>{
         this.dbDetail = data;
-        var to:number;
-        to=0; 
+        console.log(this.dbDetail);
+        var to:number; 
+        to=0;  
         for (var i = 0; i < this.dbDetail.length; i++) {
           to= to + parseFloat(this.dbDetail[i].currentValue);       
           this.assetValue.push(this.dbDetail[i].currentValue);
@@ -61,11 +62,11 @@ export class DashboardComponent implements OnInit {
 
     });
 */
-    this._dashbrd.getAssetsHistory(1)
+    this._dashbrd.getAssetsHistory(0)
     .subscribe(ast =>{ 
       ast.forEach(element => {
         this.assetValues.push(element.assetValue.toFixed(2));
-        this.assetXaxis.push(element.qtr+"-"+element.year);
+        this.assetXaxis.push(element.month+"-"+element.year);
         this.invstValues.push(element.investment.toFixed(2));        
       }); 
     });
@@ -135,7 +136,7 @@ export class DashboardComponent implements OnInit {
       else
         return 'red'      
     }
-//------------------- Bar Chart ----------------------------------
+//------------------- Asset History ----------------------------------
     public barChartOptions: ChartOptions = { 
       responsive: true,
     };  
@@ -144,7 +145,7 @@ export class DashboardComponent implements OnInit {
     public barChartLegend = true; 
     public barChartPlugins = [];
     
-    public barChartData: ChartDataSets[] = [
+    public assetHistory: ChartDataSets[] = [
       { data:this.assetValues, label: 'Current Asset' },
       { data:this.invstValues, label: 'investment' },    
     ];
@@ -158,13 +159,13 @@ public pieChartType: ChartType = 'pie';
 public pieChartLegend = true;
 public pieChartPlugins = [];
 public pieChartColors: Array < any > = [{
-  backgroundColor: ['lightred', 'green','red','blue','lightgreen','lightblue','orange','pink','darkgrey', 'rgba(148,159,177,0.2)'], 
+  backgroundColor: ['lightred', 'green','darkgrey','lightblue','purple','red','lightgreen','orange','blue', 'blue'], 
 }];
 public pieChartData: ChartDataSets[] = [
   { data:this.assetValue, label: 'Current Value' },      
 ];
 
-//-------------------Bar Chart-------------------------------=----------
+//-------------------Asset return-----------------------------------------
 public chartOptions: ChartOptions = { 
   responsive: true,
 };

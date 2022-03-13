@@ -19,12 +19,12 @@
             <tr>
                 <td style="width: 40%;">
                     <select style="cursor: pointer; background-color: #eaea25de;" id="portfolio" (change)="changeFolio($event)">
-                        <option value=0>Portfolio</option>
+                        <option value=0>All</option>
                         <option value=1 >Fillic_gov</option>
                         <option value=2>Renuka</option>
                         <option value=3>Fillic</option>
                         <option value=4>Naitik</option>
-                        <option value=5>Kedar</option> 
+                        <option value=5>Kedar</option>                        
                     </select>
                 </td>
                 <td *ngIf="isShare" class="header3">         
@@ -146,52 +146,48 @@
         <td>
             <table>                    
                 <tr style="height: 25px;">
-                    <td colspan="2"  style="text-align: right;cursor: pointer;font-weight: bold;">{{shareName}}</td>
+                    <td colspan="2"  style="text-align: right;cursor: pointer;font-weight: bold;"> </td>
                 </tr>    
                 <tr style="height: 40px;">
-                    <td style="width: 60%;">Last..
-                        <span style="padding:6px;background-color: grey;cursor: pointer;border: 1px solid lightgray;font: 300 14px sans-serif;color:#f0f8ffc7">5 yrs</span>            
-                        <span style="padding:6px;background-color: grey;cursor: pointer;border: 1px solid lightgray;font: 300 14px sans-serif;color:#f0f8ffc7">10 yrs</span>
+                    <td style="width: 60%;">                        
+                       
                     </td>
                     <td style="width: 41%;font-size: 16px;" class="header3">
-                        Total: {{dividendTotal.toFixed(2)}}
+                       
                     </td>
                 </tr>
                 <tr style="height: 27px;" class="header4">
                     <td style="text-align: center;">
-                            Date          </td>
-                    <td style="text-align: center;">
-                        Dividend         
                     </td>
-            
+                    <td style="text-align: center;">                    
+                    </td>            
                 </tr>
                 <tr style="height: 20px;"  *ngFor ="let p of companyDividend">       
-                    <td>
-                        {{p.dt|date}}
+                    <td>                  
                     </td> 
-                    <td style="text-align: right;">            
-                        {{p.value}}
-                    </td>     
-            
+                    <td style="text-align: right;">                        
+                    </td>             
                 </tr>
             </table>
         </td>
         <td>
             <table>
-                <!--<tr class="header1">
-                    <td>Date</td>
-                    <td>Qty</td>
-                    <td>Price</td>
-                    <td>Total</td>          
+                <tr class="header1">
+                    <td class="headeramt">Date</td>
+                    <td class="headeramt">Qty</td>
+                    <td class="headeramt">Price</td>
+                    <td class="headeramt">Total</td> 
+                    <td class="headeramt">PB</td>          
                 </tr>
                 <tr class="header2" *ngFor ="let p of eqtTransaction">
-                    <td class="amt">{{p.tranDate|date}}</td>  
+                    <td class="dt">{{p.tranDate|date}}</td>  
                     <td class="amt">{{p.qty.toFixed(0)}}</td> 
                     <td class="amt">{{p.price.toFixed(0)}}</td>
                     <td class="amt">{{(p.price*p.qty).toFixed(0)}}</td>
-                </tr>-->
+                    <td class="amt">{{(p.pb).toFixed(2)}}</td>
+                </tr>
                 <tr>
-                    <td>
+                    <td colspan="5">
                         <div style="width: 450px;height:150px; " >
                             <canvas baseChart
                                 [datasets]="getEquityInvstmt"
@@ -207,7 +203,7 @@
                 </tr>
                 <tr style="height: 100px;"><td></td></tr>
                 <tr>
-                    <td>
+                    <td colspan="5">
                         <div style="width: 450px;height:150px; " >
                         <canvas baseChart
                         [datasets]="getDivReturn"
@@ -222,10 +218,7 @@
                     </td>
                 </tr>
             </table>
-        </td>
-        
-    </tr>
-    
-     
+        </td>        
+    </tr>     
 </table>
     

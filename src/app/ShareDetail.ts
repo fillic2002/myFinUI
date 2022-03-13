@@ -27,7 +27,8 @@ export interface ITransaction
     qty:number
     tranDate:Date
     tranType:string
-    assetType:number     
+    assetType:number
+    pb:number
 }
 export interface IDashboard
 {
@@ -35,6 +36,7 @@ export interface IDashboard
      assetName:string
      invested:string
      currentValue:string
+     XirrReturn:number
 }
 export interface IFolio
 {
@@ -57,7 +59,7 @@ export interface IAssetHistory
     assetValue: number,
     dividend: number,
     investment:number,
-    qtr: number,
+    month: number,
     year: number,
     qty: number,
     assettype:number
@@ -73,10 +75,14 @@ export interface IDividend
 export interface ICashflow
 {
     portfolioId: number,
-    cashflow: number,
-    dividend: number,
-    qtr: number,
+    month: number,
     year: number,    
+    flow:IAssetFlow[]
+}
+export interface IAssetFlow
+{    
+    cashflow: number,
+    dividend: number,        
     assettype:number
 }
 
@@ -88,11 +94,21 @@ export interface IAssetReturn
 }
 export interface IPfAcct
 {
-    dtofchange: Date,    
-    empshr: number,    
-    emplrshr:number,
+    dateOfTransaction: Date,    
+    investmentEmp: number,    
+    InvestmentEmplr:number,
     pension:number,
-    folioid:number
+    folioid:number,
+    balance:number,
+    typeOfTransaction:string,
+    year:number,
+    month:number
+}
+export interface IAcctType
+{
+    acctTypeId: Date,    
+    BankName: number,    
+    acctType:number
 }
 
      

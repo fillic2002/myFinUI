@@ -77,7 +77,7 @@ export class PortfolioComponent implements OnInit {
   constructor(private _portfolio:SharesService,private route:ActivatedRoute,private router:Router, public datepipe: DatePipe) {  }
 
   ngOnInit(): void {    
-     this._portfolio.getPortfolio(1)
+     this._portfolio.getPortfolio(0)
      .subscribe(data => {
        this.portfolio = data;
        
@@ -105,7 +105,7 @@ export class PortfolioComponent implements OnInit {
             this.sector.push(element.sector);
             this.assetValue[this.sector.indexOf(element.sector)]=0;
             }
-          }
+          }  
         }
         if(element.sector!="")
           {
@@ -144,7 +144,7 @@ export class PortfolioComponent implements OnInit {
      this.mfCurrVal =mato; 
      this.mfPLPercent = (this.mfCurrVal-this.mfInvstVal)*100/this.mfInvstVal;
      this.barChartLabels=this.sector;
-     //console.log(this.portfolio);
+     console.log(this.portfolio);
      this.filterPortfolio =this.portfolio;
    
     });
@@ -163,20 +163,20 @@ export class PortfolioComponent implements OnInit {
     this._portfolio.getAssetHistory(e.target.value,this.option)
     .subscribe(data=>{      
       data.forEach(element => {               
-        this.assetHistoryTime.push(element.qtr+"-"+element.year); 
-        
+        this.assetHistoryTime.push(element.month+"-"+element.year); 
+        //console.log("Portfolio");
+        //console.log(element.month+"-"+element.year);
         this.assetValueHistory.push(parseFloat(element.assetValue.toFixed(2)));        
         this.dividendHistory.push(element.dividend);
         this.investmentHistory.push(parseFloat(element.investment.toString()).toFixed(2));
-        console.log(element.qtr+"-"+element.year+" invst:"+element.investment);    
-        let dt:Date = new Date(element.year,element.qtr);
+       // console.log(element.month+"-"+element.year+" invst:"+element.investment);    
+        let dt:Date = new Date(element.year,element.month);
         
         this.previousMonthAsset=element.assetValue;
         this.previousMonthInvst=element.investment;                  
         
       })      
     });
-
  
     this._portfolio.getAssetReturn(this.folioId,this.option)
     .subscribe(data=>{      
@@ -363,11 +363,11 @@ export class PortfolioComponent implements OnInit {
         .subscribe(data=>{      
           data.forEach(element => {
                      
-            this.assetHistoryTime.push(element.qtr.toString()+"-"+element.year.toString());
+            this.assetHistoryTime.push(element.month.toString()+"-"+element.year.toString());
             this.assetValueHistory.push(parseFloat(element.assetValue).toFixed(2));        
             this.dividendHistory.push(element.dividend);
             this.investmentHistory.push(parseFloat(element.investment).toFixed(2));        
-            let dt:Date = new Date(element.year,element.qtr);
+            let dt:Date = new Date(element.year,element.month);
             if(this.previousMonthAsset==0)
             {          
            
@@ -412,11 +412,11 @@ export class PortfolioComponent implements OnInit {
           this._portfolio.getAssetHistory(this.folioId,2)
           .subscribe(data=>{      
             data.forEach(element => {              
-              this.assetHistoryTime.push(element.qtr.toString()+"-"+element.year.toString());
+              this.assetHistoryTime.push(element.month.toString()+"-"+element.year.toString());
               this.assetValueHistory.push(parseFloat(element.assetValue.toString()).toFixed(2));        
               
               this.investmentHistory.push(parseFloat(element.investment.toString()).toFixed(2));        
-              let dt:Date = new Date(element.year,element.qtr);
+              let dt:Date = new Date(element.year,element.month);
               if(this.previousMonthAsset==0)
               {          
            
@@ -451,11 +451,11 @@ export class PortfolioComponent implements OnInit {
            this._portfolio.getAssetHistory(this.folioId,5)
           .subscribe(data=>{      
             data.forEach(element => {              
-              this.assetHistoryTime.push(element.qtr.toString()+"-"+element.year.toString());
+              this.assetHistoryTime.push(element.month.toString()+"-"+element.year.toString());
               this.assetValueHistory.push(parseFloat(element.assetValue.toString()).toFixed(2));        
               
               this.investmentHistory.push(parseFloat(element.investment.toString()).toFixed(2));        
-              let dt:Date = new Date(element.year,element.qtr);
+              let dt:Date = new Date(element.year,element.month);
               if(this.previousMonthAsset==0)
               {          
            
@@ -484,16 +484,16 @@ export class PortfolioComponent implements OnInit {
         this.dividendTotal += element.value;
          this.divDt.push(new Date(element.dt).getMonth()+"-"+new Date(element.dt).getFullYear());
          this.divVal.push(element.value);
-         console.log(new Date(element.dt).getMonth());
+         //console.log(new Date(element.dt).getMonth());
       }); 
-     });
+     }); 
      
     this._portfolio.getEqtTransaction(this.folioId, e)
     .subscribe(data => { 
       this.eqtTransaction=data;
       this.eqtQty.length=0;
       this.eqtTrandt.length=0;
-      data.forEach(element=>{
+      data.forEach(element=>{ 
         this.eqtQty.push(element.qty);
         let ss = this.datepipe.transform(element.tranDate, 'yyyy-MM-dd');//!=null?this.datepipe.transform(element.tranDate, 'yyyy/MM/dd'):new Date();
         this.eqtTrandt.push( ss!=null?new Date(ss).getMonth()+"-"+new Date(ss).getFullYear():new Date() );
