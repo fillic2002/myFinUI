@@ -5,6 +5,7 @@ import { registerLocaleData } from '@angular/common';
 import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
 import {Color, Label } from 'ng2-charts';
 import localeIn from '@angular/common/locales/en-IN';
+import { Console } from 'console';
 registerLocaleData(localeIn);
 
 @Component({
@@ -19,6 +20,8 @@ export class BankdetailComponent implements OnInit {
   invstmnt=[] as number[];
   intrest=[] as number[];
   year=[] as number[];
+  acctType=[] as string[];
+  return=[] as number[];
   public at:any;
   public rcash:number=0;
   public rpf:number=0;
@@ -56,15 +59,16 @@ export class BankdetailComponent implements OnInit {
       this.accDetail = data;    
       var to:number=0; 
       
-      for (var i = 0; i < this.accDetail.length; i++) {       
-         
-          if(this.accDetail[i].acctType=="Liquid"|| this.accDetail[i].acctType=="FD")
-            {this.cash += parseFloat(this.accDetail[i].amt);}
-          else if(this.accDetail[i].acctType=="People Provident Fund")
-            {this.ppf += parseFloat(this.accDetail[i].amt);}
-          else if(this.accDetail[i].acctType=="Providend Fund")
-            {this.pf += parseFloat(this.accDetail[i].amt);}
-        
+      for (var i = 0; i < this.accDetail.length; i++) {   
+
+        this.acctType.push(this.accDetail[i].acctName+'-'+this.accDetail[i].acctType);
+        this.return.push(this.accDetail[i].roi.toFixed(2));
+        if(this.accDetail[i].acctType=="People Provident Fund")
+          {this.ppf += parseFloat(this.accDetail[i].amt);}
+        else if(this.accDetail[i].acctType=="Providend Fund")
+          {this.pf += parseFloat(this.accDetail[i].amt);}
+        else{
+          this.cash += parseFloat(this.accDetail[i].amt);}           
       }
       this.at=this.cash+this.pf+this.ppf;
       this.filterAcct = this.accDetail;
@@ -92,7 +96,7 @@ export class BankdetailComponent implements OnInit {
   public ChangeAccount(e:any)
   {    
     this.at=0;
-    console.log(this.accDetail.length);
+    //console.log(this.accDetail.length);
     this.filterAcct=this.accDetail.filter((acct: { userid: number; }) => acct.userid==e.target.value);
     for (var i = 0; i < this.filterAcct.length; i++) {
       this.at=this.at+parseFloat(this.accDetail[i].amt);
@@ -135,23 +139,23 @@ export class BankdetailComponent implements OnInit {
       if(actname=='PF')
       actType=3;
     this._acct.getPFAcDetails(userid, actType)
-    .subscribe(data =>{
-           
+    .subscribe(data =>{      
       this.PFAcctDetails=data;
       data.forEach(element=>{
-        //console.log(element);
-        this.addYear(element.year); 
+      this.addYear(element.year); 
         
         if(element.typeOfTransaction=="int")
-        {                    
-          this.intrest.push(element.investmentEmp); 
-         // console.log(element.investmentEmp);  
+        { 
+          var inv:number=0;
+          inv= element.investmentEmplr+element.investmentEmp;     
+          this.intrest.push(inv);   
         }else if(element.typeOfTransaction=="Deposit")
         {
-          this.invstmnt.push(element.investmentEmp);        
+          var inv:number=0;
+          inv= element.investmentEmplr+element.investmentEmp;     
+          this.invstmnt.push(inv);        
         }
-      }); 
-      
+      });       
     });
   }
   private addYear(yr:number)
@@ -237,5 +241,20 @@ export class BankdetailComponent implements OnInit {
     { data:this.intrest, label: 'Intrest',stack:'a' },     
     
   ];
+ //--------------------Return Matrix -----------------------
+ public returnOptions: ChartOptions = {
+  responsive: true,
+};
+public returnLbl: Label[] = this.acctType; 
+public returnType: ChartType = 'bar';
+public returnLegend = true;
+public returnPlugins = [];
+public returnColors: Color[] = [
+  { backgroundColor: 'skyblue ' },
+  { backgroundColor: '#08b100db' },     
+]
+public returnmatrix: ChartDataSets[] = [
+  { data:this.return, label: 'Bank Return',stack:'a' }   
+];
 
 }

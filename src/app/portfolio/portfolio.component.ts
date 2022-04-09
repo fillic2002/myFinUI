@@ -54,6 +54,7 @@ export class PortfolioComponent implements OnInit {
   public mfCount:number=0;
   public sector=[] as string[];  
   public assetValue =[] as number[];
+  public assetProfit =[] as number[];
   public dividendHistory=[] as number[];
   public assetValueHistory=[] as number[];
   public investmentHistory=[] as number[];
@@ -77,21 +78,28 @@ export class PortfolioComponent implements OnInit {
   constructor(private _portfolio:SharesService,private route:ActivatedRoute,private router:Router, public datepipe: DatePipe) {  }
 
   ngOnInit(): void {    
-     this._portfolio.getPortfolio(0)
-     .subscribe(data => {
-       this.portfolio = data;
-       
-       data.forEach(element => {
-          element.profit= element.qty*element.livePrice - element.avgprice;          
-        });
-      });
+    // this._portfolio.getPortfolio(0)
+    // .subscribe(data => {
+    //   this.portfolio = data;       
+    //   data.forEach(element => {
+    //      element.profit= element.qty*element.livePrice - element.avgprice;          
+    //    });
+    ///  });
+    this.changeFolio('0');
   }
   
-  changeFolio(e :any) {
+  changeFolio(e :any){
+    
+    //this.folioId =Number(e);
+    console.log(typeof e);
     this.sector.length=0;
-    this.folioId=e.target.value;
-    this.assetValue.splice(0,this.assetValue.length);     
-    this._portfolio.getPortfolio(e.target.value)
+    if(typeof e!='string')
+    {    
+      this.folioId=e.target.value;  
+    }
+    
+    this.assetValue.splice(0,this.assetValue.length);  
+    this._portfolio.getPortfolio(this.folioId)
      .subscribe(data =>{       
       data.forEach(element => {
         element.profit= element.qty*(element.livePrice - element.avgprice);
@@ -104,12 +112,15 @@ export class PortfolioComponent implements OnInit {
             {
             this.sector.push(element.sector);
             this.assetValue[this.sector.indexOf(element.sector)]=0;
+            this.assetProfit[this.sector.indexOf(element.sector)]=0;            
             }
           }  
         }
         if(element.sector!="")
           {
-            this.assetValue[this.sector.indexOf(element.sector)] = this.assetValue[this.sector.indexOf(element.sector)] + element.avgprice*element.qty;
+            //console.log(this.assetProfit);
+            this.assetValue[this.sector.indexOf(element.sector)] += parseFloat((element.avgprice*element.qty).toFixed(2));
+            this.assetProfit[this.sector.indexOf(element.sector)] += parseFloat(((element.livePrice-element.avgprice)*element.qty).toFixed(2));
           }
       });
     this.sector = this.sector.filter((e, i) => i === this.sector.indexOf(e))
@@ -144,7 +155,7 @@ export class PortfolioComponent implements OnInit {
      this.mfCurrVal =mato; 
      this.mfPLPercent = (this.mfCurrVal-this.mfInvstVal)*100/this.mfInvstVal;
      this.barChartLabels=this.sector;
-     console.log(this.portfolio);
+     //console.log(this.portfolio);
      this.filterPortfolio =this.portfolio;
    
     });
@@ -160,7 +171,7 @@ export class PortfolioComponent implements OnInit {
       this.option=5;
     }
     
-    this._portfolio.getAssetHistory(e.target.value,this.option)
+    this._portfolio.getAssetHistory(this.folioId,this.option)
     .subscribe(data=>{      
       data.forEach(element => {               
         this.assetHistoryTime.push(element.month+"-"+element.year); 
@@ -168,7 +179,7 @@ export class PortfolioComponent implements OnInit {
         //console.log(element.month+"-"+element.year);
         this.assetValueHistory.push(parseFloat(element.assetValue.toFixed(2)));        
         this.dividendHistory.push(element.dividend);
-        this.investmentHistory.push(parseFloat(element.investment.toString()).toFixed(2));
+        this.investmentHistory.push(parseFloat(element.investment.toFixed(2)));
        // console.log(element.month+"-"+element.year+" invst:"+element.investment);    
         let dt:Date = new Date(element.year,element.month);
         
@@ -190,7 +201,9 @@ export class PortfolioComponent implements OnInit {
     this.dividendHistory.length=0;
     this.assetValueHistory.length=0;
     this.investmentHistory.length=0;
-   // this.assetReturn.sort((a,b)=>a.monthyear-b.monthyear);
+   
+    
+
 
   }
  
@@ -238,12 +251,12 @@ export class PortfolioComponent implements OnInit {
       {
         if(this.direction =="asc")
         {
-          this.assetReturn.sort((a,b)=>a.current-b.current);
+          this.assetReturn.sort((a: { current: number; },b: { current: number; })=>a.current-b.current);
           this.direction ="desc";
         }
         else 
         {
-          this.assetReturn.sort((a,b)=>b.current-a.current);
+          this.assetReturn.sort((a: { current: number; },b: { current: number; })=>b.current-a.current);
           this.direction ="asc";
         }
      }
@@ -251,12 +264,12 @@ export class PortfolioComponent implements OnInit {
       {
         if(this.direction =="asc")
         {
-          this.filterPortfolio.sort((a,b)=>a.dividend-b.dividend);
+          this.filterPortfolio.sort((a: { dividend: number; },b: { dividend: number; })=>a.dividend-b.dividend);
           this.direction ="desc";
         }
         else 
         {
-          this.filterPortfolio.sort((a,b)=>b.dividend-a.dividend);
+          this.filterPortfolio.sort((a: { dividend: number; },b: { dividend: number; })=>b.dividend-a.dividend);
           this.direction ="asc";
         }
      }
@@ -264,12 +277,12 @@ export class PortfolioComponent implements OnInit {
       {
         if(this.direction =="asc")
         {
-          this.filterPortfolio.sort((a,b)=>(a.dividend/(a.qty*a.avgprice))-(b.dividend/(b.qty*b.avgprice)));
+          this.filterPortfolio.sort((a: { dividend: number; qty: number; avgprice: number; },b: { dividend: number; qty: number; avgprice: number; })=>(a.dividend/(a.qty*a.avgprice))-(b.dividend/(b.qty*b.avgprice)));
           this.direction ="desc";
         }
         else 
         {
-          this.filterPortfolio.sort((a,b)=>(b.dividend/(b.qty*b.avgprice))-(a.dividend/(a.qty*a.avgprice)));
+          this.filterPortfolio.sort((a: { dividend: number; qty: number; avgprice: number; },b: { dividend: number; qty: number; avgprice: number; })=>(b.dividend/(b.qty*b.avgprice))-(a.dividend/(a.qty*a.avgprice)));
           this.direction ="asc";
         }
      }
@@ -277,12 +290,12 @@ export class PortfolioComponent implements OnInit {
      {
        if(this.direction =="asc")
        {
-         this.filterPortfolio.sort((a,b)=>(a.equityname>b.equityname)?1:-1);
+         this.filterPortfolio.sort((a: { equityname: number; },b: { equityname: number; })=>(a.equityname>b.equityname)?1:-1);
          this.direction ="desc";
        }
        else 
        {
-         this.filterPortfolio.sort((a,b)=>(b.equityname-a.equityname)?1:-1);
+         this.filterPortfolio.sort((a: { equityname: number; },b: { equityname: number; })=>(b.equityname-a.equityname)?1:-1);
          this.direction ="asc";
        }
     }
@@ -290,12 +303,12 @@ export class PortfolioComponent implements OnInit {
       {
         if(this.direction =="asc")
         {
-          this.filterPortfolio.sort((a,b)=>a.percentage-b.percentage);
+          this.filterPortfolio.sort((a: { percentage: number; },b: { percentage: number; })=>a.percentage-b.percentage);
           this.direction ="desc";          
         }
         else 
         {
-          this.filterPortfolio.sort((a,b)=>b.percentage-a.percentage);
+          this.filterPortfolio.sort((a: { percentage: number; },b: { percentage: number; })=>b.percentage-a.percentage);
           this.direction ="asc";
         }
      }
@@ -303,12 +316,12 @@ export class PortfolioComponent implements OnInit {
      {
        if(this.direction =="asc")
        {
-         this.filterPortfolio.sort((a,b)=>a.qty*a.avgprice-b.qty*b.avgprice);
+         this.filterPortfolio.sort((a: { qty: number; avgprice: number; },b: { qty: number; avgprice: number; })=>a.qty*a.avgprice-b.qty*b.avgprice);
          this.direction ="desc";
        }
        else 
        {
-        this.filterPortfolio.sort((a,b)=>b.qty*b.avgprice-a.qty*a.avgprice);
+        this.filterPortfolio.sort((a: { qty: number; avgprice: number; },b: { qty: number; avgprice: number; })=>b.qty*b.avgprice-a.qty*a.avgprice);
          this.direction ="asc";
        }
     }
@@ -316,12 +329,12 @@ export class PortfolioComponent implements OnInit {
     {
       if(this.direction =="asc")
       {
-        this.filterPortfolio.sort((a,b)=>b.profit-a.profit);
+        this.filterPortfolio.sort((a: { profit: number; },b: { profit: number; })=>b.profit-a.profit);
         this.direction ="desc";
       }
       else 
       {
-        this.filterPortfolio.sort((a,b)=>a.profit-b.profit);
+        this.filterPortfolio.sort((a: { profit: number; },b: { profit: number; })=>a.profit-b.profit);
         this.direction ="asc";
       }
    }
@@ -350,7 +363,7 @@ export class PortfolioComponent implements OnInit {
     this.eqInvstVal=0; 
       if(e=="share")
       {
-        this.filterPortfolio =  this.portfolio.filter(s => s.equityType===1);
+        this.filterPortfolio =  this.portfolio.filter((s: { equityType: number; }) => s.equityType===1);
      
         for (var i = 0; i < this.filterPortfolio.length; i++) {
           
@@ -364,9 +377,9 @@ export class PortfolioComponent implements OnInit {
           data.forEach(element => {
                      
             this.assetHistoryTime.push(element.month.toString()+"-"+element.year.toString());
-            this.assetValueHistory.push(parseFloat(element.assetValue).toFixed(2));        
+            this.assetValueHistory.push(parseFloat(element.assetValue.toFixed(2)));        
             this.dividendHistory.push(element.dividend);
-            this.investmentHistory.push(parseFloat(element.investment).toFixed(2));        
+            this.investmentHistory.push(parseFloat(element.investment.toFixed(2)));        
             let dt:Date = new Date(element.year,element.month);
             if(this.previousMonthAsset==0)
             {          
@@ -392,7 +405,7 @@ export class PortfolioComponent implements OnInit {
         }
         else if(e=="MF")
         {
-          this.filterPortfolio =  this.portfolio.filter(s => s.equityType===2);
+          this.filterPortfolio =  this.portfolio.filter((s: { equityType: number; }) => s.equityType===2);
                 
           for (var i = 0; i < this.filterPortfolio.length; i++){           
             this.eqInvstVal += this.filterPortfolio[i].qty*this.filterPortfolio[i].avgprice;
@@ -413,9 +426,9 @@ export class PortfolioComponent implements OnInit {
           .subscribe(data=>{      
             data.forEach(element => {              
               this.assetHistoryTime.push(element.month.toString()+"-"+element.year.toString());
-              this.assetValueHistory.push(parseFloat(element.assetValue.toString()).toFixed(2));        
+              this.assetValueHistory.push(parseFloat(element.assetValue.toFixed(2)));        
               
-              this.investmentHistory.push(parseFloat(element.investment.toString()).toFixed(2));        
+              this.investmentHistory.push(parseFloat(element.investment.toFixed(2)));        
               let dt:Date = new Date(element.year,element.month);
               if(this.previousMonthAsset==0)
               {          
@@ -432,7 +445,7 @@ export class PortfolioComponent implements OnInit {
           });
         }else if(e=="debt")
         {
-          this.filterPortfolio =  this.portfolio.filter(s=> s.equityType==5);
+          this.filterPortfolio =  this.portfolio.filter((s: { equityType: number; })=> s.equityType==5);
            
           for (var i = 0; i < this.filterPortfolio.length; i++){           
             this.eqInvstVal += this.filterPortfolio[i].qty*this.filterPortfolio[i].avgprice;
@@ -452,9 +465,9 @@ export class PortfolioComponent implements OnInit {
           .subscribe(data=>{      
             data.forEach(element => {              
               this.assetHistoryTime.push(element.month.toString()+"-"+element.year.toString());
-              this.assetValueHistory.push(parseFloat(element.assetValue.toString()).toFixed(2));        
+              this.assetValueHistory.push(parseFloat(element.assetValue.toFixed(2)));        
               
-              this.investmentHistory.push(parseFloat(element.investment.toString()).toFixed(2));        
+              this.investmentHistory.push(parseFloat(element.investment.toFixed(2)));        
               let dt:Date = new Date(element.year,element.month);
               if(this.previousMonthAsset==0)
               {          
@@ -523,9 +536,9 @@ export class PortfolioComponent implements OnInit {
     { backgroundColor: 'skyblue ' },
     { backgroundColor: '#08b100db' },     
   ]
-  public barChartData: ChartDataSets[] = [
-    { data:this.assetValue, label: 'Sector Invested',stack:'a' }
-     
+  public sectorChartData: ChartDataSets[] = [
+    { data:this.assetValue, label: 'Sector Invested',stack:'a' },
+    { data:this.assetProfit, label: 'Sector Return',stack:'a' }
   ];
 
   //--------------------Asset History Chart -----------------------
@@ -557,15 +570,22 @@ export class PortfolioComponent implements OnInit {
 
   //-------------------  Dividend Snapshot ----------------------------
   public eqtyHstryDiv: Label[] = this.divDt; 
-  public barChartType3: ChartType = 'bar';
-  public barChartPlugins3 = [];
+  public barChartType4: ChartType = 'bar';
+  public barChartPlugins4 = [];
   public barChartColors4: Color[] = [
     { backgroundColor: 'green ' },
     { backgroundColor: '#08b100db' },     
   ]
   public getDivReturn:ChartDataSets[] = [
     { data:this.divVal, label: 'Dividend',stack:'a' }    
-  ];
+  ]; 
 
-
+  public chartHovered(e: any): void {
+    if (e.event.type == "click") {
+      const clickedIndex = e.active[0]?.index;
+      var lbl=e.active[0]._chart.getElementAtEvent(event)[0]._model.label;
+      //console.log(e.active[0]._chart.getElementAtEvent(event)[0]);
+      this.filterPortfolio =  this.portfolio.filter((s: { sector: any; })=> s.sector==lbl);
+    }
+}
 }

@@ -16,6 +16,7 @@ import {TaxcompuComponent} from './taxcompu/taxcompu.component'
 import{ChartsModule} from 'ng2-charts'
 import { DatePipe } from '@angular/common';
 import { CommonYrComponent } from './common-yr/common-yr.component';
+import { AdminComponent } from './admin/admin.component';
  
 
 @NgModule({
@@ -30,7 +31,7 @@ import { CommonYrComponent } from './common-yr/common-yr.component';
     SortDirective,
     TaxcompuComponent,
     CommonYrComponent,
-    
+    AdminComponent,   
      
   ],
   imports: [

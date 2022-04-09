@@ -1,9 +1,10 @@
+<!doctype html>
 <div style="height: 35px;">    
     <span  value="H" (click)="onSelect(option)" style="font-size: 20px;">my<span style="color: orange; cursor: pointer;">f</span>in</span>
     <span class="title" style="padding-left: 30%; vertical-align:middle;" >Bank Account Details</span>
     <span class="pipe" style="padding-left: 30%;" (click)="selectnext(option)">Transaction</span>
     
-</div><br>
+</div><br> 
 <hr size="1"  color="lightgrey">
 <table style="width: 100%;">
     <tr>
@@ -13,9 +14,9 @@
                 <td style="width: 45%;">
                     <div>
                         <select style="cursor: pointer; background-color: #eaea25de;"  id="portfolio" (change)="ChangeAccount($event)">
-                            <option value=0>Account</option>    
-                            <option value=2>Renuka</option>
-                            <option value=3>Fillic</option>    
+                            <option value="0">Account</option>    
+                            <option value="2">Renuka</option>
+                            <option value="3">Fillic</option>    
                         </select>
                     </div>
                 </td>
@@ -40,8 +41,30 @@
         <td></td>
     </tr>
 </table>
- 
-
+<div>
+ <div style="width: 700px;height: 400px; padding-left: 40px; float: left;">
+    <canvas baseChart 
+    [datasets]="returnmatrix"
+    [labels]="returnLbl"
+    [options]="returnOptions"
+    [plugins]="returnPlugins"
+    [legend]="returnLegend"
+    [colors]="returnColors"
+    [chartType]="returnType">
+    </canvas>
+ </div>
+ <div style="width: 500px;height: 280px; float: left; padding-left: 40px;" >
+    <canvas baseChart 
+    [datasets]="invstVsintrestData"
+    [labels]="ChartLabels"
+    [options]="ChartOptions"
+    [plugins]="ChartPlugins"
+    [legend]="ChartLegend"
+    [colors]="ChartColors"
+    [chartType]="ChartType">
+    </canvas>                             
+</div>
+</div>
   <table style="width: 100%;">
       <tr>
         <td style="width: 5%;"></td>
@@ -51,28 +74,28 @@
                     <td colspan="5"><div style="font-size: 20px;color: green;">{{status}}</div></td>
                 </tr>
                 <tr>
-                    <td style="width: 100%;" colspan="5">
-                        <div (click)="showTrans(option)" class="dml">Add</div>
-                        <br>
-                            <ng-container *ngIf="show"> 
-                        <table>
-                            <tr>
-                                <td><input id="txtUserId" class="headeramt" ref-sname type="text" (blur)="onChange('userid',$event)"></td>
-                                <td> <input id="txtId" class="headeramt" ref-sname type="text" (blur)="onChange('id',$event)"></td>
-                                <td><input id="txtAmt" class="headeramt" type="text" (blur)="onChange('amt',$event)"></td>
-                                <td><input id="txtRoi" class="headeramt" type="text" (blur)="onChange('roi',$event)"></td>
-                                <td><input id="txtDt"  type="date" (blur)="onChange('dt',$event)"></td>
-                                <input class="savebtn" type="button" value="Add Account" (click)="AddTransaction()">
-                            </tr>
-                            <tr style="text-align: center;">
-                                <td class="naming">User Id</td>
-                                <td class="naming">Acct Id</td>
-                                <td class="naming">Total Amt</td>
-                                <td class="naming">ROI</td>                                
-                                <td class="naming">Date of Update</td>
-                            </tr>
-                        </table>
-                    </ng-container>
+                <td style="width: 100%;" colspan="5">
+                    <div (click)="showTrans(option)" class="dml">Add</div>
+                    <br>
+                        <ng-container *ngIf="show"> 
+                    <table>
+                        <tr>
+                            <td><input id="txtUserId" class="headeramt" ref-sname type="text" (blur)="onChange('userid',$event)"></td>
+                            <td> <input id="txtId" class="headeramt" ref-sname type="text" (blur)="onChange('id',$event)"></td>
+                            <td><input id="txtAmt" class="headeramt" type="text" (blur)="onChange('amt',$event)"></td>
+                            <td><input id="txtRoi" class="headeramt" type="text" (blur)="onChange('roi',$event)"></td>
+                            <td><input id="txtDt"  type="date" (blur)="onChange('dt',$event)"></td>
+                            <input class="savebtn" type="button" value="Add Account" (click)="AddTransaction()">
+                        </tr>
+                        <tr style="text-align: center;">
+                            <td class="naming">User Id</td>
+                            <td class="naming">Acct Id</td>
+                            <td class="naming">Total Amt</td>
+                            <td class="naming">ROI</td>                                
+                            <td class="naming">Date of Update</td>
+                        </tr>
+                    </table>
+                </ng-container>
                     <!--
                             <ng-container *ngIf="show"> 
                                 <div style="display: inline;"> 
@@ -83,12 +106,11 @@
                             <span class="naming">Total Amt:</span><input id="txtAmt" class="headeramt" type="text" (blur)="onChange('amt',$event)">
                             <span class="naming">Date of Update:</span><input id="txtDt"  type="date" (blur)="onChange('dt',$event)">
                             <input class="savebtn" type="button" value="Save" (click)="AddTransaction()"></div></ng-container><br>-->
-                    </td>
-                </tr> 
-                <tr>
-                    <td class="header4" style="text-align: left;" >Detail Statement:</td>
-                    <td  ></td>
-                </tr>
+                </td>
+            </tr> 
+            <tr>
+                <td colspan="2"><div class="header4">Detail Statement:</div></td>
+            </tr>
             <tr class="header1"> 
                 <td class="headeramt">UserId</td>    
                 <td class="headeramt">Acct Name</td>
@@ -111,32 +133,24 @@
         <td style="width: 40%;">
             <table style="width: 80%;">
                 <tr>
-                    <td colspan="4">
-                        <div style="width: 450px;height: 280px;" >
-                            <canvas baseChart 
-                            [datasets]="invstVsintrestData"
-                            [labels]="ChartLabels"
-                            [options]="ChartOptions"
-                            [plugins]="ChartPlugins"
-                            [legend]="ChartLegend"
-                            [colors]="ChartColors"
-                            [chartType]="ChartType">
-                            </canvas>                             
-                        </div>
+                    <td colspan="5">
+                        
                     </td>
                 </tr>
                 <tr class="header1">
-                    <td colspan="4">User: {{userselected}}, Account: {{accountselected}}</td>                                        
+                    <td colspan="5">User: {{userselected}}, Account: {{accountselected}}</td>                                        
                 </tr>
                 <tr class="header1">
-                    <td>Date Of Change</td>                    
+                    <td>Year</td>                    
                     <td class="headeramt">Emp Share</td>
+                    <td class="headeramt">Emplyr Share</td>
                     <td class="headeramt">Type Of Transaction</td>
                     <td class="headeramt">Balance</td>
                 </tr>
                 <tr class="header2" *ngFor ="let p of PFAcctDetails;">
-                    <td class="dt">{{p.dateOfTransaction|date:'MMM, y'}}</td>                    
+                    <td class="dt">{{p.year}}</td>                    
                     <td class="amt">{{p.investmentEmp|number:'1.0-2'}}</td>
+                    <td class="amt">{{p.investmentEmplr|number:'1.0-2'}}</td>
                     <td class="amt">{{p.typeOfTransaction}}</td>
                     <td class="amt">{{p.balance|number:'1.1-2'}}</td>
                 </tr>

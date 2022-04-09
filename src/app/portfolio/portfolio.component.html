@@ -1,3 +1,4 @@
+<!doctype html>
 <table style="width: 100%;">
     <tr>
         <td style="width: 15%;">
@@ -19,12 +20,12 @@
             <tr>
                 <td style="width: 40%;">
                     <select style="cursor: pointer; background-color: #eaea25de;" id="portfolio" (change)="changeFolio($event)">
-                        <option value=0>All</option>
-                        <option value=1 >Fillic_gov</option>
-                        <option value=2>Renuka</option>
-                        <option value=3>Fillic</option>
-                        <option value=4>Naitik</option>
-                        <option value=5>Kedar</option>                        
+                        <option value="0">All</option>
+                        <option value="1" >Fillic_gov</option>
+                        <option value="2">Renuka</option>
+                        <option value="3">Fillic</option>
+                        <option value="4">Naitik</option>
+                        <option value="5">Kedar</option>                        
                     </select>
                 </td>
                 <td *ngIf="isShare" class="header3">         
@@ -39,7 +40,7 @@
             <tr>
                 <td>
                     <input (click)="setradio('share')" type="radio" id="Share" name="equity" value="Share" checked> <label for="Share">Share</label>
-                    <input (click)="setradio('MF')" type="radio" id="MF" name="equity" value="MF"> <label for="MF">MF</label>
+                    <input (click)="setradio('MF')" type="radio" id="MF" name="equity" value="MF"> <label for="MF">Eqt MF</label>
                     <input (click)="setradio('debt')" type="radio" id="debt" name="equity" value="debt"> <label for="debt">Debt MF</label>
         
                 </td>
@@ -50,9 +51,8 @@
                     <span style="display: inline-block;width: 170px;padding:2px;" *ngIf="isShare">Dividend</span>
                 </td>
             </tr>
-        </table>
-                            
-    </td>
+            </table>                            
+        </td>
     </tr>
     <tr>   
         <td style="width: 46%;">
@@ -72,24 +72,25 @@
         <td style="width: 54%;">
             <table style="width: 100%;">                 
                 <tr  >                    
-                    <td style="width: 60%;"> 
-                        <div style="width: 450px;height: 280px;" >
+                    <td style="width: 70%;"> 
+                        <div style="width: 600px;height: 350px;" >
                             <canvas baseChart 
-                            [datasets]="barChartData"
+                            [datasets]="sectorChartData"
                             [labels]="barChartLabels"
                             [options]="barChartOptions"
                             [plugins]="barChartPlugins"
                             [legend]="barChartLegend"
                             [colors]="barChartColors"
-                            [chartType]="barChartType">
+                            [chartType]="barChartType"
+                            (chartHover)="chartHovered($event)">
                             </canvas>                             
                         </div>
                     </td>                    
-                    <td style="width: 40%;">
+                    <td style="width: 30%;">
                         <table style="padding-left: 10px;width: 80%;">
                             <tr class="header1" style="width:60%; " >
                                 <td style="cursor: pointer;" (click)="sort('Year')" >Year</td>
-                                <td>Return</td>                            
+                                <td>Xirr Return</td>                            
                                 <!--<td (click)="sort('current')" style="width:50px;height: 10px;">Current</td>
                                 <td style="width:50px;height: 10px;">Previous</td>-->
                             </tr>
@@ -121,6 +122,7 @@
     <td (click)="sort('Return')" class="headeramt">Return</td>
     <td (click)="sort('Dividend')" class="headeramt">Dividend<div>{{sdividend|number:'1.2-2'}}</div></td>
     <td (click)="sort('Divyield')" class="headeramt">Div Yield</td>
+    </tr>
 </thead> 
  <tr class="header2" *ngFor ="let p of filterPortfolio">    
         <!--<div class="amt">{{p.trasactionId}}</div>-->
@@ -138,9 +140,9 @@
 </tr>
 </table>
 
-<table id="sharedetails" class="popup">
-    <tr style="height: 25px;">
-        <td colspan="2" style="color: white; text-align: right;font-weight: bold;"><span style="cursor: pointer;" (click)="hideShareDetails()">X</span></td>
+<table id="sharedetails" class="popup" style="display: none;">
+    <tr>
+        <td colspan="2" class="popupCloseButton"><span (click)="hideShareDetails()">X</span></td>
     </tr>
     <tr>
         <td>

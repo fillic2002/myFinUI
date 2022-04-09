@@ -1,9 +1,12 @@
 export interface IShareDetail
 {
-    id: Int32Array
+    id: string
     shortName: string
     fullName:string
     livePrice:number
+    desc:string
+    divLink:string
+    sector:string
 }
 export interface IPortfolio
 {

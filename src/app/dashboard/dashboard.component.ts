@@ -39,7 +39,7 @@ export class DashboardComponent implements OnInit {
         this.dbDetail = data;
         console.log(this.dbDetail);
         var to:number; 
-        to=0;  
+        to=0;
         for (var i = 0; i < this.dbDetail.length; i++) {
           to= to + parseFloat(this.dbDetail[i].currentValue);       
           this.assetValue.push(this.dbDetail[i].currentValue);
@@ -155,18 +155,18 @@ public pieChartOptions: ChartOptions = {
 };
 
 public pieChartLabels: Label[] = this.assetName;  
-public pieChartType: ChartType = 'pie';
+public pieChartType: ChartType = 'bar';
 public pieChartLegend = true;
 public pieChartPlugins = [];
 public pieChartColors: Array < any > = [{
-  backgroundColor: ['lightred', 'green','darkgrey','lightblue','purple','red','lightgreen','orange','blue', 'blue'], 
+  backgroundColor: ['#ed5210', 'green','#00b38a','lightblue','#6667ab','	#d31461','lightgreen','orange','#afb0d3', 'blue'], 
 }];
 public pieChartData: ChartDataSets[] = [
-  { data:this.assetValue, label: 'Current Value' },      
+  { data:this.assetValue, label: 'Current Value' },       
 ];
 
 //-------------------Asset return-----------------------------------------
-public chartOptions: ChartOptions = { 
+public chartOptions: ChartOptions = {  
   responsive: true,
 };
 

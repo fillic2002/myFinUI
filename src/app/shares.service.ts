@@ -44,7 +44,7 @@ export class SharesService {
   getAssetsHistory(folioId:number):Observable<IAssetHistory[]>{    
     return this.client.get<IAssetHistory[]>("http://localhost:59921/portfolio/getAssetsHistory/");
   }
-  postTransaction(price:any,name:any,qty:any,dt:any,folioId: any,option:any,assetType:any,pb:any,mv:any):Observable<any>{   
+  postTransaction(price:any,name:any,qty:any,dt:any,folioId: number,option:any,assetType:any,pb:any,mv:any):Observable<any>{   
     return this.client.post("http://localhost:59921/transaction/updatefolio",{ 
     price: parseFloat(price.value),
     equityId:name.value,
@@ -57,15 +57,15 @@ export class SharesService {
     MarketCap:parseFloat(mv.value),
      });
   }
-  postBankTransaction(salary:any,desc:string,txtDt:any,txtType:any,txtAcctType:any,folioId:number):Observable<IAssetHistory[]>{
-    
-    return this.client.post<IAssetHistory[]>("http://localhost:59921/transaction/AddBankTransaction",{
+  postBankTransaction(salary:any,desc:string,txtDt:any,trnType:any,acctid:any,id:any):Observable<boolean[]>{
+    console.log(id);
+    return this.client.post<boolean[]>("http://localhost:59921/transaction/AddBankTransaction",{
       tranDate: new Date(Date.parse(txtDt)),
-      Amt:parseInt(salary.value),
-      folioId:folioId,
-       tranType:txtType,
+      amt:parseFloat(salary),
+      folioId:parseInt(id),
+       tranType:trnType,
        Description:desc,
-       AcctId:txtAcctType
+       AcctId:parseInt(acctid)
     })  
   }
  
@@ -82,6 +82,18 @@ export class SharesService {
       roi:parseFloat(roi),
       transactionDate:new Date(Date.parse(dt))      
     })  
+  }
+  postEquityUpdate(shareDtl: IShareDetail)
+  {
+    return this.client.post("http://localhost:59921/Shares/updateequity",{
+    id:shareDtl.id,
+    shortName:shareDtl.shortName,
+    fullName:shareDtl.fullName,
+    livePrice:shareDtl.livePrice,
+    desc:shareDtl.desc,
+    divlink:shareDtl.divLink, 
+    sector:shareDtl.sector
+    });
   }
 
   getDashBoard():Observable<IDashboard[]>{
@@ -118,14 +130,14 @@ export class SharesService {
     portfolioId:1,
     typeAsset:1
   });
- } 
- getDropDownText(id, object){
-  const selObj = _.filter(object, function (o) {
-      return (_.includes(id,o.id));
-  });
-  return selObj;
-}
-getBankType(){
-  return this.client.get<IAcctType[]>("http://localhost:59921/bankasset/GetAccoutType/"); 
-}
+ }  
+// getDropDownText(id, object){
+ // const selObj = _.filter(object, function (o) {
+  //    return (_.includes(id,o.id));
+ // });
+ // return selObj;
+//}
+//getBankType(){
+ // return this.client.get<IAcctType[]>("http://localhost:59921/bankasset/GetAccoutType/"); 
+//}
 }

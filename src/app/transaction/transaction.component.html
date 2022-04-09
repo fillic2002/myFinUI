@@ -1,6 +1,7 @@
+<!doctype html>
 <div>
     <span value="H" (click)="onSelect(option)" style="font-size: 20px;">my<span style="color: orange; cursor: pointer;">f</span>in</span>
-    <span class="title" style="padding-left: 30%;padding-top: 10px;">Transaction Detail</span>
+    <span class="title" style="padding-left: 30%;padding-top: 10px;">Investment</span>
     <span class="pipe" style="padding-left: 32%;" (click)="selectnext(option)">Bank Account Details</span>
     <span class="pipe" > | </span>
     <span class="pipe" (click)="selectnext(option)">Portfolio</span>
@@ -15,12 +16,12 @@
         <td style="width: 20%;">
             <div style="padding-left: 20px;">            
                 <select style="cursor: pointer; background-color: #eaea25de;"  id="portfolio" (change)="changeFolio($event)">
-                <option value=0 >All</option>
-                <option value=1 >Fillic_gov</option>
-                <option value=2>Renuka</option>
-                <option value=3>Fillic</option>
-                <option value=4>Naitik</option>
-                <option value=5>Kedar</option> 
+                <option value="0" >All</option>
+                <option value="1" >Fillic_gov</option>
+                <option value="2">Renuka</option>
+                <option value="3">Fillic</option>
+                <option value="4">Naitik</option>
+                <option value="5">Kedar</option> 
                 </select>
             </div> 
                    
@@ -35,9 +36,9 @@
             <div style="padding-left: 70px;">
             <input (click)="SelectAssetType('share')" type="radio" id="Share" name="equity" value="Share" checked> 
                 <label for="Share">Share</label>
-            <input (click)="SelectAssetType('MF')"type="radio" id="MF" name="equity" value="MF"> 
+            <input (click)="SelectAssetType('MF')" type="radio" id="MF" name="equity" value="MF"> 
                  <label for="MF">MF</label>
-             <input (click)="SelectAssetType('Gold')"type="radio" id="Gold" name="equity" value="Gold"> 
+             <input (click)="SelectAssetType('Gold')" type="radio" id="Gold" name="equity" value="Gold"> 
                  <label for="Gold">Gold</label>  
         </div>
         </td>
@@ -61,17 +62,16 @@
     <tr >        
         <td><span class="naming" style="font-weight: 600;padding-right: 3px;">Asset Type:</span>
             <select class="inputT" id="portfolio" (change)="changeAsset($event)">
-                <option value=1 >Shares</option>
-                <option value=2>Equity MF</option>
-                <option value=3>PF</option>
-                <option value=4>PPF</option>
-                <option value=5>Debt MF</option>           
-                <option value=8>Flat</option> 
-                <option value=12>Gold</option> 
-                <option value=7>Plot</option> 
-                <option value=6>Bank</option> 
-         </select>
-        
+                <option value="1" >Shares</option>
+                <option value="2">Equity MF</option>
+                <option value="3">PF</option>
+                <option value="4">PPF</option>
+                <option value="5">Debt MF</option>           
+                <option value="8">Flat</option> 
+                <option value="12">Gold</option> 
+                <option value="7">Plot</option> 
+                <option value="6">Bank</option> 
+         </select>        
         
         <span class="naming" style="font-weight: 600;padding-right: 3px;" >Option:</span>
             <select id="option" class="inputT"  (change)="selectOption($event)"> 
@@ -86,7 +86,8 @@
                     <span (click)="getId(t.id)" class="dt">{{t.id}}</span>
                     <span class="naming">{{t.fullName}}</span>                
                 </div>
-            </div><input *ngIf="isShown" id="txtName" class="inputT" type="text"  (keypress)="getasset($event)" value="{{companyid}}" >
+            </div>
+            <input *ngIf="isShown" id="txtName" class="inputT" type="text"  (keypress)="getasset($event)" value="{{companyid}}" >
             
             <span class="naming" style="font-weight: 600;padding-right: 3px;">Date:</span>
                 <input class="inputT" id="txtDt" type="date" (change)="changeDate($event)">
@@ -116,17 +117,17 @@
             </canvas>                             
         </div></td>
         <td>
-            <!--<div style="width: 450px;height: 280px;" >
-            <canvas baseChart 
-            [datasets]="invstMFDataSet"
-            [labels]="barChartLabels1"
-            [options]="barChartOptions1"
-            [plugins]="barChartPlugins1"
-            [legend]="barChartLegend1"
-            [colors]="barChartColors1"
-            [chartType]="barChartType1">
-            </canvas>                             
-        </div>--></td>
+            <div style="width: 500px;height: 280px; float: left; padding-left: 40px;" >
+                <canvas baseChart 
+                [datasets]="invstVsintrestData"
+                [labels]="ChartLabels"
+                [options]="ChartOptions"
+                [plugins]="ChartPlugins"
+                [legend]="ChartLegend"
+                [colors]="ChartColors"
+                [chartType]="ChartType">
+                </canvas>                             
+            </div></td>
         <td><!--<div style="width: 450px;height: 280px;" >
             <canvas baseChart 
             [datasets]="invstDebtDataSet"

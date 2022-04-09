@@ -133,7 +133,7 @@ export class TaxcompuComponent {
             {
               cashF+= e.cashflow;              
               div+= e.dividend;
-            }
+            } 
           }); 
           //console.log(element.qtr.toString()+"-"+element.year.toString());    
           this.timeLine.push(element.month.toString()+"-"+element.year.toString());

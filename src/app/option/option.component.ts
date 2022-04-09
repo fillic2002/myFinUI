@@ -12,9 +12,10 @@ export class OptionComponent implements OnInit {
   public options=[
     {"name":"Dashboard","id":1},
     {"name":"Portfolio","id":2}, 
-    {"name":"Transaction","id":4},
+    {"name":"Investment","id":4},
     {"name":"Taxcompu","id":3},
-    {"name":"BankAcDetail","id":5}
+    {"name":"BankAcDetail","id":5},
+    {"name":"Admin","id":6}
 
   ]
   constructor(private  router:Router) {
@@ -31,6 +32,7 @@ export class OptionComponent implements OnInit {
     if(option.id==2){this.router.navigate(['/portfolio'])}
     if(option.id==4){this.router.navigate(['/transaction'])}
     if(option.id==3){this.router.navigate(['/tax'])}
-    if(option.id==5){this.router.navigate(['/bankdetail'])}    
+    if(option.id==5){this.router.navigate(['/bankdetail'])}
+    if(option.id==6){this.router.navigate(['/admin'])}
   }
 }

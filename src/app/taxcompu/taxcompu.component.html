@@ -1,3 +1,4 @@
+<!doctype html>
 <div>
   <span value="H" (click)="onSelect(option)" style="font-size: 20px;">my<span style="color: orange; cursor: pointer;">f</span>in</span>
   <span class="title" style="padding-left: 30%;padding-top: 10px;">Asset Creation/Tax Saving</span>
@@ -20,19 +21,19 @@
             <table style="width: 100%;" class="status">
               <tr>
                 <td style="padding: 15px;width: 25%;"><select style="cursor: pointer; background-color: #eaea25de;" id="portfolio" (change)="changeFolio($event)">
-                  <option value=0>All Portfolio</option>
-                  <option value=1 >Fillic_gov</option>
-                  <option value=2>Renuka</option>
-                  <option value=3>Fillic</option>
-                  <option value=4>Naitik</option>
-                  <option value=5>Kedar</option> 
+                  <option value="0">All Portfolio</option>
+                  <option value="1" >Fillic_gov</option>
+                  <option value="2">Renuka</option>
+                  <option value="3">Fillic</option>
+                  <option value="4">Naitik</option>
+                  <option value="5">Kedar</option> 
               </select></td>
               <td style="width: 60%;"><span class="shatusContent2">{{avgMonthCashflow/pastMonth|number:'1.2-2'}}</span><div > (past {{pastMonth}} months)</div></td>
               <td style="text-align: right;">
                 <span>Past</span>
                 <span style="padding:6px" (click)="selectCashflow(6)" >6 Month</span>
-                <span style="padding:6px"(click)="selectCashflow(12)" >12 Month</span>
-                <span style="padding:6px" (click)="selectCashflow(0)"  >All months</span>
+                <span style="padding:6px" (click)="selectCashflow(12)" >12 Month</span>
+                <span style="padding:6px" (click)="selectCashflow(0)" >All months</span>
               </td>
               </tr>
             </table>
@@ -117,7 +118,7 @@
                 </td>
               </tr>
             </table>             
-           
+          </td>
         </tr>
         <tr>
           <td>
@@ -127,8 +128,7 @@
             <div class="status">
               <div>Cash Out</div>
             </div>
-          </td>
-          
+          </td>          
         </tr>
         <tr>
           <td>

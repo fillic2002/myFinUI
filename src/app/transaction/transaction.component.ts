@@ -4,6 +4,7 @@ import { SharesService } from '../shares.service';
 import {Router} from '@angular/router';
 import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
 import {Color, Label } from 'ng2-charts';
+import { debug } from 'console';
 
 @Component({
   selector: 'app-transaction',
@@ -13,6 +14,7 @@ import {Color, Label } from 'ng2-charts';
 export class TransactionComponent implements OnInit {
 
   public portfolio =[] as any;
+  public PFAcctDetails =[] as any;
   public filterPortfolio =[] as any;
   public equitytransaction =[] as any;
   public folio =[] as any;
@@ -36,6 +38,9 @@ export class TransactionComponent implements OnInit {
   public invstMF =[] as number[];
   public yearDebt =[] as number[];
   public invstDebt =[] as number[];
+  invstmnt=[] as number[];
+  intrest=[] as number[];
+  year=[] as number[];
   showresult: boolean = false ;
   qty: any;
   direction:string="asc";
@@ -84,7 +89,27 @@ export class TransactionComponent implements OnInit {
       this.yearMF.reverse();
       this.yearDebt.reverse();
       this.invstDebt.reverse();
-    });      
+    });  
+    this.intrest.length=0;
+    this.invstmnt.length=0;
+    this._eqTransaction.getPFAcDetails('2', 4)
+    .subscribe(data =>{       
+      this.PFAcctDetails=data;
+      data.forEach(element=>{
+      this.addYear(element.year);         
+      if(element.typeOfTransaction=="int")
+        { 
+          var inv:number=0;
+          inv= element.investmentEmplr+element.investmentEmp;     
+          this.intrest.push(inv);   
+      }else if(element.typeOfTransaction=="Deposit")
+        {
+          var inv:number=0;
+          inv= element.investmentEmplr+element.investmentEmp;     
+          this.invstmnt.push(inv);        
+        }
+      });       
+    });    
   }
   
   AddTransaction():void  {
@@ -178,6 +203,35 @@ export class TransactionComponent implements OnInit {
      else  
          this.filterPortfolio =  this.equitytransaction.filter(s => s.assetType===2 ||s.assetType===5 );
     });
+    this.intrest.length=0;
+    this.invstmnt.length=0;
+    this._eqTransaction.getPFAcDetails('2', 4)
+    .subscribe(data =>{       
+      this.PFAcctDetails=data;
+      data.forEach(element=>{
+      this.addYear(element.year);         
+      if(element.typeOfTransaction=="int")
+        { 
+          var inv:number=0;
+          inv= element.investmentEmplr+element.investmentEmp;     
+          this.intrest.push(inv);   
+      }else if(element.typeOfTransaction=="Deposit")
+        {
+          var inv:number=0;
+          inv= element.investmentEmplr+element.investmentEmp;     
+          this.invstmnt.push(inv);        
+        }
+      });       
+    });
+    
+  }
+  private addYear(yr:number)
+  {     
+    var found=this.year.indexOf(yr);
+    if(found < 0)
+    {
+      this.year.push(yr);
+    }   
   }
   changeDate(e:any){
     this.status="";
@@ -187,8 +241,7 @@ export class TransactionComponent implements OnInit {
     this.purchaseOption = e.target.value;
   }
   changeAsset(e:any)
-  {
-   
+  {   
     this.assetType =e.target.value;
      if(e.target.value==12 || e.target.value==7|| e.target.value==8)
       {
@@ -230,7 +283,7 @@ export class TransactionComponent implements OnInit {
       this.showresult =true;
       this._eqTransaction.getShare(e.target.value)
       .subscribe(data =>{
-        this.result = data;        
+        this.result = data;
       });
     }
   }
@@ -238,6 +291,7 @@ export class TransactionComponent implements OnInit {
   {    
     this.showresult =false;
     this.companyid=e;
+   // alert(e);
   }
   public deleterecord(id:any,dt:any)
   {
@@ -386,7 +440,7 @@ export class TransactionComponent implements OnInit {
   {            
         //this.isMF = !this.isMF;
         this.isShare=!this.isShare;
-        console.log(this.isShare);
+       // console.log(this.isShare);
         if(this.isShare)
           this.filterPortfolio =  this.equitytransaction.filter(s => s.assetType===1);
         else  
@@ -450,5 +504,22 @@ export class TransactionComponent implements OnInit {
     { data:this.invstDebt, label: 'Investment in Debt MF',stack:'a' }
      
   ];*/
+//--------------------Investment vs intrest data -----------------------
+public ChartOptions: ChartOptions = {
+  responsive: true,
+};
+public ChartLabels: Label[] = this.year; 
+public ChartType: ChartType = 'bar';
+public ChartLegend = true;
+public ChartPlugins = [];
+public ChartColors: Color[] = [
+  { backgroundColor: 'skyblue ' },
+  { backgroundColor: '#08b100db' },     
+]
 
+public invstVsintrestData: ChartDataSets[] = [
+  { data:this.invstmnt, label: 'Investment',stack:'a' },        
+  { data:this.intrest, label: 'Intrest',stack:'a' },   
+  
+];
 }

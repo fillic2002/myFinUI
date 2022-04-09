@@ -1,19 +1,40 @@
-  
-  .bold{
-    font-weight: bold;
-  }
-  .space{
-    margin-right: 200px;
-  }
-  .popup{
-    background-color: #e2e2e2;
-     height: 550px;
-     width: 850px;
-     padding: 6px;
-     z-index: 900;
-     position: fixed;
-     top: 150px;
-     left: 300px;
-     display: none;
-     overflow: auto;
-  }
+.bold {
+  font-weight: bold;
+}
+.space {
+  margin-right: 200px;
+}
+.popup {
+  background-color: #fff;
+  box-shadow: 10px 10px 60px #555;
+  cursor: pointer;
+  height: 600px;
+  width: 900px;
+  padding: 6px;
+  z-index: 800;
+  position: absolute;
+  top: 50px;
+  left: 200px;
+  overflow: auto;
+}
+.popupCloseButton {
+  background-color: #fff;
+  border: 3px solid #999;
+  border-radius: 50px;
+  cursor: pointer;
+  font-family: arial;
+  font-weight: bold;
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  font-size: 25px;
+  line-height: 30px;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  padding-top: 15px;
+  padding-right: 15px;
+}
+.popupCloseButton:hover {
+  background-color: #ccc;
+}
