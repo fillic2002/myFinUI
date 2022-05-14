@@ -121,7 +121,7 @@ html {
   height: 30px;
   color: #3b3a3a;
   text-align: right;
-  font: 500 14px Helvetica, sans-serif;
+  font: 560 14px Helvetica, sans-serif;
   padding-right: 6px;
   border-bottom: 1px dotted #bfbfbf;
 }
@@ -129,7 +129,7 @@ html {
   height: 30px;
   color: #666;
   text-align: center;
-  font: 500 14px Helvetica, sans-serif;
+  font: 560 13px Helvetica, sans-serif;
   padding-right: 6px;
   border-bottom: 1px dotted #bfbfbf;
 }

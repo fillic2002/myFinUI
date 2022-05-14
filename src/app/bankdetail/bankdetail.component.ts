@@ -48,7 +48,7 @@ export class BankdetailComponent implements OnInit {
   }
   public set userselected(value: string) {
     this._userselected = value;
-  }
+  }  
   accountselected:string="";
   
   constructor(private _acct:SharesService, private route:ActivatedRoute,private router:Router) { }
@@ -57,12 +57,16 @@ export class BankdetailComponent implements OnInit {
     this._acct.getBankAcDetails()
     .subscribe(data =>{ 
       this.accDetail = data;    
-      var to:number=0; 
-      
+      var to:number=0;       
       for (var i = 0; i < this.accDetail.length; i++) {   
 
-        this.acctType.push(this.accDetail[i].acctName+'-'+this.accDetail[i].acctType);
-        this.return.push(this.accDetail[i].roi.toFixed(2));
+        //this.acctType.push(this.accDetail[i].acctName+'-'+this.accDetail[i].acctType);
+        if(this.return.indexOf(this.accDetail[i].roi.toFixed(2))< 0)
+        {
+          this.return.push(this.accDetail[i].roi.toFixed(2));  
+          this.acctType.push(this.accDetail[i].acctName+'-'+this.accDetail[i].acctType);
+        }
+        
         if(this.accDetail[i].acctType=="People Provident Fund")
           {this.ppf += parseFloat(this.accDetail[i].amt);}
         else if(this.accDetail[i].acctType=="Providend Fund")
@@ -141,15 +145,15 @@ export class BankdetailComponent implements OnInit {
     this._acct.getPFAcDetails(userid, actType)
     .subscribe(data =>{      
       this.PFAcctDetails=data;
+      //console.log(this.PFAcctDetails);
       data.forEach(element=>{
-      this.addYear(element.year); 
-        
-        if(element.typeOfTransaction=="int")
+      this.addYear(element.year);         
+      if(element.typeOfTransaction=="int")
         { 
           var inv:number=0;
           inv= element.investmentEmplr+element.investmentEmp;     
           this.intrest.push(inv);   
-        }else if(element.typeOfTransaction=="Deposit")
+        }else if(element.typeOfTransaction=="deposit")
         {
           var inv:number=0;
           inv= element.investmentEmplr+element.investmentEmp;     

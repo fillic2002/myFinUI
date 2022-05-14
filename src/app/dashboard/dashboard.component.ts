@@ -19,6 +19,7 @@ export class DashboardComponent implements OnInit {
  
  
   public dbDetail = [] as any;
+  public preMonthDshbrd = [] as any;  
   public assetValue =[] as number[];
   public assetName=[] as string[];
   public bankAmt: any;
@@ -30,6 +31,8 @@ export class DashboardComponent implements OnInit {
   yearReturn=[] as any;
   public assetId=0 as number;
   asttype:string | undefined;
+  netAddition:number=0;
+  monthyr:string="";
   
   constructor(private _dashbrd:SharesService,private route:ActivatedRoute,private router:Router) { }
  
@@ -37,7 +40,7 @@ export class DashboardComponent implements OnInit {
     this._dashbrd.getDashBoard()
     .subscribe(data=>{
         this.dbDetail = data;
-        console.log(this.dbDetail);
+        //console.log(this.dbDetail);
         var to:number; 
         to=0;
         for (var i = 0; i < this.dbDetail.length; i++) {
@@ -48,20 +51,7 @@ export class DashboardComponent implements OnInit {
         this.total=to.toFixed(2);
        }); 
        this.asttype="All";
-  /*  this._dashbrd.getBankAcTotal()
-    .subscribe(data =>{ 
-      this.bankAmt = data;
-      var to:number;
-      to=0;
-      for (var i = 0; i < this.dbDetail.length; i++) {
-        to= to + parseFloat(this.dbDetail[i].total);       
-      }
-      console.log(Number(this.bankAmt.amt));
-      to= to + Number(this.bankAmt.amt);
-      this.total=to.toFixed(2);
-
-    });
-*/
+   
     this._dashbrd.getAssetsHistory(0)
     .subscribe(ast =>{ 
       ast.forEach(element => {
@@ -109,9 +99,7 @@ export class DashboardComponent implements OnInit {
     {
       this.assetId=12;this.asttype="Gold"
     }
-
-
-      this._dashbrd.getAssetsReturn(this.assetId)
+    this._dashbrd.getAssetsReturn(this.assetId)
     .subscribe(rtn=>{
       rtn.forEach(element => {
         this.astReturn.push(element.return.toFixed(2)); 
@@ -140,7 +128,7 @@ export class DashboardComponent implements OnInit {
     public barChartOptions: ChartOptions = { 
       responsive: true,
     };  
-    public barChartLabels: Label[] = this.assetXaxis; //['"'+this.assetName[0]+'"', '2016', '2017', '2018', '2019', '2020'];
+    public barChartLabels: Label[] = this.assetXaxis; 
     public barChartType: ChartType = 'line';
     public barChartLegend = true; 
     public barChartPlugins = [];
@@ -182,4 +170,42 @@ public chartColors1: Color[] = [
 public chartDataset1: ChartDataSets[] = [
   { data:this.astReturn, label: 'Return' },      
 ];
+public chartClick(e: any): void {
+  if (e.active.length > 0) {
+    this.netAddition=0;
+    const chart = e.active[0]._chart;
+    const activePoints = chart.getElementAtEvent(e.event);
+    if ( activePoints.length > 0) {
+      // get the internal index of slice
+      const clickedElementIndex = activePoints[0]._index;
+      const label = chart.data.labels[clickedElementIndex];
+      this.monthyr=label;
+      // get value by index
+      const value = chart.data.datasets[0].data[clickedElementIndex];     
+      this.assetValue.length=0
+      this.assetName.length=0
+      this._dashbrd.getMonthDashBoard(label.split('-')[0], label.split('-')[1])
+      .subscribe(data=>{
+          this.dbDetail = data;
+          //console.log(this.dbDetail);
+          var to:number; 
+          to=0;
+          for (var i = 0; i < this.dbDetail.length; i++) {
+            to= to + parseFloat(this.dbDetail[i].currentValue);       
+            this.assetValue.push(this.dbDetail[i].currentValue);
+            this.assetName.push(this.dbDetail[i].assetName);          
+          }         
+          this.total=to.toFixed(2);
+        });
+      this._dashbrd.getMonthDashBoard(label.split('-')[0]-1, label.split('-')[1])
+      .subscribe(data=>{
+          this.preMonthDshbrd = data;                    
+          for (var i = 0; i < this.preMonthDshbrd.length; i++) {          
+            this.preMonthDshbrd[i].diff=this.dbDetail[i].currentValue- this.preMonthDshbrd[i].currentValue
+            this.netAddition +=this.preMonthDshbrd[i].diff;
+          }         
+        });
+      }
+      }
+}
 }

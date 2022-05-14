@@ -113,13 +113,25 @@
             [plugins]="barChartPlugins"
             [legend]="barChartLegend"
             [colors]="barChartColors"
-            [chartType]="barChartType">
+            [chartType]="barChartType"
+            (chartClick)="chartClick($event)">            
             </canvas>                             
         </div></td>
         <td>
             <div style="width: 500px;height: 280px; float: left; padding-left: 40px;" >
                 <canvas baseChart 
-                [datasets]="invstVsintrestData"
+                [datasets]="pfDataSet"
+                [labels]="pfChartLabels"
+                [options]="pfChartOptions"
+                [plugins]="pfChartPlugins"
+                [legend]="pfChartLegend"
+                [colors]="pfChartColors"
+                [chartType]="pfChartType">
+                </canvas>                             
+            </div>
+            <div style="width: 500px;height: 280px; float: left; padding-left: 40px;" >
+                <canvas baseChart 
+                [datasets]="ppfDataSet"
                 [labels]="ChartLabels"
                 [options]="ChartOptions"
                 [plugins]="ChartPlugins"
@@ -165,7 +177,7 @@
         <td class="amt">{{t.price|number : '1.2-2'}}</td>
         <td class="amt">{{t.qty*t.price|number : '1.2-2'}}</td>
         <td class="amt">{{t.pb}}</td>
-        <td class="amt">{{t.marketCap}}</td>
+        <td class="amt">{{t.marketCap|number : '1.2-2'}}</td>
         <td class="amt" [ngStyle]="{color: getTrColor(t.tranType)}">{{t.tranType}}</td>
         <td (click)="deleterecord(t.equityId, t.tranDate)" style="cursor: pointer" class="action" >Delete</td>
     </tr>

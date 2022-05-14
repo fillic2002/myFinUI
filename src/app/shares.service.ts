@@ -23,6 +23,9 @@ export class SharesService {
   getEqtTransaction(folioid:Number,eqtId:string):Observable<ITransaction[]>{
     return this.client.get<ITransaction[]>("http://localhost:59921/transaction/tran/"+folioid+"/"+eqtId)  
   }
+  getEqtMonthlyTransaction(folioid:Number,month:number,year:number,astType:string):Observable<ITransaction[]>{
+    return this.client.get<ITransaction[]>("http://localhost:59921/transaction/tran/"+folioid+"/"+month+"/"+year+"/"+astType)  
+  }
   getYearlyInvestment(flag:string):Observable<IAssetHistory[]>{
     return this.client.get<IAssetHistory[]>("http://localhost:59921/transaction/getInvestment/"+flag)  
   }
@@ -93,11 +96,14 @@ export class SharesService {
     desc:shareDtl.desc,
     divlink:shareDtl.divLink, 
     sector:shareDtl.sector
-    });
+    }); 
   }
 
   getDashBoard():Observable<IDashboard[]>{
     return this.client.get<IDashboard[]>("http://localhost:59921/dashboard/getDashboard")  
+  }
+  getMonthDashBoard(m:number,y:number):Observable<IDashboard[]>{
+    return this.client.get<IDashboard[]>("http://localhost:59921/dashboard/getDashboard/"+m+"/"+y);  
   }
 
   getBankAcTotal():Observable<IBankAcDetail[]>{

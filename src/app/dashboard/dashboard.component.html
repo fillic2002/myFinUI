@@ -26,14 +26,26 @@
         <tr class="header1">
             <td class="headername">Asset Type</td>
             <td class="headeramt">Invested</td>    
-            <td class="headeramt">Current</td>
+            <td class="headeramt">Current<div>{{monthyr}}</div></td>       
             <td class="headeramt">XiRR Return</td>    
         </tr>
         <tr class="header2" *ngFor ="let d of dbDetail">        
                 <td class="naming" style="cursor: pointer;" (click)="showReturn(d.assetName)">{{d.assetName}}</td>
                 <td class="amt">{{d.invested|number : '1.2-2'}}</td>
-                <td class="amt">{{d.currentValue|number : '1.2-2'}}</td>
+                <td class="amt">{{d.currentValue|number : '1.2-2'}}</td>                
                 <td class="amt" [ngStyle]="{color: getTrColor(d.currentValue-d.invested)}" >{{d.xirrReturn|number : '1.2-2'}}%</td>
+        </tr>
+      </table>
+      <table> 
+        <tr class="header1">
+            <td class="headername">Asset Type</td>            
+            <td class="headeramt">Current-1</td> 
+            <td class="headeramt">Diff<div>{{netAddition|number : '1.2-2'}}</div> </td>                   
+        </tr>
+        <tr class="header2" *ngFor ="let d of preMonthDshbrd">        
+                <td class="naming" style="cursor: pointer;" (click)="showReturn(d.assetName)">{{d.assetName}}</td>                
+                <td class="amt">{{d.currentValue|number : '1.2-2'}}</td>                            
+                <td class="amt">{{d.diff|number : '1.2-2'}}</td>
         </tr>
       </table>
     </td>
@@ -47,7 +59,8 @@
             [colors]="barChartColors"
             [plugins]="barChartPlugins"
             [legend]="barChartLegend"
-            [chartType]="barChartType">
+            [chartType]="barChartType"
+            (chartClick)="chartClick($event)">
           </canvas>           
         </div></td>
   </tr>
@@ -73,7 +86,8 @@
       [colors]="pieChartColors"
       [plugins]="pieChartPlugins"
       [legend]="pieChartLegend"
-      [chartType]="pieChartType">
+      [chartType]="pieChartType"
+       >
     </canvas></div>
     </td>
   </tr>

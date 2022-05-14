@@ -42,7 +42,77 @@
     </tr>
 </table>
 <div>
- <div style="width: 700px;height: 400px; padding-left: 40px; float: left;">
+    <div style="width: 43%; vertical-align: top;float: left;">
+        <table style="width: 100%;" >
+            <tr>       
+                <td colspan="5"><div style="font-size: 20px;color: green;">{{status}}</div></td>
+            </tr>
+            <tr>
+            <td style="width: 100%;" colspan="5">
+                <div (click)="showTrans(option)" class="dml">Add</div>
+                <br>
+                    <ng-container *ngIf="show"> 
+                <table>
+                    <tr>
+                        <td><input id="txtUserId" class="headeramt" ref-sname type="text" (blur)="onChange('userid',$event)"></td>
+                        <td> <input id="txtId" class="headeramt" ref-sname type="text" (blur)="onChange('id',$event)"></td>
+                        <td><input id="txtAmt" class="headeramt" type="text" (blur)="onChange('amt',$event)"></td>
+                        <td><input id="txtRoi" class="headeramt" type="text" (blur)="onChange('roi',$event)"></td>
+                        <td><input id="txtDt"  type="date" (blur)="onChange('dt',$event)"></td>
+                        <input class="savebtn" type="button" value="Add Account" (click)="AddTransaction()">
+                    </tr>
+                    <tr style="text-align: center;">
+                        <td class="naming">User Id</td>
+                        <td class="naming">Acct Id</td>
+                        <td class="naming">Total Amt</td>
+                        <td class="naming">ROI</td>                                
+                        <td class="naming">Date of Update</td>
+                    </tr>
+                </table>
+            </ng-container>
+                <!--
+                        <ng-container *ngIf="show"> 
+                            <div style="display: inline;"> 
+                            
+                        
+                            <input id="txtId" class="headeramt" ref-sname type="text" (blur)="onChange('id',$event)">
+                        <span class="naming">ROI:</span><input id="txtRoi" class="headeramt" type="text" (blur)="onChange('roi',$event)">
+                        <span class="naming">Total Amt:</span><input id="txtAmt" class="headeramt" type="text" (blur)="onChange('amt',$event)">
+                        <span class="naming">Date of Update:</span><input id="txtDt"  type="date" (blur)="onChange('dt',$event)">
+                        <input class="savebtn" type="button" value="Save" (click)="AddTransaction()"></div></ng-container><br>-->
+            </td>
+        </tr> 
+        <tr>
+            <td colspan="2"><div class="header4">Detail Statement:</div></td>
+        </tr>
+        <tr class="header1"> 
+            <td class="headeramt">UserId</td>    
+            <td class="headeramt">Acct Name</td>
+            <td class="headeramt">Accout Type</td>       
+            <td class="headeramt">Rate Of Intreset</td>
+            <td class="headeramt">Accout Balance</td>      
+        </tr>
+        <tr class="header2" *ngFor ="let p of filterAcct;">
+            <td class="amt">{{p.userid}}</td>        
+            <td class="amt" (click)="SelectAccount(p.acctName,p.userid)">{{p.acctName}}</td>
+            <td class="amt">{{p.acctType}}</td>
+            <td contenteditable="true" (keydown.Tab)="updateList($event,p.acctId,'roi',p.userid,p.roi,p.amt)" (blur)="updateList(p.acctId, 'roi', $event)" class="amt">{{p.roi|number:'1.1-2'}}%</td>
+            <td contenteditable="true" (keydown.Tab)="updateList($event,p.acctId,'amt',p.userid,p.roi,p.amt)" (blur)="onChange('amt',$event)"  class="amt">{{p.amt|number:'1.2-2'}}</td>    
+        </tr>
+        </table>
+    </div>
+    <div style="width: 500px;height: 280px; float: left; padding-left: 40px;" >
+        <canvas baseChart 
+        [datasets]="invstVsintrestData"
+        [labels]="ChartLabels"
+        [options]="ChartOptions"
+        [plugins]="ChartPlugins"
+        [legend]="ChartLegend"
+        [colors]="ChartColors"
+        [chartType]="ChartType">
+        </canvas>                             
+    </div>
+ <div style="width: 500px;height: 400px; padding-left: 40px; float: left;">
     <canvas baseChart 
     [datasets]="returnmatrix"
     [labels]="returnLbl"
@@ -53,110 +123,6 @@
     [chartType]="returnType">
     </canvas>
  </div>
- <div style="width: 500px;height: 280px; float: left; padding-left: 40px;" >
-    <canvas baseChart 
-    [datasets]="invstVsintrestData"
-    [labels]="ChartLabels"
-    [options]="ChartOptions"
-    [plugins]="ChartPlugins"
-    [legend]="ChartLegend"
-    [colors]="ChartColors"
-    [chartType]="ChartType">
-    </canvas>                             
-</div>
-</div>
-  <table style="width: 100%;">
-      <tr>
-        <td style="width: 5%;"></td>
-        <td style="width: 43%; vertical-align: top;">
-            <table style="width: 100%;" >
-                <tr>       
-                    <td colspan="5"><div style="font-size: 20px;color: green;">{{status}}</div></td>
-                </tr>
-                <tr>
-                <td style="width: 100%;" colspan="5">
-                    <div (click)="showTrans(option)" class="dml">Add</div>
-                    <br>
-                        <ng-container *ngIf="show"> 
-                    <table>
-                        <tr>
-                            <td><input id="txtUserId" class="headeramt" ref-sname type="text" (blur)="onChange('userid',$event)"></td>
-                            <td> <input id="txtId" class="headeramt" ref-sname type="text" (blur)="onChange('id',$event)"></td>
-                            <td><input id="txtAmt" class="headeramt" type="text" (blur)="onChange('amt',$event)"></td>
-                            <td><input id="txtRoi" class="headeramt" type="text" (blur)="onChange('roi',$event)"></td>
-                            <td><input id="txtDt"  type="date" (blur)="onChange('dt',$event)"></td>
-                            <input class="savebtn" type="button" value="Add Account" (click)="AddTransaction()">
-                        </tr>
-                        <tr style="text-align: center;">
-                            <td class="naming">User Id</td>
-                            <td class="naming">Acct Id</td>
-                            <td class="naming">Total Amt</td>
-                            <td class="naming">ROI</td>                                
-                            <td class="naming">Date of Update</td>
-                        </tr>
-                    </table>
-                </ng-container>
-                    <!--
-                            <ng-container *ngIf="show"> 
-                                <div style="display: inline;"> 
-                                
-                            
-                                <input id="txtId" class="headeramt" ref-sname type="text" (blur)="onChange('id',$event)">
-                            <span class="naming">ROI:</span><input id="txtRoi" class="headeramt" type="text" (blur)="onChange('roi',$event)">
-                            <span class="naming">Total Amt:</span><input id="txtAmt" class="headeramt" type="text" (blur)="onChange('amt',$event)">
-                            <span class="naming">Date of Update:</span><input id="txtDt"  type="date" (blur)="onChange('dt',$event)">
-                            <input class="savebtn" type="button" value="Save" (click)="AddTransaction()"></div></ng-container><br>-->
-                </td>
-            </tr> 
-            <tr>
-                <td colspan="2"><div class="header4">Detail Statement:</div></td>
-            </tr>
-            <tr class="header1"> 
-                <td class="headeramt">UserId</td>    
-                <td class="headeramt">Acct Name</td>
-                <td class="headeramt">Accout Type</td>       
-                <td class="headeramt">Rate Of Intreset</td>
-                <td class="headeramt">Accout Balance</td>      
-            </tr>
-            <tr class="header2" *ngFor ="let p of filterAcct;">
-                <td class="amt">{{p.userid}}</td>        
-                <td class="amt" (click)="SelectAccount(p.acctName,p.userid)">{{p.acctName}}</td>
-                <td class="amt">{{p.acctType}}</td>
-                <td contenteditable="true" (keydown.Tab)="updateList($event,p.acctId,'roi',p.userid,p.roi,p.amt)" (blur)="updateList(p.acctId, 'roi', $event)" class="amt">{{p.roi|number:'1.1-2'}}%</td>
-                <td contenteditable="true" (keydown.Tab)="updateList($event,p.acctId,'amt',p.userid,p.roi,p.amt)" (blur)="onChange('amt',$event)"  class="amt">{{p.amt|number:'1.2-2'}}</td>    
-            </tr>
-            </table>            
-        </td>          
-        <td style="width: 5%;">
-             
-        </td>
-        <td style="width: 40%;">
-            <table style="width: 80%;">
-                <tr>
-                    <td colspan="5">
-                        
-                    </td>
-                </tr>
-                <tr class="header1">
-                    <td colspan="5">User: {{userselected}}, Account: {{accountselected}}</td>                                        
-                </tr>
-                <tr class="header1">
-                    <td>Year</td>                    
-                    <td class="headeramt">Emp Share</td>
-                    <td class="headeramt">Emplyr Share</td>
-                    <td class="headeramt">Type Of Transaction</td>
-                    <td class="headeramt">Balance</td>
-                </tr>
-                <tr class="header2" *ngFor ="let p of PFAcctDetails;">
-                    <td class="dt">{{p.year}}</td>                    
-                    <td class="amt">{{p.investmentEmp|number:'1.0-2'}}</td>
-                    <td class="amt">{{p.investmentEmplr|number:'1.0-2'}}</td>
-                    <td class="amt">{{p.typeOfTransaction}}</td>
-                    <td class="amt">{{p.balance|number:'1.1-2'}}</td>
-                </tr>
-            </table>
-        </td>
-          <td style="width: 5%;"></td>
-      </tr>
-  </table>
   
+</div>
+   

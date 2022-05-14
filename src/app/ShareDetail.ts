@@ -32,6 +32,8 @@ export interface ITransaction
     tranType:string
     assetType:number
     pb:number
+    marketcap:number
+    portfolioId:number
 }
 export interface IDashboard
 {
@@ -40,6 +42,7 @@ export interface IDashboard
      invested:string
      currentValue:string
      XirrReturn:number
+     diff:number
 }
 export interface IFolio
 {
@@ -94,6 +97,8 @@ export interface IAssetReturn
     portfolioId: number,
     year: number,
     return:number,
+    dividend:number,
+    xirr:number
 }
 export interface IPfAcct
 {

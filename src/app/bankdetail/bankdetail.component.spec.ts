@@ -9,17 +9,16 @@ describe('BankdetailComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ BankdetailComponent ]
     })
-    .compileComponents();  
+    .compileComponents();    
   }); 
 
   beforeEach(() => {
     fixture = TestBed.createComponent(BankdetailComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    fixture.detectChanges(); 
   });
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    expect(component).toBeTruthy(); 
 
-  
+  });  
 });

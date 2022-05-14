@@ -18,7 +18,9 @@ export interface returnonasset{
 }
 export interface returnonassets{
   year:number;
-  return:number;  
+  return:number;
+  dividend:number;
+  xirr:number;
 }
 export interface divHistory{
   year:number;
@@ -34,6 +36,7 @@ export interface divHistory{
 export class PortfolioComponent implements OnInit {
 
   public portfolio =[] as any;
+  
   public filterPortfolio =[] as any;
   public eqtTransaction=[] as any;
   eqtQty=[] as number[];
@@ -59,9 +62,9 @@ export class PortfolioComponent implements OnInit {
   public assetValueHistory=[] as number[];
   public investmentHistory=[] as number[];
   public assetHistoryTime=[] as string[];
-  public companyDividend=[] as divHistory[];
- // assetReturn=[] as returnonasset[];
+  public companyDividend=[] as divHistory[]; 
   assetReturns=[] as returnonassets[];
+  public show:boolean = true;
   
   isMF:boolean=false;
   isShare:boolean=true;
@@ -77,33 +80,25 @@ export class PortfolioComponent implements OnInit {
  
   constructor(private _portfolio:SharesService,private route:ActivatedRoute,private router:Router, public datepipe: DatePipe) {  }
 
-  ngOnInit(): void {    
-    // this._portfolio.getPortfolio(0)
-    // .subscribe(data => {
-    //   this.portfolio = data;       
-    //   data.forEach(element => {
-    //      element.profit= element.qty*element.livePrice - element.avgprice;          
-    //    });
-    ///  });
+  ngOnInit(): void {         
     this.changeFolio('0');
   }
   
-  changeFolio(e :any){
-    
-    //this.folioId =Number(e);
-    console.log(typeof e);
+  changeFolio(e :any){    
+     
+    //console.log(typeof e);
     this.sector.length=0;
     if(typeof e!='string')
     {    
       this.folioId=e.target.value;  
-    }
-    
+    }    
     this.assetValue.splice(0,this.assetValue.length);  
     this._portfolio.getPortfolio(this.folioId)
-     .subscribe(data =>{       
+     .subscribe(data =>{ 
       data.forEach(element => {
+        //console.log(element);
         element.profit= element.qty*(element.livePrice - element.avgprice);
-        element.percentage = (element.livePrice - element.avgprice)*100/element.avgprice;
+        element.percentage = element.xirr; 
         if(element.sector!="Debt" && element.sector!="Equity" )
         {           
           if(this.sector.indexOf(element.sector)<=-1 )
@@ -121,6 +116,7 @@ export class PortfolioComponent implements OnInit {
             //console.log(this.assetProfit);
             this.assetValue[this.sector.indexOf(element.sector)] += parseFloat((element.avgprice*element.qty).toFixed(2));
             this.assetProfit[this.sector.indexOf(element.sector)] += parseFloat(((element.livePrice-element.avgprice)*element.qty).toFixed(2));
+            //console.log( this.assetProfit[this.sector.indexOf(element.sector)] );
           }
       });
     this.sector = this.sector.filter((e, i) => i === this.sector.indexOf(e))
@@ -175,13 +171,13 @@ export class PortfolioComponent implements OnInit {
     .subscribe(data=>{      
       data.forEach(element => {               
         this.assetHistoryTime.push(element.month+"-"+element.year); 
-        //console.log("Portfolio");
+        
         //console.log(element.month+"-"+element.year);
         this.assetValueHistory.push(parseFloat(element.assetValue.toFixed(2)));        
         this.dividendHistory.push(element.dividend);
         this.investmentHistory.push(parseFloat(element.investment.toFixed(2)));
-       // console.log(element.month+"-"+element.year+" invst:"+element.investment);    
-        let dt:Date = new Date(element.year,element.month);
+         
+       // let dt:Date = new Date(element.year,element.month);
         
         this.previousMonthAsset=element.assetValue;
         this.previousMonthInvst=element.investment;                  
@@ -192,19 +188,17 @@ export class PortfolioComponent implements OnInit {
     this._portfolio.getAssetReturn(this.folioId,this.option)
     .subscribe(data=>{      
       data.forEach(element => {            
-          let a:returnonassets={ year:element.year,return:element.return};        
+          let a:returnonassets={ year:element.year,return:element.return,dividend:element.dividend,xirr:element.xirr};        
           this.assetReturns.push(a);
       })
     });
-
+     
     this.assetHistoryTime.length=0;
     this.dividendHistory.length=0;
     this.assetValueHistory.length=0;
     this.investmentHistory.length=0;
-   
-    
 
-
+     
   }
  
 
@@ -360,17 +354,16 @@ export class PortfolioComponent implements OnInit {
     this.investmentHistory.length=0;
     this.dividendHistory.length=0;
     this.eqCurrVal =0;
-    this.eqInvstVal=0; 
+    this.eqInvstVal=0;
+    this.sdividend=0;
       if(e=="share")
       {
         this.filterPortfolio =  this.portfolio.filter((s: { equityType: number; }) => s.equityType===1);
      
-        for (var i = 0; i < this.filterPortfolio.length; i++) {
-          
+        for (var i = 0; i < this.filterPortfolio.length; i++) {          
           this.eqInvstVal += this.filterPortfolio[i].qty*this.filterPortfolio[i].avgprice;          
           this.eqCurrVal +=  this.filterPortfolio[i].qty*this.filterPortfolio[i].livePrice;
-          this.sdividend+= this.filterPortfolio[i].dividend;
-           
+          this.sdividend+= this.filterPortfolio[i].dividend;           
         }
       this._portfolio.getAssetHistory(this.folioId,1)
         .subscribe(data=>{      
@@ -383,12 +376,10 @@ export class PortfolioComponent implements OnInit {
             let dt:Date = new Date(element.year,element.month);
             if(this.previousMonthAsset==0)
             {          
-           
               this.previousMonthAsset=element.assetValue;
               this.previousMonthInvst = element.investment;          
             }
-            else{
-      
+            else{      
               this.previousMonthAsset=element.assetValue;
               this.previousMonthInvst=element.investment;                  
             }
@@ -398,7 +389,7 @@ export class PortfolioComponent implements OnInit {
           this._portfolio.getAssetReturn(this.folioId, 1)
             .subscribe(data=>{      
               data.forEach(element => {            
-                  let a:returnonassets={ year:element.year,return:element.return};        
+                  let a:returnonassets={ year:element.year,return:element.return,xirr:element.xirr,dividend:element.dividend};        
                   this.assetReturns.push(a);
               })
             });
@@ -416,7 +407,7 @@ export class PortfolioComponent implements OnInit {
           this._portfolio.getAssetReturn(this.folioId, 2)
             .subscribe(data=>{      
               data.forEach(element => {            
-                  let a:returnonassets={ year:element.year,return:element.return};        
+                  let a:returnonassets={ year:element.year,return:element.return,xirr:element.xirr};        
                   this.assetReturns.push(a);
               })
             });
@@ -446,7 +437,7 @@ export class PortfolioComponent implements OnInit {
         }else if(e=="debt")
         {
           this.filterPortfolio =  this.portfolio.filter((s: { equityType: number; })=> s.equityType==5);
-           
+          console.log(this.filterPortfolio); 
           for (var i = 0; i < this.filterPortfolio.length; i++){           
             this.eqInvstVal += this.filterPortfolio[i].qty*this.filterPortfolio[i].avgprice;
             this.eqCurrVal +=  this.filterPortfolio[i].qty*this.filterPortfolio[i].livePrice;
@@ -456,7 +447,7 @@ export class PortfolioComponent implements OnInit {
           this._portfolio.getAssetReturn(this.folioId, 5)
             .subscribe(data=>{      
               data.forEach(element => {            
-                  let a:returnonassets={ year:element.year,return:element.return};        
+                  let a:returnonassets={ year:element.year,return:element.return,xirr:element.xirr};        
                   this.assetReturns.push(a);
               })
             });
@@ -470,13 +461,11 @@ export class PortfolioComponent implements OnInit {
               this.investmentHistory.push(parseFloat(element.investment.toFixed(2)));        
               let dt:Date = new Date(element.year,element.month);
               if(this.previousMonthAsset==0)
-              {          
-           
+              {           
                 this.previousMonthAsset=element.assetValue;
                 this.previousMonthInvst = element.investment;          
               }
-              else{
-           
+              else{           
                 this.previousMonthAsset=element.assetValue;
                 this.previousMonthInvst=element.investment;                  
               }
@@ -504,13 +493,14 @@ export class PortfolioComponent implements OnInit {
     this._portfolio.getEqtTransaction(this.folioId, e)
     .subscribe(data => { 
       this.eqtTransaction=data;
+  console.log(this.eqtTransaction);
       this.eqtQty.length=0;
       this.eqtTrandt.length=0;
       data.forEach(element=>{ 
         this.eqtQty.push(element.qty);
         let ss = this.datepipe.transform(element.tranDate, 'yyyy-MM-dd');//!=null?this.datepipe.transform(element.tranDate, 'yyyy/MM/dd'):new Date();
         this.eqtTrandt.push( ss!=null?new Date(ss).getMonth()+"-"+new Date(ss).getFullYear():new Date() );
-        //console.log(this.eqtTransaction);
+       
       });      
      });
      document.getElementById('sharedetails').style.display='block';
@@ -525,7 +515,11 @@ export class PortfolioComponent implements OnInit {
   }
  //.................... Sector wise Chart........................
   public barChartOptions: ChartOptions = {
-    responsive: true,    
+    responsive: true,
+    title: {
+      display: true,
+      text: "Sector Wise Asset Distribution"
+    }
   };
 
   public barChartLabels: Label[] = this.sector; 
@@ -544,6 +538,10 @@ export class PortfolioComponent implements OnInit {
   //--------------------Asset History Chart -----------------------
   public barChartOptions2: ChartOptions = {
     responsive: true,
+    title: {
+      display: true,
+      text: "Investment vs Return"
+    }
   };
   public assetHistorylbl: Label[] = this.assetHistoryTime; 
   public barChartType2: ChartType = 'line';
@@ -581,11 +579,35 @@ export class PortfolioComponent implements OnInit {
   ]; 
 
   public chartHovered(e: any): void {
+    this.sdividend=0;
     if (e.event.type == "click") {
-      const clickedIndex = e.active[0]?.index;
-      var lbl=e.active[0]._chart.getElementAtEvent(event)[0]._model.label;
-      //console.log(e.active[0]._chart.getElementAtEvent(event)[0]);
+      const clickedIndex = e.active[0]?.index; 
+      var lbl=e.active[0]._chart.getElementAtEvent(event)[0]._model.label;      
       this.filterPortfolio =  this.portfolio.filter((s: { sector: any; })=> s.sector==lbl);
+      this.filterPortfolio.forEach(element => { 
+              this.sdividend += element.dividend;
+             // console.log(element.dividend);      
+            }); 
     }
-}
+  }
+  public historyClick (e: any): void{
+    if (e.active.length > 0) {
+      const chart = e.active[0]._chart;
+      const activePoints = chart.getElementAtEvent(e.event);
+        if ( activePoints.length > 0) { 
+          // get the internal index of slice in pie chart
+          const clickedElementIndex = activePoints[0]._index;
+          const label = chart.data.labels[clickedElementIndex];
+          // get value by index
+          const value = chart.data.datasets[0].data[clickedElementIndex];
+          console.log( label.split('-'))
+          this._portfolio.getEqtMonthlyTransaction(this.folioId,label.split('-')[0],label.split('-')[1],"1")
+          .subscribe(data=>{ 
+            this.eqtTransaction=data;
+            this.show = !this.show;
+            
+          });
+        }
+       }
+  }
 }

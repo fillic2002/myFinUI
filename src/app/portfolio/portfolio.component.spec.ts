@@ -10,15 +10,14 @@ describe('PortfolioComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ PortfolioComponent ]
     })
-    .compileComponents();
+    .compileComponents();   
   });
-
   beforeEach(() => {
     fixture = TestBed.createComponent(PortfolioComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    fixture.detectChanges(); 
   });
-
+     
   it('should create', () => {
     expect(component).toBeTruthy();
   });
