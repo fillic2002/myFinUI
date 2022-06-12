@@ -53,6 +53,9 @@ export class TransactionComponent implements OnInit {
   constructor(private _eqTransaction:SharesService,private route:ActivatedRoute,private  router:Router) { }
 
   ngOnInit(): void {
+    this.invstDebt.length=0;
+    this.invstEqt.length=0;
+    this.invstMF.length=0;
     this._eqTransaction.getTransaction(0)
     .subscribe(data =>{
      this.equitytransaction = data
@@ -170,18 +173,19 @@ export class TransactionComponent implements OnInit {
      
     document.getElementById('status').style.display='block';
   }
-  add(){ 
-      this._eqTransaction.getAllfolio()
+add()
+{ 
+    this._eqTransaction.getAllfolio()
     .subscribe(datan =>{ 
       this.folio = datan;
     });
    
-  }
-  hideShareDetails()
-  {
-    document.getElementById('status').style.display='none';
-  } 
-  public onSelect(option:any)
+}
+hideShareDetails()
+{
+  document.getElementById('status').style.display='none';
+} 
+public onSelect(option:any)
   {    
     this.router.navigate(['/']);
   }
@@ -380,8 +384,7 @@ export class TransactionComponent implements OnInit {
      }
   }
   if(e=="mc")
-   { 
-     
+   {      
      if(this.direction =="asc")
      {
        this.filterPortfolio.sort((a,b)=>(a.marketCap>b.marketCap)?1:-1);
@@ -393,6 +396,19 @@ export class TransactionComponent implements OnInit {
        this.direction ="asc";
      }
   } 
+  if(e=="ia")
+  {
+    if(this.direction =="asc")
+    {
+      this.filterPortfolio.sort((a,b)=>(a.qty*a.price>b.qty*b.price)?1:-1);
+      this.direction ="desc";
+    }  
+    else 
+    {
+      this.filterPortfolio.sort((a,b)=>(b.qty*b.price>a.qty*a.price)?1:-1);
+      this.direction ="asc";
+    }
+  }
   }
   selectInvstOption(e: string): void   
   {
@@ -490,9 +506,7 @@ export class TransactionComponent implements OnInit {
     { backgroundColor: '#f08080' },
     { backgroundColor: '#3cb371' },
     
-    
-    
-          
+              
   ]
   public invstShrDataSet: ChartDataSets[] = [
     { data:this.invstDebt, label: 'Investment in Debt MF' },

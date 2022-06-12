@@ -35,15 +35,17 @@ export class AdminComponent implements OnInit {
   name:string='';
   shrdetail!: IShareDetail;
   response!: string;
+  expType!:string;
+  expTypes=[] as any;
+  folios=[] as any;
+  folioId:number=1;
+  public selectedfolio!: number;
+  public expType1!: number;
 
   ngOnInit(): void {
-     
-    //this.selectedDesc=1;
-    //this.selectedTranType=1;
-  //  this._eqTransaction.getBankType().subscribe(data=>{
-   //   this.ActType =data;
-   //   console.log(this.ActType);
-   //   });  
+    this.GetExpenseType();
+    this.GetFolioDetails();
+
   } 
   changeAccount(event:any){
     this.selectedTranType = event.target.value;
@@ -58,16 +60,15 @@ export class AdminComponent implements OnInit {
     var salary =(document.getElementById('txtAmt')as  HTMLInputElement).value;
     var txtDt = (document.getElementById('txtDt') as  HTMLInputElement).value;
     var txtAcctType = (document.getElementById('txtAcctType')as HTMLInputElement).value;
-    var folioId = (document.getElementById('portfolio')as HTMLInputElement).value;
+    //var folioId = (document.getElementById('portfolio')as HTMLInputElement).value;
     var trnType = (document.getElementById('trnType')as HTMLSelectElement).value;
     var typ = (document.getElementById('portfolio')as HTMLInputElement).value;
     var desc = (document.getElementById('txtDesc')as HTMLInputElement).value;
     
     //console.log(desc);
     
-    this._eqTransaction.postBankTransaction(
-      salary,desc,txtDt,trnType,txtAcctType,parseInt( folioId)
-    ).subscribe(data => {
+    this._eqTransaction.postBankTransaction(salary,desc,txtDt,trnType,txtAcctType,this.selectedfolio)
+      .subscribe(data => {
       this.response="New Transaction added to the database.";
     });
 
@@ -111,14 +112,13 @@ export class AdminComponent implements OnInit {
     //debugger;
     
     var shr:IShareDetail =<IShareDetail>
-    {
-      desc:(document.getElementById("desc") as HTMLInputElement).value,
-      divLink : (document.getElementById("txtDivLink") as HTMLInputElement).value,
-      id : (document.getElementById("txtISIN") as HTMLInputElement).value,
-      sector : (document.getElementById("txtSector") as HTMLInputElement).value,
-      shortName : (document.getElementById("symbol") as HTMLInputElement).value,
+    <unknown>{
+      desc: (document.getElementById("desc") as HTMLInputElement).value,
+      divLink: (document.getElementById("txtDivLink") as HTMLInputElement).value,
+      id: (document.getElementById("txtISIN") as HTMLInputElement).value,
+      sector: (document.getElementById("txtSector") as HTMLInputElement).value,
+      shortName: (document.getElementById("symbol") as HTMLInputElement).value,
       fullName: (document.getElementById("txtName") as HTMLInputElement).value
-    
     };    
       
     this._eqTransaction.postEquityUpdate(shr)
@@ -128,8 +128,47 @@ export class AdminComponent implements OnInit {
         {
           this.response ="Data Added Successfully";
         }
-        console.log(data);   
+        //console.log(data);   
       });
      
   }
+  AddExpenseType()
+  {
+    this._eqTransaction.AddExpenseType(this.expType)
+    .subscribe(data=>{
+      //console.log(data);   
+    });
+    this.GetExpenseType();
+  }
+
+  AddExpense()
+  {
+    var desc=(document.getElementById("txtExpDesc") as HTMLInputElement).value;
+    var dtOfTran=(document.getElementById("txtExpDt") as HTMLInputElement).value;
+    var amt=(document.getElementById("expamt") as HTMLInputElement).value;    
+
+    this._eqTransaction.AddExpense(desc,this.selectedfolio,parseFloat(amt), new Date(Date.parse(dtOfTran)),this.expType1)
+    .subscribe(data=>{
+      console.log(data);   
+    });
+    this.GetExpenseType();
+  }
+
+  GetExpenseType()
+  {
+    this._eqTransaction.getExpenseType()
+    .subscribe(data=>{
+      this.expTypes =data;
+      console.log(this.expTypes);
+    });
+  }
+GetFolioDetails()
+{
+  this._eqTransaction.getAllfolio()
+    .subscribe(data=>{
+      this.folios =data;
+      console.log(data);
+    });   
+}
+ 
 }

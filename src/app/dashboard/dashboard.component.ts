@@ -203,7 +203,7 @@ public chartClick(e: any): void {
           for (var i = 0; i < this.preMonthDshbrd.length; i++) {          
             this.preMonthDshbrd[i].diff=this.dbDetail[i].currentValue- this.preMonthDshbrd[i].currentValue
             this.netAddition +=this.preMonthDshbrd[i].diff;
-          }         
+          }      
         });
       }
       }

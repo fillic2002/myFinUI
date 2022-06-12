@@ -12,49 +12,61 @@
         </td>
     </tr>
 </table><hr size="1"  color="lightgrey"> 
-
-<table  style="border-style: solid;border-color: white; width: 100%;">   
+<table style="border-style: solid;border-color: white; width: 100%;">
     <tr>
-        <td colspan="2">
-          <table style="width: 98%;" class="status">
-            <tr>
-                <td style="width: 40%;">
-                    <select style="cursor: pointer; background-color: #eaea25de;" id="portfolio" (change)="changeFolio($event)">
-                        <option value="0">All</option>
-                        <option value="1" >Fillic_gov</option>
-                        <option value="2">Renuka</option>
-                        <option value="3">Fillic</option>
-                        <option value="4">Naitik</option>
-                        <option value="5">Kedar</option>                        
-                    </select>
-                </td>
-                <td *ngIf="isShare" class="header3">         
-                    <span style="display: inline-block;width: 170px;padding:2px;"  [ngStyle]="{color: getHeaderTrColor(eqPLPercent), 'font-size':'20px'}">{{eqPLPercent|number:'1.2-2'}}%</span>
-                    <span style="display: inline-block;width: 170px;padding:2px;" class="shatusContent2">{{eqCurrVal|number:'1.2-2'}}</span>
-                    <span style="display: inline-block;width: 170px;" class="shatusContent2">{{eqInvstVal|number:'1.2-2'}}</span>
-                    <span style="display: inline-block;width: 170px;" class="shatusContent2">{{sdividend|number:'1.2-2'}} 
-                    <span class="statusSmall">({{sdividend*100/eqInvstVal|number:'1.2-2'}}%)</span></span>
-                </td>
-            </tr>
+        <td style="width:1%;"></td>
+        <td>
+            <table style="width: 98%;" class="status">
+                <tr>
+                    <td style="width: 40%;">
+                        <select style="cursor: pointer; background-color: #eaea25de;" id="portfolio" (change)="changeFolio($event)">
+                            <option value="0">All</option>
+                            <option value="1" >Fillic_gov</option>
+                            <option value="2">Renuka</option>
+                            <option value="3">Fillic</option>
+                            <option value="4">Naitik</option>
+                            <option value="5">Kedar</option>                        
+                        </select>
+                    </td>
+                    <td *ngIf="isShare" class="header3">         
+                        <span style="display: inline-block;width: 170px;padding:2px;"  [ngStyle]="{color: getHeaderTrColor(eqPLPercent), 'font-size':'20px'}">{{eqPLPercent|number:'1.2-2'}}%</span>
+                        <span style="display: inline-block;width: 170px;padding:2px;" class="shatusContent2">{{eqCurrVal|number:'1.2-2'}}</span>
+                        <span style="display: inline-block;width: 170px;" class="shatusContent2">{{eqInvstVal|number:'1.2-2'}}</span>
+                        <span style="display: inline-block;width: 170px;" class="shatusContent2">{{sdividend|number:'1.2-2'}} 
+                        <span class="statusSmall">({{sdividend*100/eqInvstVal|number:'1.2-2'}}%)</span></span>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                        <input (click)="setradio('share')" type="radio" id="Share" name="equity" value="Share" checked> <label for="Share">Share</label>
+                        <input (click)="setradio('MF')" type="radio" id="MF" name="equity" value="MF"> <label for="MF">Eqt MF</label>
+                        <input (click)="setradio('debt')" type="radio" id="debt" name="equity" value="debt"> <label for="debt">Debt MF</label>
             
-            <tr>
-                <td>
-                    <input (click)="setradio('share')" type="radio" id="Share" name="equity" value="Share" checked> <label for="Share">Share</label>
-                    <input (click)="setradio('MF')" type="radio" id="MF" name="equity" value="MF"> <label for="MF">Eqt MF</label>
-                    <input (click)="setradio('debt')" type="radio" id="debt" name="equity" value="debt"> <label for="debt">Debt MF</label>
-        
-                </td>
-                <td >
-                    <span style="display: inline-block;width: 170px;padding:2px;">Net Return</span>            
-                    <span style="display: inline-block;width: 170px;padding:2px;">Current</span>
-                    <span style="display: inline-block;width: 170px;padding:2px;">Investment</span>
-                    <span style="display: inline-block;width: 170px;padding:2px;" *ngIf="isShare">Dividend</span>
-                </td>
-            </tr>
-            </table>                            
+                    </td>
+                    <td >
+                        <span style="display: inline-block;width: 170px;padding:2px;">Net Return</span>            
+                        <span style="display: inline-block;width: 170px;padding:2px;">Current</span>
+                        <span style="display: inline-block;width: 170px;padding:2px;">Investment</span>
+                        <span style="display: inline-block;width: 170px;padding:2px;" *ngIf="isShare">Dividend</span>
+                    </td>
+                </tr>
+                </table>                            
         </td>
+        <td style="width:1%;"></td>
     </tr>
-    <tr>   
+</table>
+<table  style="border-style: solid;border-color: white; width: 100%;">   
+    
+    <ng-container *ngIf="show">
+        <div>
+            <textarea style="width:400px;height:100px ; " id="comment" name="comment" [(ngModel)]="comment"></textarea>
+            <input class="savebtn" type="button" value="Save" (click)="AddComment()">     
+        </div>
+    </ng-container>   
+    <div>{{status}}</div> 
+    <div (click)="showTrans(option)" class="dml">{{trnStatus}}</div>  
+    <tr> 
         <td style="width: 46%;">
             <div style="width: 650px;height:350px; " >
                 <canvas baseChart
@@ -111,16 +123,18 @@
 </tr>
 
 </table>
-<table *ngIf="show" > 
+<table> 
     <thead>
     <tr class="header1" style="vertical-align:middle">    
         <td (click)="sort('name')" class="headername">Equity Name<div>{{sharecount}}</div></td>
+        <td class="headeramt">PB</td>    
+        <td class="headeramt">MarketCap</td>    
         <td class="headeramt">Live Price</td>    
         <td class="headeramt">Quantity</td>
         <td class="headeramt">Avg Price</td>
         <td (click)="sort('Investment')" class="headeramt">Net Invst<div>{{eqInvstVal|number:'1.2-2'}}</div></td>     
         <td (click)="sort('Gain')" class="headeramt">Gain<div>{{eqCurrVal-eqInvstVal|number:'1.2-2'}}</div></td>
-        <td (click)="sort('Return')" class="headeramt">Return</td>
+        <td (click)="sort('Return')" class="headeramt">xirr Return</td>
         <td (click)="sort('Dividend')" class="headeramt">Dividend<div>{{sdividend|number:'1.2-2'}}</div></td>
         <td (click)="sort('Divyield')" class="headeramt">Div Yield</td>
     </tr>
@@ -128,8 +142,10 @@
     <tr class="header2" *ngFor ="let p of filterPortfolio">    
         <!--<div class="amt">{{p.trasactionId}}</div>-->
          
-        <td class="naming" id="{{p.equityId}}" (click)="showdividend(p.equityId)">{{p.equityName}}<div id="{{p.equityId}}" ng-show=""></div></td>
-        <td class="amt">{{p.livePrice|number:'1.2-2'}}</td>        
+        <td class="naming" id="{{p.equityId}}" (click)="showdividend(p.equityId)">{{p.eq.equityName}}<div id="{{p.equityId}}" ng-show=""></div></td>
+        <td class="amt">{{p.eq.pb|number:'1.2-2'}}</td>        
+        <td class="amt">{{p.eq.marketCap|number:'1.2-2'}}</td>        
+        <td class="amt">{{p.eq.livePrice|number:'1.2-2'}}</td>        
         <td class="amt">{{p.qty.toFixed(0)}}</td>
         <td class="amt">{{p.avgprice|number : '1.2-2'}}</td>
         <td class="amt">{{p.qty*p.avgprice|number:'1.2-2'}}</td>         
@@ -143,10 +159,10 @@
     <table> 
         <tr class="header1">
             <td class="headeramt">Date</td>
-            <td class="headeramt">Name</td>
+            <td class="headername">Name</td>
             <td class="headeramt">Qty</td>
             <td class="headeramt">Price</td>
-            <td class="headeramt">Total</td> 
+            <td class="headeramt">Total <div>{{invstTotal|number:'1.2-2'}}</div></td> 
             <td class="headeramt">PB</td>          
             <td class="headeramt">Market Cap</td>          
         </tr>

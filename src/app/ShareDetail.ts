@@ -2,7 +2,7 @@ export interface IShareDetail
 {
     id: string
     shortName: string
-    fullName:string
+    equityname:string
     livePrice:number
     desc:string
     divLink:string
@@ -12,15 +12,17 @@ export interface IPortfolio
 {
     trasactionId: number
     avgprice: number
-    equityname:string
+    //equityname:string
     qty:number
-    livePrice:number
+    //livePrice:number
     profit:number
     percentage:number
     equityType:number
     dividend:number
-    sector:string
-    EquityId:string
+    //sector:string
+    //EquityId:string
+    xirr:number
+    eq:IShareDetail
 }
 export interface ITransaction
 {

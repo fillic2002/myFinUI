@@ -17,6 +17,8 @@ import{ChartsModule} from 'ng2-charts'
 import { DatePipe } from '@angular/common';
 import { CommonYrComponent } from './common-yr/common-yr.component';
 import { AdminComponent } from './admin/admin.component';
+import { FormsModule } from '@angular/forms';
+import { ExpenseComponent } from './expense/expense.component';
  
 
 @NgModule({
@@ -31,14 +33,16 @@ import { AdminComponent } from './admin/admin.component';
     SortDirective,
     TaxcompuComponent,
     CommonYrComponent,
-    AdminComponent,   
+    AdminComponent,
+    ExpenseComponent,   
      
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    ChartsModule  
+    ChartsModule,
+    FormsModule 
   ],
   providers: [SharesService,DatePipe],
   bootstrap: [AppComponent]

@@ -12,5 +12,4 @@ export class CommonYrComponent implements OnInit {
   ngOnInit(): void {
     console.log('asd');
   }
-
 }

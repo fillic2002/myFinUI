@@ -10,16 +10,17 @@ describe('CommonYrComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ CommonYrComponent ]
     })
-    .compileComponents();
+    .compileComponents();    
   });
 
   beforeEach(() => {
+
     fixture = TestBed.createComponent(CommonYrComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create', () => { 
     expect(component).toBeTruthy();
   });
 });

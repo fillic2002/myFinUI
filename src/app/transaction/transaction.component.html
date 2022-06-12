@@ -1,6 +1,6 @@
 <!doctype html>
 <div>
-    <span value="H" (click)="onSelect(option)" style="font-size: 20px;">my<span style="color: orange; cursor: pointer;">f</span>in</span>
+    <span value="H" (click)="onSelect(option)" style="font-size: 20px; cursor: pointer;">my<span style="color: orange; cursor: pointer;">f</span>in</span>
     <span class="title" style="padding-left: 30%;padding-top: 10px;">Investment</span>
     <span class="pipe" style="padding-left: 32%;" (click)="selectnext(option)">Bank Account Details</span>
     <span class="pipe" > | </span>
@@ -161,7 +161,7 @@
         <td class="headeramt" (click)="sort('ID')"> ID</td>        
         <td class="headeramt">Quantity</td>
         <td class="headeramt">Purchase Price</td>
-        <td class="headeramt">Invested amt</td>
+        <td class="headeramt" (click)="sort('ia')">Invested amt</td>
         <td class="headeramt" (click)="sort('pb')">PB</td>
         <td class="headeramt" (click)="sort('mc')">MarketCap</td>
         <td class="headeramt">Transation Type</td>
@@ -176,7 +176,7 @@
         <td class="amt">{{t.qty}}</td>
         <td class="amt">{{t.price|number : '1.2-2'}}</td>
         <td class="amt">{{t.qty*t.price|number : '1.2-2'}}</td>
-        <td class="amt">{{t.pb}}</td>
+        <td class="amt">{{t.pb|number : '1.2-2'}}</td>
         <td class="amt">{{t.marketCap|number : '1.2-2'}}</td>
         <td class="amt" [ngStyle]="{color: getTrColor(t.tranType)}">{{t.tranType}}</td>
         <td (click)="deleterecord(t.equityId, t.tranDate)" style="cursor: pointer" class="action" >Delete</td>

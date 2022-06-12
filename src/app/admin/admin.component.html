@@ -9,20 +9,14 @@
     <span class="pipe" (click)="selectnext(option)">Tax</span>
     </div>
  <hr size="1"  color="lightgrey">  
+ <select [(ngModel)]="selectedfolio" style="cursor: pointer; background-color: #eaea25de;"  id="txtFolio" >
+    <option [value]="item.folioID" *ngFor="let item of folios" > {{item.folioName}}</option>                    
+</select>
 <table>
     <tr>
         <td>
             <div style="font-weight: 550;">Add Transaction</div>
-            <span style="padding-left: 20px;">            
-                <select style="cursor: pointer; background-color: #eaea25de;"  id="portfolio" (change)="changeFolio($event)">
-                    <option value="0" >All</option>
-                    <option value="1" >Fillic_gov</option>
-                    <option value="2">Renuka</option>
-                    <option value="3">Fillic</option>
-                    <option value="4">Naitik</option>
-                    <option value="5">Kedar</option> 
-                </select>
-            </span> 
+             
             
             <span class="naming">Date:</span><input id="txtDt" type="date" class="inputdt">
             <span class="naming">Amount:</span><input id="txtAmt" class="inputT" type="text"> 
@@ -45,16 +39,7 @@
     <tr>
         <td>
             <div style="font-weight: 550;">Add New Account</div>
-            <span style="padding-left: 20px;">            
-                <select style="cursor: pointer; background-color: #eaea25de;"  id="portfolio" (change)="changeFolio($event)">
-                    <option value="0" >All</option>
-                    <option value="1" >Fillic_gov</option>
-                    <option value="2">Renuka</option>
-                    <option value="3">Fillic</option>
-                    <option value="4">Naitik</option>
-                    <option value="5">Kedar</option> 
-                </select>
-            </span> 
+             
             
             <span class="naming">Date:</span><input id="txtDt" type="date" class="inputdt">
              
@@ -95,7 +80,7 @@
                 </div>
             </div>
             <input  id="txtISIN" class="inputT" type="text"  (keypress)="getasset($event)" value="{{companyid}}" >
-            <span class="naming">Symbol:</span><input name="symbol" id="symbol" class="inputT"   >
+            <span class="naming">Symbol:</span><input name="symbol" id="symbol" class="inputT">
             <span class="naming">Sector:</span><input id="txtSector" class="inputT" type="text">
             <span class="naming">Description:</span><input id="desc" class="inputT" type="text">
             <span class="naming">Div Link:</span><input id="txtDivLink" class="inputT" type="text">
@@ -104,3 +89,22 @@
     </tr>
     <tr><td>{{response}}</td></tr>
 </table>
+<!--Adding Expense Type-->
+<div>
+    <div style="font-weight: 550;">Add Expense Type</div>
+    <span class="naming">Expense Type:</span><input class="inputT" [(ngModel)]="expType">
+    <input class="savebtn" type="button" value="Save" (click)="AddExpenseType()"> 
+</div>
+<!--Adding Expense-->
+<div>
+    <div style="font-weight: 550;">Add Expense</div>
+     
+    <span class="naming">Expense Type:</span>
+    <select [(ngModel)]="expType1" style="cursor: pointer; background-color: #eaea25de;"  id="txtType" (change)="changeAccount($event)">
+        <option [value]="item.expId" *ngFor="let item of expTypes" > {{item.expTypeDesc}}</option>                    
+    </select>
+    <span class="naming">Amt:</span><input name="expamt" id="expamt" class="inputT">
+    <span class="naming">Date:</span><input id="txtExpDt" type="date" class="inputdt">
+    <span class="naming">Desc:</span><input id="txtExpDesc" type="textArea" class="inputdt">
+    <input class="savebtn" type="button" value="Save" (click)="AddExpense()"> 
+</div>

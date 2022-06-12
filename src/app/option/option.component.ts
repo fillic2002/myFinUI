@@ -15,7 +15,8 @@ export class OptionComponent implements OnInit {
     {"name":"Investment","id":4},
     {"name":"Taxcompu","id":3},
     {"name":"BankAcDetail","id":5},
-    {"name":"Admin","id":6}
+    {"name":"Admin","id":6},
+    {"name":"Expense","id":7}
 
   ]
   constructor(private  router:Router) {
@@ -34,5 +35,6 @@ export class OptionComponent implements OnInit {
     if(option.id==3){this.router.navigate(['/tax'])}
     if(option.id==5){this.router.navigate(['/bankdetail'])}
     if(option.id==6){this.router.navigate(['/admin'])}
+    if(option.id==7){this.router.navigate(['/expense'])}
   }
 }

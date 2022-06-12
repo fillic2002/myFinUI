@@ -125,8 +125,7 @@ export class SharesService {
  getPFAcDetails(folioid:string,acttype:any):Observable<IPfAcct[]>{
   return this.client.get<IPfAcct[]>("http://localhost:59921/bankasset/GetPfYearlyDetails/"+folioid+"/"+acttype)    
  }
- deleteTransaction(id:string,dt:Date):Observable<any>{
-   console.log(new Date(dt));
+ deleteTransaction(id:string,dt:Date):Observable<any>{   
   return this.client.post("http://localhost:59921/transaction/deletetransction",{    
     equityId:id,    
     tranDate: dt,
@@ -136,14 +135,47 @@ export class SharesService {
     portfolioId:1,
     typeAsset:1
   });
- }  
-// getDropDownText(id, object){
- // const selObj = _.filter(object, function (o) {
-  //    return (_.includes(id,o.id));
- // });
- // return selObj;
-//}
-//getBankType(){
- // return this.client.get<IAcctType[]>("http://localhost:59921/bankasset/GetAccoutType/"); 
-//}
+ } 
+ AddFolioComment(id:number,cmt:string):Observable<any>{
+  return this.client.post("http://localhost:59921/portfolio/AddComment",{
+    folioID:parseInt(id),
+    comment:cmt
+  });
+ }
+ GetFolioComment(id:number):Observable<any>{
+  return this.client.get("http://localhost:59921/portfolio/GetfolioComment/"+id);
+ }
+
+ getExpense(folioID:number)
+ { return this.client.get("http://localhost:59921/portfolio/GetfolioExpense/"+folioID); }
+
+ getMonthlyExpense(folioID:number,my:string)
+ { return this.client.get("http://localhost:59921/portfolio/GetMonthlyfolioExpense/"+folioID+"/"+my); }
+ 
+ getMonthlyExpenseHistory(folioID:number,m:number)
+ { return this.client.get("http://localhost:59921/portfolio/GetMonthlyfolioExpenseHistory/"+folioID+"/"+m); }
+ 
+ getExpenseType()
+ {return this.client.get("http://localhost:59921/portfolio/GetExpenseType/");}
+
+ AddExpenseType(expType:string)
+ {
+   return this.client.post("http://localhost:59921/portfolio/AddExpenseType/",
+   {
+    expTypeDesc: expType
+   });
+  }
+ AddExpense(expdesc:string,portfolioId:any,amount:any,dt:Date, expType:any)
+ {
+   return this.client.post("http://localhost:59921/portfolio/AddExpense/",
+   {
+    desc: expdesc,
+    folioId:parseInt(portfolioId),
+    dtOfTran:new Date( dt),
+    amt: parseInt(amount),
+    expenseType:{
+      expId:parseInt(expType)   
+    }
+   });
+  }
 }

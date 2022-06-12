@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<table style="width: 100%">
+  <tr>
+    <td style="width: 15%">
+      <span
+        value="H"
+        (click)="onSelect(option)"
+        style="font-size: 22px; cursor: pointer"
+        >my<span style="color: orange">f</span>in</span
+      >
+    </td>
+    <td style="width: 70%">
+      <span class="title" style="padding-left: 30%" (click)="onClick($event)">Expense</span>
+    </td>
+    <td style="width: 15%">
+      <span class="pipe" (click)="selectnext(option)">Admin</span>
+    </td>
+  </tr>
+</table>
+<hr size="1" color="lightgrey" />
+<table class="status"  style="width: 100%">
+  <tr>
+    <td style="width: 1%">      
+      <select [(ngModel)]="selectedfolio" (change)="changeFolio($event)" style="cursor: pointer; background-color: #eaea25de;"  id="txtFolio" >
+        <option [value]="item.folioID" *ngFor="let item of folios" > {{item.folioName}}</option>                    
+      </select>
+    </td>
+    <td  style="width: 98%"><span>Expense</span></td>
+  </tr>
+</table>
+<div style="width: 650px;height:350px; " >
+  <canvas baseChart
+    [datasets]="getMonthlyExpense"
+    [labels]="expLbl"
+    [options]="expOption"
+    [plugins]="expPlugins" 
+    [legend]="barChartLegend"
+    [colors]="expColors"
+    [chartType]="expType"
+    (chartClick)="historyClick($event)">
+  </canvas>
+</div>
+<div   *ngFor="let item of monthlyExpense" >
+<span>{{item.folioId}}---</span><span>{{item.amt}}---</span><span>{{item.expenseType.expTypeDesc}}</span>
+</div>        

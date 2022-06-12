@@ -8,6 +8,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { BankdetailComponent } from './bankdetail/bankdetail.component';
 import { TaxcompuComponent } from './taxcompu/taxcompu.component';
 import { AdminComponent } from './admin/admin.component';
+import { ExpenseComponent } from './expense/expense.component';
 
 const routes: Routes = [
   {path:'', component:OptionComponent},
@@ -17,7 +18,8 @@ const routes: Routes = [
   {path:'dashboard',component:DashboardComponent},  
   {path:'bankdetail',component:BankdetailComponent},
   {path:'tax',component:TaxcompuComponent},
-  {path:'admin',component:AdminComponent}
+  {path:'admin',component:AdminComponent},
+  {path:'expense',component:ExpenseComponent}
 ];
  
 @NgModule({
