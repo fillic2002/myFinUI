@@ -37,23 +37,14 @@ export class DashboardComponent implements OnInit {
   constructor(private _dashbrd:SharesService,private route:ActivatedRoute,private router:Router) { }
  
   ngOnInit(): void {
-    this._dashbrd.getDashBoard()
-    .subscribe(data=>{
-        this.dbDetail = data;
-        //console.log(this.dbDetail);
-        var to:number; 
-        to=0;
-        for (var i = 0; i < this.dbDetail.length; i++) {
-          to= to + parseFloat(this.dbDetail[i].currentValue);       
-          this.assetValue.push(this.dbDetail[i].currentValue);
-          this.assetName.push(this.dbDetail[i].assetName);          
-        }         
-        this.total=to.toFixed(2);
-       }); 
-       this.asttype="All";
-   
+    
+   this.GetDashboard();
+
     this._dashbrd.getAssetsHistory(0)
     .subscribe(ast =>{ 
+      //console.log(ast);
+      //ast.sort((a: { assetValue: number; },b: { assetValue: number; })=>a.assetValue-b.assetValue);
+      //console.log(ast);
       ast.forEach(element => {
         this.assetValues.push(element.assetValue.toFixed(2));
         this.assetXaxis.push(element.month+"-"+element.year);
@@ -62,6 +53,7 @@ export class DashboardComponent implements OnInit {
     });
     this._dashbrd.getAssetsReturn(this.assetId)
     .subscribe(rtn=>{
+       
       rtn.forEach(element => {
         this.astReturn.push(element.return.toFixed(2)); 
         this.yearReturn.push(element.year); 
@@ -69,6 +61,27 @@ export class DashboardComponent implements OnInit {
        
     }); 
   }
+
+public GetDashboard()
+{
+  this._dashbrd.getDashBoard()
+  .subscribe(data=>{
+      this.dbDetail = data;
+      this.dbDetail.sort((a: { currentValue: number; },b: { currentValue: number; })=>a.currentValue-b.currentValue);
+      this.dbDetail.sort((a: { currentValue: number; },b: { currentValue: number; })=>a.currentValue-b.currentValue);
+      console.log(this.dbDetail);
+      var to:number; 
+      to=0;
+      for (var i = 0; i < this.dbDetail.length; i++) {
+        to= to + parseFloat(this.dbDetail[i].currentValue);       
+        this.assetValue.push(this.dbDetail[i].currentValue);
+        this.assetName.push(this.dbDetail[i].assetName);          
+      }         
+      this.total=to.toFixed(2);
+     }); 
+     this.asttype="All";
+}
+
   public showReturn(assetName:string)
   {
     this.astReturn.length=0;
@@ -127,6 +140,10 @@ export class DashboardComponent implements OnInit {
 //------------------- Asset History ----------------------------------
     public barChartOptions: ChartOptions = { 
       responsive: true,
+      title: {
+        display: true,
+        text: "Asset Over Time" 
+      }
     };  
     public barChartLabels: Label[] = this.assetXaxis; 
     public barChartType: ChartType = 'line';
@@ -147,7 +164,7 @@ public pieChartType: ChartType = 'bar';
 public pieChartLegend = true;
 public pieChartPlugins = [];
 public pieChartColors: Array < any > = [{
-  backgroundColor: ['#ed5210', 'green','#00b38a','lightblue','#6667ab','	#d31461','lightgreen','orange','#afb0d3', 'blue'], 
+  backgroundColor: ['#97CEEC', '#A68E34','#00b38a','lightblue','#EFCEC8','	#BBBFD2','#E8ACD6','#B5E1E1','#afb0d3', 'blue'], 
 }];
 public pieChartData: ChartDataSets[] = [
   { data:this.assetValue, label: 'Current Value' },       
@@ -188,20 +205,20 @@ public chartClick(e: any): void {
       .subscribe(data=>{
           this.dbDetail = data;
           //console.log(this.dbDetail);
-          var to:number; 
+          var to:number;
           to=0;
           for (var i = 0; i < this.dbDetail.length; i++) {
             to= to + parseFloat(this.dbDetail[i].currentValue);       
             this.assetValue.push(this.dbDetail[i].currentValue);
             this.assetName.push(this.dbDetail[i].assetName);          
-          }         
+          }      
           this.total=to.toFixed(2);
         });
       this._dashbrd.getMonthDashBoard(label.split('-')[0]-1, label.split('-')[1])
       .subscribe(data=>{
           this.preMonthDshbrd = data;                    
           for (var i = 0; i < this.preMonthDshbrd.length; i++) {          
-            this.preMonthDshbrd[i].diff=this.dbDetail[i].currentValue- this.preMonthDshbrd[i].currentValue
+            this.preMonthDshbrd[i].diff=this.dbDetail[i].invested- this.preMonthDshbrd[i].invested
             this.netAddition +=this.preMonthDshbrd[i].diff;
           }      
         });

@@ -41,6 +41,9 @@
         <td></td>
     </tr>
 </table>
+<div (click)="showTrans(option)" class="dml">Add</div><br>
+<div style="float: left;" class="header4">Detail Statement:</div>
+                
 <div>
     <div style="width: 43%; vertical-align: top;float: left;">
         <table style="width: 100%;" >
@@ -49,9 +52,8 @@
             </tr>
             <tr>
             <td style="width: 100%;" colspan="5">
-                <div (click)="showTrans(option)" class="dml">Add</div>
-                <br>
-                    <ng-container *ngIf="show"> 
+                 <br>
+              <!--  <ng-container *ngIf="show"> 
                 <table>
                     <tr>
                         <td><input id="txtUserId" class="headeramt" ref-sname type="text" (blur)="onChange('userid',$event)"></td>
@@ -69,7 +71,7 @@
                         <td class="naming">Date of Update</td>
                     </tr>
                 </table>
-            </ng-container>
+            </ng-container>-->
                 <!--
                         <ng-container *ngIf="show"> 
                             <div style="display: inline;"> 
@@ -82,15 +84,14 @@
                         <input class="savebtn" type="button" value="Save" (click)="AddTransaction()"></div></ng-container><br>-->
             </td>
         </tr> 
-        <tr>
-            <td colspan="2"><div class="header4">Detail Statement:</div></td>
-        </tr>
+      
         <tr class="header1"> 
             <td class="headeramt">UserId</td>    
             <td class="headeramt">Acct Name</td>
             <td class="headeramt">Accout Type</td>       
             <td class="headeramt">Rate Of Intreset</td>
-            <td class="headeramt">Accout Balance</td>      
+            <td class="headeramt">Accout Balance</td>    
+            <td class="headername">DOT</td>      
         </tr>
         <tr class="header2" *ngFor ="let p of filterAcct;">
             <td class="amt">{{p.userid}}</td>        
@@ -98,6 +99,7 @@
             <td class="amt">{{p.acctType}}</td>
             <td contenteditable="true" (keydown.Tab)="updateList($event,p.acctId,'roi',p.userid,p.roi,p.amt)" (blur)="updateList(p.acctId, 'roi', $event)" class="amt">{{p.roi|number:'1.1-2'}}%</td>
             <td contenteditable="true" (keydown.Tab)="updateList($event,p.acctId,'amt',p.userid,p.roi,p.amt)" (blur)="onChange('amt',$event)"  class="amt">{{p.amt|number:'1.2-2'}}</td>    
+            <td class="dt">{{p.transactionDate| date}}</td>
         </tr>
         </table>
     </div>

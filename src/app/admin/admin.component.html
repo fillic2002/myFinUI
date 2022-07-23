@@ -9,7 +9,7 @@
     <span class="pipe" (click)="selectnext(option)">Tax</span>
     </div>
  <hr size="1"  color="lightgrey">  
- <select [(ngModel)]="selectedfolio" style="cursor: pointer; background-color: #eaea25de;"  id="txtFolio" >
+<select [(ngModel)]="selectedfolio" style="cursor: pointer; background-color: #eaea25de;"  id="txtFolio" >
     <option [value]="item.folioID" *ngFor="let item of folios" > {{item.folioName}}</option>                    
 </select>
 <table>
@@ -87,8 +87,9 @@
             <input class="savebtn" type="button" value="Save" (click)="UpdateEquity()"> 
         </td>
     </tr>
-    <tr><td>{{response}}</td></tr>
+    
 </table>
+<div class="msg">{{response}}</div>
 <!--Adding Expense Type-->
 <div>
     <div style="font-weight: 550;">Add Expense Type</div>
@@ -97,11 +98,10 @@
 </div>
 <!--Adding Expense-->
 <div>
-    <div style="font-weight: 550;">Add Expense</div>
-     
+    <div style="font-weight: 550;">Add Expense</div>     
     <span class="naming">Expense Type:</span>
     <select [(ngModel)]="expType1" style="cursor: pointer; background-color: #eaea25de;"  id="txtType" (change)="changeAccount($event)">
-        <option [value]="item.expId" *ngFor="let item of expTypes" > {{item.expTypeDesc}}</option>                    
+        <option [value]="item.expTypeId" *ngFor="let item of expTypes" > {{item.expTypeDesc}}</option>                    
     </select>
     <span class="naming">Amt:</span><input name="expamt" id="expamt" class="inputT">
     <span class="naming">Date:</span><input id="txtExpDt" type="date" class="inputdt">

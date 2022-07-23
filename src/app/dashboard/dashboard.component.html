@@ -17,53 +17,66 @@
     <td style="width: 1%;"></td>
      <td class="status"  style="width: 98%;"><div class="shatusContent2"> {{total|number : '1.2-2'}}</div><span>Current Asset Size</span></td>
   </tr>   
-</table>
+</table>    
+<div style="display:flex;">   
+<div style="width: 650px; height: 450px;padding-left: 50px;" >
+  <canvas baseChart 
+    [datasets]="assetHistory"
+    [labels]="barChartLabels"
+    [options]="barChartOptions"
+    [colors]="barChartColors"
+    [plugins]="barChartPlugins"
+    [legend]="barChartLegend"
+    [chartType]="barChartType"
+    (chartClick)="chartClick($event)">
+  </canvas>           
+</div>
+<div style="width: 700px; height: 450px;padding-left: 50px;" > 
+  <canvas baseChart 
+  [datasets]="pieChartData"
+  [labels]="pieChartLabels"
+  [options]="pieChartOptions"
+  [colors]="pieChartColors"
+  [plugins]="pieChartPlugins"
+  [legend]="pieChartLegend"
+  [chartType]="pieChartType"
+   >
+</canvas></div>
+</div>
+<div style="display:flex ;">
+  <div> 
+  <table> 
+    <tr class="header1">        
+        <td class="headeramt">XiRR Return</td>  
+        <td class="headeramt">Current<div>{{monthyr}}</div></td>               
+        <td class="headeramt">Invested</td>            
+        <td class="headername" >Asset Type</td>    
+    </tr>
+    <tr class="header2" *ngFor ="let d of dbDetail">                    
+      <td class="amt" [ngStyle]="{color: getTrColor(d.currentValue-d.invested)}" >{{d.xirrReturn|number : '1.2-2'}}%</td>      
+      <td class="amt">{{d.currentValue|number : '1.2-2'}}</td>                            
+      <td class="amt">{{d.invested|number : '1.2-2'}}</td>
+      <td class="naming" style="cursor: pointer; text-align: center;" (click)="showReturn(d.assetName)">{{d.assetName}}</td>
+    </tr>
+  </table>
+</div>
+<div>
+  <table>  
+    <tr class="header1">
+        <!--<td class="headername">Asset Type</td> -->           
+        <td class="headeramt">Invested(C-1)</td> 
+        <td class="headeramt">Net Investment<div>{{netAddition|number : '1.2-2'}}</div> </td>                   
+    </tr>
+    <tr class="header2" *ngFor ="let d of preMonthDshbrd">        
+          <!--  <td class="naming" style="cursor: pointer;" (click)="showReturn(d.assetName)">{{d.assetName}}</td>  -->              
+            <td class="amt">{{d.invested|number : '1.2-2'}}</td>                            
+            <td class="amt">{{d.diff|number : '1.2-2'}}</td>
+    </tr>
+  </table>
+</div>
+</div>
 <table >  
-  <tr>
-    <td style="width: 1%;"></td>
-    <td>       
-      <table> 
-        <tr class="header1">
-            <td class="headername">Asset Type</td>
-            <td class="headeramt">Invested</td>    
-            <td class="headeramt">Current<div>{{monthyr}}</div></td>       
-            <td class="headeramt">XiRR Return</td>    
-        </tr>
-        <tr class="header2" *ngFor ="let d of dbDetail">        
-                <td class="naming" style="cursor: pointer;" (click)="showReturn(d.assetName)">{{d.assetName}}</td>
-                <td class="amt">{{d.invested|number : '1.2-2'}}</td>
-                <td class="amt">{{d.currentValue|number : '1.2-2'}}</td>                
-                <td class="amt" [ngStyle]="{color: getTrColor(d.currentValue-d.invested)}" >{{d.xirrReturn|number : '1.2-2'}}%</td>
-        </tr>
-      </table>
-      <table> 
-        <tr class="header1">
-            <td class="headername">Asset Type</td>            
-            <td class="headeramt">Current-1</td> 
-            <td class="headeramt">Diff<div>{{netAddition|number : '1.2-2'}}</div> </td>                   
-        </tr>
-        <tr class="header2" *ngFor ="let d of preMonthDshbrd">        
-                <td class="naming" style="cursor: pointer;" (click)="showReturn(d.assetName)">{{d.assetName}}</td>                
-                <td class="amt">{{d.currentValue|number : '1.2-2'}}</td>                            
-                <td class="amt">{{d.diff|number : '1.2-2'}}</td>
-        </tr>
-      </table>
-    </td>
-    <td>
-      <span style="text-align: center;font-size:14px; font-weight: bold;" >Asset Distribution</span>       
-          <div style="width: 650px; height: 450px;padding-left: 50px;" >
-          <canvas baseChart 
-            [datasets]="assetHistory"
-            [labels]="barChartLabels"
-            [options]="barChartOptions"
-            [colors]="barChartColors"
-            [plugins]="barChartPlugins"
-            [legend]="barChartLegend"
-            [chartType]="barChartType"
-            (chartClick)="chartClick($event)">
-          </canvas>           
-        </div></td>
-  </tr>
+ 
   <tr>
     <td style="width: 1%;"></td>
     <td> <div style="text-align: center;font-size:14px; font-weight: bold;">Return on {{asttype}}</div>    
@@ -78,17 +91,7 @@
           [chartType]="chartType1">
         </canvas></div>
     </td>
-    <td><div style="width: 700px; height: 450px;padding-left: 50px;" > 
-      <canvas baseChart 
-      [datasets]="pieChartData"
-      [labels]="pieChartLabels"
-      [options]="pieChartOptions"
-      [colors]="pieChartColors"
-      [plugins]="pieChartPlugins"
-      [legend]="pieChartLegend"
-      [chartType]="pieChartType"
-       >
-    </canvas></div>
+    <td>
     </td>
   </tr>
 </table>

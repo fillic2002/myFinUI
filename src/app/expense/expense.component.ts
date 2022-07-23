@@ -28,7 +28,7 @@ export class ExpenseComponent implements OnInit {
   {
     this._shrdServ.getExpense(this.selectedfolio)
       .subscribe(data =>{ 
-        //console.log(data);
+        console.log(data);
       });
   }
   public onSelect(option:any)
@@ -52,7 +52,7 @@ export class ExpenseComponent implements OnInit {
   {
       this._shrdServ.getMonthlyExpense(f,my)
       .subscribe(data =>{ 
-       // console.log(data);
+        console.log(data);
         this.monthlyExpense = data;
       });
   }
@@ -72,16 +72,25 @@ changeFolio(e:any)
   this.GetMonthlyExpenseHistory(this.selectedfolio);
  }
  historyClick(e:any)
- {
-   
+ {   
   if (e.event.type == "click") {
     const clickedIndex = e.active[0]?.index; 
-    var lbl=e.active[0]._chart.getElementAtEvent(event)[0]._model.label;      
-   // console.log(this.selectedfolio);
+    var lbl=e.active[0]._chart.getElementAtEvent(event)[0]._model.label;
     this.GetMonthlyExpense(this.selectedfolio, lbl);     
   }
   
  }
+ public deleterecord(id:any)
+  {
+    console.log(id);
+    if(confirm("Are you sure to delete ")) {        
+      this._shrdServ.deleteExpense(id)
+        .subscribe(data =>{
+          this.monthlyExpense = data;   
+        });
+    }
+    this.ngOnInit();
+  }
  public selectnext(option:any)
   {    
     this.router.navigate(['/admin']);  

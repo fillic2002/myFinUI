@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { AppRoutingModule, routingComp } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { OptionComponent } from './option/option.component';
@@ -19,7 +19,7 @@ import { CommonYrComponent } from './common-yr/common-yr.component';
 import { AdminComponent } from './admin/admin.component';
 import { FormsModule } from '@angular/forms';
 import { ExpenseComponent } from './expense/expense.component';
- 
+import "@angular/common/locales/global/en-IN";
 
 @NgModule({
   declarations: [
@@ -44,7 +44,7 @@ import { ExpenseComponent } from './expense/expense.component';
     ChartsModule,
     FormsModule 
   ],
-  providers: [SharesService,DatePipe],
+  providers: [SharesService,DatePipe,{ provide: LOCALE_ID, useValue: "en-IN" }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

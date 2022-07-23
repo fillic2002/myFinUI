@@ -22,13 +22,15 @@ export class TransactionComponent implements OnInit {
   public eqtotal:any;
   public mftotal:any;
   public selectedLevel:any;
-  public selectedfolio: any;
+  public selectedfolio: number =0;
   public purchaseOption: any="B";
   isShown: boolean = true;
   public assetType: Number=1;
   public assetId: any;
   public buttonName:any = 'Show';
   public show:boolean = false;
+  public DetailSummary:boolean = true;
+   
   public trnStatus:string='Add >'
   public result=[] as any;
   public companyid: string="";
@@ -38,11 +40,19 @@ export class TransactionComponent implements OnInit {
   public invstMF =[] as number[];
   public yearDebt =[] as number[];
   public invstDebt =[] as number[];
+  public monthlyInvstShr =[] as number[];
+  public monthlyInvstEqtMF =[] as number[];
+  public monthlyInvstDebtMF =[] as number[];
+  public monthlyInvstPF =[] as number[];
+  public monthlyInvstPPF =[] as number[];
+
   invstmnt=[] as number[];
   intrest=[] as number[];
   pfinvstmnt=[] as number[];
   pfintrest=[] as number[];
   year=[] as number[];
+  month=[] as string[];
+ 
   showresult: boolean = false ;
   qty: any;
   direction:string="asc";
@@ -53,6 +63,8 @@ export class TransactionComponent implements OnInit {
   constructor(private _eqTransaction:SharesService,private route:ActivatedRoute,private  router:Router) { }
 
   ngOnInit(): void {
+    this.GetFolioDetails();
+    this.getMonthlyInvestment();
     this.invstDebt.length=0;
     this.invstEqt.length=0;
     this.invstMF.length=0;
@@ -60,6 +72,7 @@ export class TransactionComponent implements OnInit {
     .subscribe(data =>{
      this.equitytransaction = data
      this.filterPortfolio=data;
+     //console.log(this.filterPortfolio);
      var to:number;
      to=0;  
      for (var i = 0; i < this.equitytransaction.length; i++) {
@@ -77,20 +90,20 @@ export class TransactionComponent implements OnInit {
             this.yearEqt.push(element.year)
              
             this.invstEqt.push(element.investment.toFixed(2));
-          }
+          } 
           if(element.assettype==2)
           {
             this.yearMF.push(element.year)
             this.invstMF.push(element.investment.toFixed(2));
           }
-          if(element.assettype==5)
+          if(element.assettype==5) 
           {
             this.yearDebt.push(element.year)
             this.invstDebt.push(element.investment.toFixed(2));
           }
-      });
-      this.yearEqt.reverse();
-      this.invstEqt.reverse();
+      }); 
+      this.yearEqt.reverse(); 
+      this.invstEqt.reverse(); 
       this.invstMF.reverse();
       this.yearMF.reverse();
       this.yearDebt.reverse();
@@ -131,6 +144,7 @@ export class TransactionComponent implements OnInit {
           { 
             var inv:number=0;
             inv= element.investmentEmplr+element.investmentEmp;     
+            
             this.pfintrest.push(inv);   
         }else if(element.typeOfTransaction=="deposit")
           {
@@ -141,7 +155,40 @@ export class TransactionComponent implements OnInit {
         });       
     });  
   }
-  
+  getMonthlyInvestment()
+  {
+    this._eqTransaction.getMonthlyInvstment(0,12)
+    .subscribe(data=>{
+      data.forEach(element=>{
+        
+        console.log(element);
+        if(this.month.findIndex(x=>x==element.month+"-"+element.year) < 0)
+        {          
+          this.month.push(element.month+"-"+element.year);  
+        }        
+        if(element.assetId==1){
+          this.monthlyInvstShr.push(element.invested.toFixed(1))        
+        }else if(element.assetId==2){
+          this.monthlyInvstEqtMF.push(element.invested.toFixed(1))        
+        }else if(element.assetId==5){          
+          this.monthlyInvstDebtMF.push(element.invested.toFixed(1))        
+        }else if(element.assetId==3){          
+          this.monthlyInvstPF.push(element.invested.toFixed(1))        
+        }else if(element.assetId==4){          
+          this.monthlyInvstPPF.push(element.invested.toFixed(1))        
+        }
+      });
+    }); 
+
+  }
+GetFolioDetails()
+{
+  this._eqTransaction.getAllfolio()
+    .subscribe(data=>{
+      this.folio =data;
+     // console.log(data);
+    }); 
+}
   AddTransaction():void  {
     if(document.getElementById('txtName') == null)
     {
@@ -208,7 +255,7 @@ public onSelect(option:any)
     this.status="";
     
     this.selectedfolio=e.target.value;
-    console.log(this.selectedfolio);
+    //console.log(this.selectedfolio);
     this._eqTransaction.getTransaction(e.target.value)
     .subscribe(data =>{
       this.portfolio=data;
@@ -334,9 +381,17 @@ public onSelect(option:any)
       });
    }
   }
+  public getBGColor(x:any):string
+  {   
+    if(x>100000)
+        return '#aceda9db';
+    if(x<5000 && x>10)
+      return '#fa8d8d'
+    if(x<100000 && x>70000)
+      return '#e0abfa'
+  }
   public getTrColor(x:any):string
   {   
-   
     if(x=='B')
           return '#08b100db';
     else
@@ -452,7 +507,7 @@ public onSelect(option:any)
       this._eqTransaction.getYearlyInvestment("Yearly")
       .subscribe(data =>{
         data.forEach(element => {
-           
+        
           if(element.assettype==1)
             {
               this.yearEqt.push(element.year)
@@ -495,23 +550,27 @@ public onSelect(option:any)
    
    //.................... Shares Investment........................
    public barChartOptions: ChartOptions = {
-    responsive: true,    
+    responsive: true,
+    title: {
+      display: true,
+      text: "Net Investment"
+    }    
   };
   public barChartLabels: Label[] = this.yearEqt.reverse(); 
   public barChartType: ChartType = 'bar';
   public barChartLegend = true;
   public barChartPlugins = [];
   public barChartColors: Color[] = [
-    { backgroundColor: '#ba8759' },
+    { backgroundColor: '#BFA584' },
     { backgroundColor: '#f08080' },
     { backgroundColor: '#3cb371' },
     
               
   ]
   public invstShrDataSet: ChartDataSets[] = [
-    { data:this.invstDebt, label: 'Investment in Debt MF' },
-    { data:this.invstMF, label: 'Investment in Eqty MF' },   
-    { data:this.invstEqt, label: 'Investment in Shares'  },
+    { data:this.invstDebt, label: 'Debt MF' },
+    { data:this.invstMF, label: 'Eqty MF' },   
+    { data:this.invstEqt, label: 'Shares'  },
     
     
   ];
@@ -572,7 +631,35 @@ public ppfDataSet: ChartDataSets[] = [
   { data:this.intrest, label: 'Intrest',stack:'a' },   
   
 ];
-//--------------------PF Investment -----------------------
+//-------------------- Monthly Invst -----------------------
+public mnthInvstChartOptions: ChartOptions = {
+  responsive: true,
+  title: {
+    display: true,
+    text: "Monthly Investment"
+  } 
+}; 
+
+public mnthInvstlbl: Label[] = this.month;
+public mnthInvstChartType: ChartType = 'bar'; 
+public mnthInvstChartLegend = true;
+public mnthInvstChartPlugins = []; 
+public mnthInvstChartColors: Color[] = [
+  { backgroundColor: '#726762 ' },
+  { backgroundColor: '#BFA584 ' },
+  { backgroundColor: '#667D8B ' },
+  { backgroundColor: '#8295AD ' },
+  { backgroundColor: '#D1CDC4 ' }
+]
+public mnthInvstDataSet: ChartDataSets[] = [
+  { data:this.monthlyInvstShr, label: 'Shares',stack:'inv' },
+  { data:this.monthlyInvstEqtMF, label: 'EqtMF',stack:'inv' },
+  { data:this.monthlyInvstDebtMF, label: 'DebtMF',stack:'inv' },
+  { data:this.monthlyInvstPF, label: 'PF',stack:'inv' },
+  { data:this.monthlyInvstPPF, label: 'PPF',stack:'inv' }
+];
+
+ //--------------------PF Investment -----------------------
 public pfChartOptions: ChartOptions = {
   responsive: true,
   title: {
@@ -582,7 +669,7 @@ public pfChartOptions: ChartOptions = {
 };
 public pfChartLabels: Label[] = this.year; 
 public pfChartType: ChartType = 'bar';
-public pfChartLegend = true;
+public pfChartLegend = false;
 public pfChartPlugins = [];
 public pfChartColors: Color[] = [
   { backgroundColor: 'skyblue ' },
@@ -593,9 +680,11 @@ public pfDataSet: ChartDataSets[] = [
   { data:this.pfinvstmnt, label: 'Investment',stack:'a' },        
   { data:this.pfintrest, label: 'Intrest',stack:'a' },     
 ];
+//------------------------------------------------------------
 
 public chartClick(e: any): void {
   if (e.active.length > 0) {
+    this.DetailSummary = true;
     const chart = e.active[0]._chart;
     const activePoints = chart.getElementAtEvent(e.event);
     
@@ -603,20 +692,36 @@ public chartClick(e: any): void {
       const clickedElementIndex = activePoints[0]._index;
       const label = chart.data.labels[clickedElementIndex];
       const typeOfinvst =activePoints[0]._view.datasetLabel;      
-      //console.log(this.equitytransaction);
-      if(typeOfinvst.search('Debt')>0)
+     // console.log(typeOfinvst);
+      if(typeOfinvst=="Debt MF")
       {
         this.filterPortfolio =  this.equitytransaction.filter(s => new Date(s.tranDate).getFullYear()==label && s.assetType == 5);
       }
-      if(typeOfinvst.search('Shares')>0)
-      {
+      if(typeOfinvst=='Shares')
+      {       
         this.filterPortfolio =  this.equitytransaction.filter(s => new Date(s.tranDate).getFullYear()==label && s.assetType == 1);
       }
-      if(typeOfinvst.search('Eqty')>0)
+      if(typeOfinvst=="Eqty MF")
       {
         this.filterPortfolio =  this.equitytransaction.filter(s => new Date(s.tranDate).getFullYear()==label && s.assetType == 2);
-      }      
+      } 
     }   
   }}
 
+ public getPFDetail(e:any): void {
+  const chart = e.active[0]._chart;
+    const activePoints = chart.getElementAtEvent(e.event);
+    if ( activePoints.length > 0) {
+      const clickedElementIndex = activePoints[0]._index;
+      const label = chart.data.labels[clickedElementIndex];
+      //const typeOfinvst =activePoints[0]._view.datasetLabel;      
+      //console.log(this.selectedfolio)
+      this._eqTransaction.getMonthlyPFDetails(this.selectedfolio,3,label)
+      .subscribe(data =>{ 
+        this.PFAcctDetails =data;
+        this.DetailSummary = false;
+      });      
+    }  
+ }
+ 
 }

@@ -40,6 +40,17 @@
     (chartClick)="historyClick($event)">
   </canvas>
 </div>
-<div   *ngFor="let item of monthlyExpense" >
-<span>{{item.folioId}}---</span><span>{{item.amt}}---</span><span>{{item.expenseType.expTypeDesc}}</span>
+<div>
+  <span class="divHeader">FolioID</span>
+  <span class="divHeader">Description</span>
+  <span class="divHeader">Details</span>
+  <span class="divHeader">AMT</span>  
+  <span class="divHeader">Action</span>
+</div>
+<div *ngFor="let item of monthlyExpense" >
+  <span class="divRow">{{item.folioId}}</span>
+  <span  class="divRow">{{item.expenseType.expTypeDesc}}</span>
+  <span  class="divRow">{{item.desc}}</span>
+  <span  class="divRow">{{item.amt}}</span>  
+  <span (click)="deleterecord(item.expId)" style="cursor: pointer" class="action" >Delete</span>
 </div>        

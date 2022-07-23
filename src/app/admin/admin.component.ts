@@ -57,16 +57,14 @@ export class AdminComponent implements OnInit {
 
   AddTransaction():void  {
     //debugger;
-    var salary =(document.getElementById('txtAmt')as  HTMLInputElement).value;
-    var txtDt = (document.getElementById('txtDt') as  HTMLInputElement).value;
-    var txtAcctType = (document.getElementById('txtAcctType')as HTMLInputElement).value;
-    //var folioId = (document.getElementById('portfolio')as HTMLInputElement).value;
-    var trnType = (document.getElementById('trnType')as HTMLSelectElement).value;
-    var typ = (document.getElementById('portfolio')as HTMLInputElement).value;
-    var desc = (document.getElementById('txtDesc')as HTMLInputElement).value;
-    
-    //console.log(desc);
-    
+    var salary =(document.getElementById('txtAmt')as  HTMLInputElement).value;    
+    var txtDt = (document.getElementById('txtDt') as  HTMLInputElement).value;    
+    var txtAcctType = (document.getElementById('txtAcctType')as HTMLInputElement).value;    
+    var trnType = (document.getElementById('trnType')as HTMLSelectElement).value;    
+    //var typ = (document.getElementById('portfolio')as HTMLInputElement).value;
+    //console.log(typ);
+    var desc = (document.getElementById('txtDesc')as HTMLInputElement).value;   
+    console.log(desc);
     this._eqTransaction.postBankTransaction(salary,desc,txtDt,trnType,txtAcctType,this.selectedfolio)
       .subscribe(data => {
       this.response="New Transaction added to the database.";
@@ -93,7 +91,7 @@ export class AdminComponent implements OnInit {
       .subscribe(data =>{
         this.result = data;        
       });
-    }
+    } 
   }
   public getId(e:any)
   {    
@@ -149,7 +147,11 @@ export class AdminComponent implements OnInit {
 
     this._eqTransaction.AddExpense(desc,this.selectedfolio,parseFloat(amt), new Date(Date.parse(dtOfTran)),this.expType1)
     .subscribe(data=>{
-      console.log(data);   
+     // console.log(data);
+      if(data=="fasle")
+      { this.response="Expense Added failed."; }       
+      else{this.response="Expense Added Successfully."; }
+        
     });
     this.GetExpenseType();
   }
@@ -159,7 +161,7 @@ export class AdminComponent implements OnInit {
     this._eqTransaction.getExpenseType()
     .subscribe(data=>{
       this.expTypes =data;
-      console.log(this.expTypes);
+      //console.log(this.expTypes);
     });
   }
 GetFolioDetails()
@@ -168,7 +170,7 @@ GetFolioDetails()
     .subscribe(data=>{
       this.folios =data;
       console.log(data);
-    });   
+    }); 
 }
  
 }

@@ -148,7 +148,7 @@ export class BankdetailComponent implements OnInit {
       //console.log(this.PFAcctDetails);
       data.forEach(element=>{
       this.addYear(element.year);         
-      if(element.typeOfTransaction=="int")
+      if(element.typeOfTransaction=="int") 
         { 
           var inv:number=0;
           inv= element.investmentEmplr+element.investmentEmp;     
@@ -197,10 +197,10 @@ export class BankdetailComponent implements OnInit {
       const editField = event.target.textContent.toString().replace('%','');
       this.tRoi=editField;
       this.tAmt=amt;
-    }
-  
+    }  
     this.AddTransaction();
     this.status="Account Updated Successfully!";
+    this.ngOnInit();
   }
   onChange(item:string,event:any)
   {

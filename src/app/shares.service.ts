@@ -9,10 +9,13 @@ import * as _ from 'lodash';
     providedIn: 'root'
 })
 export class SharesService {
-   constructor(private client:HttpClient) { } 
+   constructor(private client:HttpClient) { }
 
   getPortfolio(id:number):Observable<IPortfolio[]>{
     return this.client.get<IPortfolio[]>("http://localhost:59921/portfolio/Getfolio/"+id)  
+  }
+  getSectorPortfolio(id:number):Observable<any[]>{
+    return this.client.get<any[]>("http://localhost:59921/portfolio/SectorWiseAssetDistribution/"+id)  
   }
   getAllfolio():Observable<IFolio[]>{
     return this.client.get<IFolio[]>("http://localhost:59921/portfolio/GetAllfolio")  
@@ -22,6 +25,9 @@ export class SharesService {
   } 
   getEqtTransaction(folioid:Number,eqtId:string):Observable<ITransaction[]>{
     return this.client.get<ITransaction[]>("http://localhost:59921/transaction/tran/"+folioid+"/"+eqtId)  
+  }
+  getYrlyEqtInvestment(folioid:Number,eqtId:string):Observable<ITransaction[]>{
+    return this.client.get<ITransaction[]>("http://localhost:59921/transaction/getYrlyEqtInvst/"+folioid+"/"+eqtId)  
   }
   getEqtMonthlyTransaction(folioid:Number,month:number,year:number,astType:string):Observable<ITransaction[]>{
     return this.client.get<ITransaction[]>("http://localhost:59921/transaction/tran/"+folioid+"/"+month+"/"+year+"/"+astType)  
@@ -122,6 +128,9 @@ export class SharesService {
  getDividend(name:string):Observable<IDividend[]>{
   return this.client.get<IDividend[]>("http://localhost:59921/Shares/getdividend/"+name)  
  }
+ getMonthlyPFDetails(folioid:any,acttype:any,year:number):Observable<IPfAcct[]>{
+  return this.client.get<IPfAcct[]>("http://localhost:59921/bankasset/GetMonthlyPFDetails/"+folioid+"/"+acttype+"/"+year)  
+ }
  getPFAcDetails(folioid:string,acttype:any):Observable<IPfAcct[]>{
   return this.client.get<IPfAcct[]>("http://localhost:59921/bankasset/GetPfYearlyDetails/"+folioid+"/"+acttype)    
  }
@@ -135,7 +144,12 @@ export class SharesService {
     portfolioId:1,
     typeAsset:1
   });
- } 
+ }
+ deleteExpense(id:number) :Observable<any>{   
+  return this.client.post("http://localhost:59921/portfolio/DeleteExpense",{    
+    expId:id  
+  });
+}
  AddFolioComment(id:number,cmt:string):Observable<any>{
   return this.client.post("http://localhost:59921/portfolio/AddComment",{
     folioID:parseInt(id),
@@ -151,6 +165,9 @@ export class SharesService {
 
  getMonthlyExpense(folioID:number,my:string)
  { return this.client.get("http://localhost:59921/portfolio/GetMonthlyfolioExpense/"+folioID+"/"+my); }
+ 
+ getMonthlyInvstment(folioID:number,pastmonth:number)
+ { return this.client.get("http://localhost:59921/portfolio/GetMonthlyInvestment/"+folioID+"/"+pastmonth); }
  
  getMonthlyExpenseHistory(folioID:number,m:number)
  { return this.client.get("http://localhost:59921/portfolio/GetMonthlyfolioExpenseHistory/"+folioID+"/"+m); }
@@ -174,7 +191,7 @@ export class SharesService {
     dtOfTran:new Date( dt),
     amt: parseInt(amount),
     expenseType:{
-      expId:parseInt(expType)   
+      expTypeId:parseInt(expType)   
     }
    });
   }

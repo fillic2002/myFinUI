@@ -52,6 +52,8 @@ export class TaxcompuComponent {
   timeLineMFDmaster=[] as string[];
 
   monthlyCashflowShr =[] as number[];
+  monthlyCashflowEqtMF =[] as number[];
+  monthlyCashflowDebtMF=[] as number[];
   
   monthlyCashflowOut =[] as number[];
   monthlyCashflowMaster =[] as number[];
@@ -70,15 +72,16 @@ export class TaxcompuComponent {
     sortDirection: string = '';     
 
     ngOnInit() { 
-      this._portfolio.getCashFlow({ folioId: 0, pastmonth: 12 })
+
+      this.changeFolio(0);
+      /*this._portfolio.getCashFlow({ folioId: 0, pastmonth: 12 })
       .subscribe(data=>{
         data.forEach(element => {      
           //console.log(element.flow);  
           var cashF=0;
           var div=0;
           this.flw = element.flow;   
-          element.flow.forEach(e => {
-           
+          element.flow.forEach(e => {           
             cashF+= e.cashflow +e.dividend;
             //div+=e.dividend;
           });
@@ -89,8 +92,11 @@ export class TaxcompuComponent {
             this.timeLine.push(element.qtr.toString()+"-"+element.year.toString());
              
         });
-      });
+      });*/
     }
+
+
+
     changeFolio(e :any) {
      
       this.monthlyCashflowShr.length=0; 
@@ -116,37 +122,51 @@ export class TaxcompuComponent {
       this.monthlyDividend.length=0;
       this.timeLineCashOut.length=0;
       this.monthlyCashflowOut.length=0; 
-
+this.monthlyCashflowDebtMF.length=0;
 
       this._portfolio.getCashFlow({ folioId: e.target.value, pastmonth: this.pastMonth })
       .subscribe(data=>{
         data.forEach(element => {           
-          var cashF:number=0;
+          var cashFShares:number=0;
+          var cashEqtMF:number=0;
+          var cashDebtMF:number=0;
           var salary=0;
           var div=0;
           this.flw = element.flow;   
           element.flow.forEach(e => {
-            //console.log(e);
+            //console.log(e); 
             if(e.assettype==6)
               salary +=e.cashflow;
-            else
+            else if(e.assettype==1)
             {
-              cashF+= e.cashflow;              
+              cashFShares+= e.cashflow;              
               div+= e.dividend;
-            } 
+            }
+            else if(e.assettype==2)
+            {
+              cashEqtMF+= e.cashflow;              
+              div+= e.dividend;
+            }
+            else if(e.assettype==5)
+            {
+              cashDebtMF+= e.cashflow;              
+              div+= e.dividend;
+            }
           }); 
           //console.log(element.qtr.toString()+"-"+element.year.toString());    
           this.timeLine.push(element.month.toString()+"-"+element.year.toString());
-          this.monthlyCashflowShr.push(cashF.toFixed(2));
+          this.monthlyCashflowShr.push(cashFShares.toFixed(2));
           this.monthlySalary.push(salary);
+          this.monthlyCashflowDebtMF.push(cashDebtMF.toFixed(2));          
+          this.monthlyCashflowEqtMF.push(cashEqtMF.toFixed(2));
           this.monthlyDividend.push(div);
             
-          let a:cashflow={ monthyear:element.month.toString()+"-"+element.year.toString(),cash:cashF,dividend:salary};
+          let a:cashflow={ monthyear:element.month.toString()+"-"+element.year.toString(),cash:cashFShares,dividend:salary};
           this.cashflw.push(a);
   
           //console.log(element.cashflow);
           this.cashFlwMonthlyTotal.push(a);
-          this.avgMonthCashflow +=  salary+cashF;
+          this.avgMonthCashflow +=  salary+cashFShares;
           this.avgDiv+= salary;                       
           
         });
@@ -220,13 +240,18 @@ export class TaxcompuComponent {
     public barChartLegend = true;
     public barChartPlugins = [];
     public barChartColors: Color[] = [
-      { backgroundColor: 'skyblue ' },
-      { backgroundColor: '#08b100db' },
-      
+      { backgroundColor: '#D1E9D8 ' },
+      { backgroundColor: '#F0A2BC' },
+      { backgroundColor: '#E9E5B8' },
+      { backgroundColor: '#FA7BA8' },
+      { backgroundColor: '#F8D8E3' },
+       
     ]
     public barChartData: ChartDataSets[] = [
-      { data:this.monthlySalary, label: 'Salary',stack:'a' },
-      { data:this.monthlyCashflowShr, label: 'Rest',stack:'a' },
+      { data:this.monthlySalary, label: 'DepositBank',stack:'a' },
+      { data:this.monthlyCashflowShr, label: 'Shares',stack:'a' },
+      { data:this.monthlyCashflowEqtMF, label: 'eqtMF',stack:'a' },      
+      { data:this.monthlyCashflowDebtMF, label: 'DebtMF',stack:'a' },
       { data:this.monthlyDividend, label: 'Dividend',stack:'a' }      
      
     ];

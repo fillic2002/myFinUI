@@ -103,8 +103,13 @@ html {
   padding: 7px;
 }
 .headername {
-  width: 360px;
-  font: 13px Arial;
+  width: 350px;
+  font: 14px Arial;
+}
+.headernameDiv {
+  display: inline-block;
+  width: 100px;
+  font: 12px Arial;
 }
 .headerdt {
   width: 110px;
@@ -125,6 +130,15 @@ html {
   padding-right: 6px;
   border-bottom: 1px dotted #bfbfbf;
 }
+.amtDiv {  
+  width: 80px;
+  display: inline-block;
+  color: #3b3a3a;
+  text-align: right;
+  font: 500 14px Helvetica, sans-serif;
+  
+  border-bottom: 1px dotted #bfbfbf;
+}
 .percent {
   height: 30px;
   color: #666;
@@ -135,7 +149,9 @@ html {
 }
 .action {
   color: grey;
-  text-align: right;
+  display: inline-block;
+  text-align: center;
+  width: 120px;
   font: 500 14px "Open Sans", Arial, Helvetica, sans-serif;
   padding-right: 6px;
   border-bottom: 1px dotted #bfbfbf;
@@ -144,6 +160,14 @@ html {
   color: red;
 }
 .dt {
+  width: 90px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 11px;
+  background-color: rgb(255 195 0);
+}
+.dtDiv {
+  display: inline-block;
   width: 90px;
   text-align: center;
   font-weight: bold;
@@ -239,4 +263,11 @@ body {
   border: 1px dotted;
   background-color: palegoldenrod;
   width: 120px;
+}
+.msg{
+  font-weight: 10px;
+  display: inline-block;
+  width: 100px;
+  text-align: center;
+  color: green;
 }
