@@ -36,6 +36,8 @@ export interface ITransaction
     pb:number
     marketcap:number
     portfolioId:number
+    totalShare:number
+    ownership:number
 }
 export interface IDashboard
 {
@@ -76,8 +78,9 @@ export interface IAssetHistory
 export interface IDividend
 {
     dt: Date,
-    value: number,
-    companyid: string
+    divValue: number,
+    companyid: string,
+    eqt:IAsset
 }
 
 export interface ICashflow
@@ -119,6 +122,18 @@ export interface IAcctType
     acctTypeId: Date,    
     BankName: number,    
     acctType:number
+}
+export interface IAsset
+{
+    equityName:string,
+    equityId:string,
+    symbol:string,
+    livePrice:number,
+    description:string;
+    sector:string;
+    PB :number,
+    MarketCap:number,
+    freefloat :number,
 }
 
      

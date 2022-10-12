@@ -33,6 +33,8 @@ export class DashboardComponent implements OnInit {
   asttype:string | undefined;
   netAddition:number=0;
   monthyr:string="";
+  monthYear=[] as string[];
+  expAmt=[] as number[];
   
   constructor(private _dashbrd:SharesService,private route:ActivatedRoute,private router:Router) { }
  
@@ -42,9 +44,6 @@ export class DashboardComponent implements OnInit {
 
     this._dashbrd.getAssetsHistory(0)
     .subscribe(ast =>{ 
-      //console.log(ast);
-      //ast.sort((a: { assetValue: number; },b: { assetValue: number; })=>a.assetValue-b.assetValue);
-      //console.log(ast);
       ast.forEach(element => {
         this.assetValues.push(element.assetValue.toFixed(2));
         this.assetXaxis.push(element.month+"-"+element.year);
@@ -59,7 +58,8 @@ export class DashboardComponent implements OnInit {
         this.yearReturn.push(element.year); 
       });
        
-    }); 
+    });
+    this.GetMonthlyExpenseHistory(0); 
   }
 
 public GetDashboard()
@@ -117,8 +117,7 @@ public GetDashboard()
       rtn.forEach(element => {
         this.astReturn.push(element.return.toFixed(2)); 
         this.yearReturn.push(element.year); 
-      });
-     
+      });     
     });
     
 
@@ -188,8 +187,9 @@ public chartDataset1: ChartDataSets[] = [
   { data:this.astReturn, label: 'Return' },      
 ];
 public chartClick(e: any): void {
-  if (e.active.length > 0) {
+  if (e.active.length > 0) { 
     this.netAddition=0;
+    
     const chart = e.active[0]._chart;
     const activePoints = chart.getElementAtEvent(e.event);
     if ( activePoints.length > 0) {
@@ -199,30 +199,72 @@ public chartClick(e: any): void {
       this.monthyr=label;
       // get value by index
       const value = chart.data.datasets[0].data[clickedElementIndex];     
-      this.assetValue.length=0
-      this.assetName.length=0
+      this.assetValue.length=0;
+      this.assetName.length=0;
+       
       this._dashbrd.getMonthDashBoard(label.split('-')[0], label.split('-')[1])
       .subscribe(data=>{
           this.dbDetail = data;
-          //console.log(this.dbDetail);
+          console.log(this.dbDetail);
           var to:number;
           to=0;
           for (var i = 0; i < this.dbDetail.length; i++) {
-            to= to + parseFloat(this.dbDetail[i].currentValue);       
+            to= to + parseFloat(this.dbDetail[i].currentValue);
+                    
             this.assetValue.push(this.dbDetail[i].currentValue);
             this.assetName.push(this.dbDetail[i].assetName);          
           }      
           this.total=to.toFixed(2);
         });
+        this.netAddition =0;
       this._dashbrd.getMonthDashBoard(label.split('-')[0]-1, label.split('-')[1])
       .subscribe(data=>{
+        console.log(data);
           this.preMonthDshbrd = data;                    
-          for (var i = 0; i < this.preMonthDshbrd.length; i++) {          
+          for (var i = 0; i < this.preMonthDshbrd.length; i++) {
+            if(this.dbDetail[i].id==6)
+            {
+              this.preMonthDshbrd[i].diff=this.dbDetail[i].currentValue- this.preMonthDshbrd[i].currentValue
+              this.netAddition +=this.preMonthDshbrd[i].diff;
+            }else{
             this.preMonthDshbrd[i].diff=this.dbDetail[i].invested- this.preMonthDshbrd[i].invested
             this.netAddition +=this.preMonthDshbrd[i].diff;
+            }
           }      
         });
       }
       }
 }
+GetMonthlyExpenseHistory(f:number)
+  {
+    this.expAmt.length =0;
+    this.monthYear.length=0;
+    this._dashbrd.getMonthlyExpenseHistory(f,6)
+    .subscribe(data =>{ 
+      data.forEach(element => {
+        this.monthYear.push(element.monthYear);
+        this.expAmt.push(element.totalExpAmt);
+        //console.log( this.monthYear);  
+      });  
+    });
+  }
+//-------------------  Monthly Expense ----------------------------
+public expLbl: Label[] = this.monthYear; 
+public expType: ChartType = 'bar';
+public barChartLegend = true;
+public expPlugins = [];
+public expColors: Color[] = [
+  { backgroundColor: 'green ' },
+  { backgroundColor: '#08b100db' },     
+]
+public getMonthlyExpense:ChartDataSets[] = [
+  { data:this.expAmt, label: 'Expense',stack:'a' }    
+]; 
+public expOption: ChartOptions = {
+  responsive: true,
+  title: {
+    display: true,
+    text: "Expense Over Time"
+  }
+};
 }

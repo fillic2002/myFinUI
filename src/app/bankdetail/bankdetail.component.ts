@@ -147,7 +147,7 @@ export class BankdetailComponent implements OnInit {
       this.PFAcctDetails=data;
       //console.log(this.PFAcctDetails);
       data.forEach(element=>{
-      this.addYear(element.year);         
+      this.addYear(element.year);    
       if(element.typeOfTransaction=="int") 
         { 
           var inv:number=0;
@@ -159,7 +159,7 @@ export class BankdetailComponent implements OnInit {
           inv= element.investmentEmplr+element.investmentEmp;     
           this.invstmnt.push(inv);        
         }
-      });       
+      });
     });
   }
   private addYear(yr:number)

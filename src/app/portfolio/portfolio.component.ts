@@ -38,6 +38,7 @@ export class PortfolioComponent implements OnInit {
   public portfolio =[] as any;
   
   public filterPortfolio =[] as any;
+  public compDivDetails=[] as any;
   public eqtTransaction=[] as any;
   eqtQty=[] as number[];
   eqtTrandt=[] as Date[];
@@ -54,6 +55,7 @@ export class PortfolioComponent implements OnInit {
   public mfCurrVal:number=0;  
   public mfPLPercent:number=0;
   public eqPLPercent:number=0;
+  public eqXirrReturn:number=0;
   public mfCount:number=0;
   public sector=[] as string[];  
   public assetValue =[] as number[];
@@ -68,7 +70,12 @@ export class PortfolioComponent implements OnInit {
   public assetHistoryTime=[] as string[];
   public companyDividend=[] as divHistory[]; 
   assetReturns=[] as returnonassets[];
+  retrunYear=[] as string[];
+  
+  public returnNet =[] as number[];
   public show:boolean = false;
+  public showGraph:boolean = true;
+   
   
   isMF:boolean=false;
   isShare:boolean=true;
@@ -89,6 +96,7 @@ export class PortfolioComponent implements OnInit {
   comment:string="";
   isShown: boolean = true;
   selectedEqt:string="";
+  ownership:number=0;
  
   constructor(private _portfolio:SharesService,private route:ActivatedRoute,private router:Router, public datepipe: DatePipe) {  }
 
@@ -98,27 +106,17 @@ export class PortfolioComponent implements OnInit {
   
   changeFolio(e :any){    
      
-    //console.log(typeof e);
+    this.returnNet.length=0
+    this.retrunYear.length=0;
+    this.showGraph =true;
     this.sector.length=0;
     if(typeof e!='string')
     {    
       this.folioId=e.target.value;  
     }    
     this.assetValue.splice(0,this.assetValue.length);  
-     this.sectorfolio();
-   // this._portfolio.getSectorPortfolio(this.folioId)
-    // .subscribe(data =>{   
-      //console.log(data);   
-     // data.sort((a: { invested: number; },b: { invested: number; })=>a.invested-b.invested);
-     // data.forEach(element => { 
-     //   this.sector.push(element.sectorName);         
-     //   this.sectorDiv[this.sector.indexOf(element.sectorName)]=element.dividend.toFixed(2);
-     //   this.sectorInvstmt[this.sector.indexOf(element.sectorName)]=element.invested.toFixed(2);
-     //   this.assetProfit[this.sector.indexOf(element.sectorName)]=element.currentValue.toFixed(2)-element.invested.toFixed(2);
-     // });
-                 
-     // });
-      //this.sector=0;
+     this.sectorfolio(); 
+   
     this._portfolio.getPortfolio(this.folioId)
      .subscribe(data =>{ 
       data.forEach(element => {         
@@ -171,14 +169,14 @@ export class PortfolioComponent implements OnInit {
        }
      }
      this.eqInvstVal=eto;
-     this.eqCurrVal = eato;
-     this.eqPLPercent = (eato-eto+this.sdividend)*100/eto;
+     this.eqCurrVal = eato; 
+     //this.eqPLPercent = (eato-eto+this.sdividend)*100/eto; 
      this.mfInvstVal=mto;    
      this.mfCurrVal =mato; 
      this.mfPLPercent = (this.mfCurrVal-this.mfInvstVal)*100/this.mfInvstVal;
      this.barChartLabels=this.sector;
      //console.log(this.portfolio);
-     //this.filterPortfolio =this.portfolio;
+     
      this.filterPortfolio =  this.portfolio.filter((s: { equityType: number; }) => s.equityType===1);
      
     });
@@ -208,13 +206,19 @@ export class PortfolioComponent implements OnInit {
     });
  
     this._portfolio.getAssetReturn(this.folioId,this.option)
-    .subscribe(data=>{      
+    .subscribe(data=>{
+      var i=0;
       data.forEach(element => {            
           let a:returnonassets={ year:element.year,return:element.return,dividend:element.dividend,xirr:element.xirr};        
           this.assetReturns.push(a);
-      })
+          if(i>0)
+          {
+            this.retrunYear.push(element.year.toString());
+            this.returnNet.push(element.xirr);
+          } i++;
+      }) 
     });
-    
+   
     this._portfolio.GetFolioComment(this.folioId)
     .subscribe(data=>{  
       this.comment=data.comment;
@@ -224,7 +228,9 @@ export class PortfolioComponent implements OnInit {
     this.dividendHistory.length=0;
     this.assetValueHistory.length=0;
     this.investmentHistory.length=0;
-     
+    
+    this.GetXirrReturn(this.folioId,1);
+    
   }
  
 public sectorfolio()
@@ -237,10 +243,19 @@ public sectorfolio()
      this.sector.push(element.sectorName);         
      this.sectorDiv[this.sector.indexOf(element.sectorName)]=element.dividend.toFixed(2);
      this.sectorInvstmt[this.sector.indexOf(element.sectorName)]=element.invested.toFixed(2);
-     this.sectorProfit[this.sector.indexOf(element.sectorName)]=element.currentValue.toFixed(2)-element.invested.toFixed(2);
+     this.sectorProfit[this.sector.indexOf(element.sectorName)]=element.currentValue-element.invested;
    });
               
-   });
+   }); 
+}
+
+public GetXirrReturn(folioId:number, AssetId:number)
+{
+  this._portfolio.GetXirrReturn(this.folioId,AssetId)
+  .subscribe(data=>{  
+    this.eqPLPercent =data;
+    //console.log(data);
+  });
 }
 
   onClick(option:any)
@@ -261,11 +276,11 @@ public sectorfolio()
   public selecttype(option:any)
   {    
     for (var i = 0; i < this.portfolio.length; i++) {
-    }   
+      }   
   }
   public getTrColor(x:any):string
   {   
-    if(parseFloat(x)>=0)
+    if(parseFloat(x)>=0) 
           return '#22a704';
     else
       return '#bf1722'
@@ -341,16 +356,42 @@ public sectorfolio()
           this.direction ="asc";
         }
      }
-    if(e=="Divyield")
+     if(e=="netDiv")
       {
         if(this.direction =="asc")
         {
-          this.filterPortfolio.sort((a: { dividend: number; qty: number; avgprice: number; },b: { dividend: number; qty: number; avgprice: number; })=>(a.dividend/(a.qty*a.avgprice))-(b.dividend/(b.qty*b.avgprice)));
+          this.compDivDetails.sort((a: { dividend: number; qty:number; },b: { dividend: number; qty:number; })=>a.dividend*a.qty-b.dividend*b.qty);
           this.direction ="desc";
         }
         else 
         {
-          this.filterPortfolio.sort((a: { dividend: number; qty: number; avgprice: number; },b: { dividend: number; qty: number; avgprice: number; })=>(b.dividend/(b.qty*b.avgprice))-(a.dividend/(a.qty*a.avgprice)));
+          this.compDivDetails.sort((a: { dividend: number; qty:number; },b: { dividend: number; qty:number; })=>b.dividend*b.qty-a.dividend*a.qty);
+          this.direction ="asc";
+        }
+     }
+     if(e=="DivReturn")
+      {
+        if(this.direction =="asc")
+        {
+          this.compDivDetails.sort((a: { dividend: number; livePrice:number; },b: { dividend: number; livePrice:number; })=>a.dividend/a.livePrice-b.dividend/b.livePrice);
+          this.direction ="desc";
+        }
+        else 
+        {
+          this.compDivDetails.sort((a: { dividend: number; livePrice:number; },b: { dividend: number; livePrice:number; })=>b.dividend/b.livePrice-a.dividend/a.livePrice);
+          this.direction ="asc";
+        }
+     }
+    if(e=="Divyield")
+      {
+        if(this.direction =="asc")
+        {
+          this.filterPortfolio.sort((a: { divReturnXirr: number; },b: { divReturnXirr: number; })=>a.divReturnXirr-b.divReturnXirr);
+          this.direction ="desc";
+        }
+        else 
+        {
+          this.filterPortfolio.sort((a: { divReturnXirr: number; },b: { divReturnXirr: number; })=>b.divReturnXirr-a.divReturnXirr);
           this.direction ="asc";
         }
      }
@@ -409,9 +450,9 @@ public sectorfolio()
    if(e=="Year")
     {
       if(this.direction =="asc")
-      {
+      { 
         this.assetReturns.sort((a,b)=>b.year-a.year);
-        this.direction ="desc";        
+        this.direction ="desc";   
       } 
       else 
       {
@@ -458,8 +499,8 @@ public sectorfolio()
     this.sdividend=0;
       if(e=="share")
       {
-        this.filterPortfolio =  this.portfolio.filter((s: { equityType: number; }) => s.equityType===1);
-     
+        this.filterPortfolio =  this.portfolio.filter((s: { equityType: number; }) => s.equityType===1);     
+        this.GetXirrReturn(this.folioId,1);
         for (var i = 0; i < this.filterPortfolio.length; i++) {          
           this.eqInvstVal += this.filterPortfolio[i].qty*this.filterPortfolio[i].avgprice;          
           this.eqCurrVal +=  this.filterPortfolio[i].qty*this.filterPortfolio[i].eq.livePrice;
@@ -478,12 +519,12 @@ public sectorfolio()
             {          
               this.previousMonthAsset=element.assetValue;
               this.previousMonthInvst = element.investment;          
-            }
+            } 
             else{      
               this.previousMonthAsset=element.assetValue;
               this.previousMonthInvst=element.investment;                  
             }
-          })      
+          })
         });
         this.assetReturns.length=0;
           this._portfolio.getAssetReturn(this.folioId, 1)
@@ -513,7 +554,8 @@ public sectorfolio()
                   this.assetReturns.push(a);
               })
             });
-          //this.eqPLPercent = (this.eqCurrVal -this.eqInvstVal)*100/this.eqInvstVal;
+          
+          this.GetXirrReturn(this.folioId,2);
           
           this._portfolio.getAssetHistory(this.folioId,2)
           .subscribe(data=>{      
@@ -551,8 +593,9 @@ public sectorfolio()
                   this.assetReturns.push(a);
               })
             });
-
-           this._portfolio.getAssetHistory(this.folioId,5)
+          this.GetXirrReturn(this.folioId,5);
+          
+          this._portfolio.getAssetHistory(this.folioId,5)
           .subscribe(data=>{      
             data.forEach(element => {              
               this.assetHistoryTime.push(element.month.toString()+"-"+element.year.toString());
@@ -571,8 +614,9 @@ public sectorfolio()
               }
             })      
           });
+        }else if(e=="bonds"){
+          this.GetXirrReturn(this.folioId,9);
         }
-        this.eqPLPercent = (this.eqCurrVal -this.eqInvstVal)*100/this.eqInvstVal;
   } 
   showdividend(e:string,eqtName:string)
   {
@@ -581,12 +625,13 @@ public sectorfolio()
     this.divDt.length=0;
     this._portfolio.getDividend(e)
     .subscribe(data => { 
-      this.share = data;     
+      this.share = data;
+      console.log(data);
       this.companyDividend=data;
       data.forEach(element => {
         this.dividendTotal += element.value;
          this.divDt.push(new Date(element.dt).getFullYear());
-         this.divVal.push(element.value);
+         this.divVal.push(element.divValue);
          //console.log(new Date(element.dt).getMonth());
       }); 
      }); 
@@ -596,25 +641,35 @@ public sectorfolio()
       //console.log(this.eqtTransaction);   
       this.eqtQty.length=0;
       this.eqtTrandt.length=0;
-      data.forEach(element=>{
-        console.log()   
+      data.forEach(element=>{ 
+        //console.log()   
         this.eqtQty.push(element.qty);
         let ss = this.datepipe.transform(element.tranDate, 'yyyy-MM-dd');
         this.eqtTrandt.push( ss!=null?new Date(ss).getFullYear():new Date() );
       });      
-     }); 
+     });
      this._portfolio.getEqtTransaction(this.folioId, e)
      .subscribe(data => { 
        this.eqtTransaction=data;
-       //console.log(this.eqtTransaction);       
-      }); 
 
-     document.getElementById('sharedetails').style.display='block';        
+       }); 
+
+     (document.getElementById('sharedetails')as HTMLDivElement).style.display='block';        
     this.shareName = e;
   }
+  showCompDividend(year:string)
+  {
+    this._portfolio.getCompDividend(year)
+    .subscribe(data => { 
+      this.compDivDetails =data;
+      (document.getElementById('cmpDivDetails')as HTMLDivElement).style.display='block'; 
+    });
+  }
+
   hideShareDetails()
   {
-    document.getElementById('sharedetails').style.display='none';
+    (document.getElementById('sharedetails')as HTMLDivElement).style.display='none';
+    (document.getElementById('cmpDivDetails')as HTMLDivElement).style.display='none'; 
   }
   public showTrans() {
     this.show = !this.show;    
@@ -664,7 +719,24 @@ public sectorfolio()
     { data:this.sectorProfit, label: 'Return',stack:'a' },
     { data:this.sectorDiv, label: 'Div',stack:'a' }
   ];
+//.................... Folio wise Return........................
+public rtnChartOptions: ChartOptions = {
+  responsive: true,
+  title: {
+    display: true,
+    text: "Xirr Return Over Time"
+  }};
 
+public rtnHistorylbl: Label[] = this.retrunYear; 
+public rtnChartType: ChartType = 'bar';
+public rtnChartLegend = true;
+public rtnChartPlugins = [];
+public rtnChartColors: Color[] = [   
+  { backgroundColor: '#00b38a' },
+]
+public rtnInvstmt: ChartDataSets[] = [
+  { data:this.returnNet, label: 'rtn' }  
+];
   //--------------------Asset History Chart -----------------------
   public barChartOptions2: ChartOptions = {
     responsive: true,
@@ -721,9 +793,10 @@ public sectorfolio()
   public DivReturn:ChartDataSets[] = [
     { data:this.divVal, label: 'Dividend',stack:'a' }    
   ]; 
-
+//---------------------------------------------------------
   public sectorSelection(e: any): void {   
     this.isShown=true; 
+    this.showGraph =false;
     this.sdividend=0;this.netReturn=0;this.eqInvstVal=0; this.eqCurrVal=0;
     if (e.event.type == "click") {
       const clickedIndex = e.active[0]?.index; 

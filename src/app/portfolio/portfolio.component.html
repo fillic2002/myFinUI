@@ -29,7 +29,7 @@
                         </select>
                     </td>
                     <td *ngIf="isShare" class="header3">         
-                        <span style="display: inline-block;width: 190px;padding:2px;"  [ngStyle]="{color: getHeaderTrColor(eqPLPercent), 'font-size':'13px'}"><span style="font-size: 22px;">{{eqCurrVal-eqInvstVal|number:'1.2-2'}}</span>({{eqPLPercent|number:'1.2-2'}}%)</span>
+                        <span style="display: inline-block;width: 190px;padding:2px;"  [ngStyle]="{color: getHeaderTrColor(eqPLPercent), 'font-size':'13px'}"><span style="font-size: 22px;">{{eqCurrVal-eqInvstVal|number:'1.2-2'}}</span>xirr-({{eqPLPercent|number:'1.2-2'}}%)</span>
                         <span style="display: inline-block;width: 190px;padding:2px;" class="shatusContent2">{{eqCurrVal|number:'1.2-2'}}</span>
                         <span style="display: inline-block;width: 190px;" class="shatusContent2">{{eqInvstVal|number:'1.2-2'}}</span>
                         <span style="display: inline-block;width: 190px;" class="shatusContent2">{{sdividend|number:'1.2-2'}} 
@@ -41,6 +41,7 @@
                         <input (click)="setradio('share')" type="radio" id="Share" name="equity" value="Share" checked> <label for="Share">Share</label>
                         <input (click)="setradio('MF')" type="radio" id="MF" name="equity" value="MF"> <label for="MF">Eqt MF</label>
                         <input (click)="setradio('debt')" type="radio" id="debt" name="equity" value="debt"> <label for="debt">Debt MF</label>
+                        <input (click)="setradio('bonds')" type="radio" id="Bond" name="equity" value="Bonds"> <label for="debt">Bonds</label>
             
                     </td>
                     <td >
@@ -55,8 +56,6 @@
         <td style="width:1%;"></td>
     </tr>
 </table>
-<table  style="border-style: solid;border-color: white; width: 100%;">   
-    
     <ng-container *ngIf="show">
         <div>
             <textarea style="width:400px;height:100px ; " id="comment" name="comment" [(ngModel)]="comment"></textarea>
@@ -65,9 +64,11 @@
     </ng-container>   
     <div>{{status}}</div> 
     <div (click)="showTrans(option)" class="dml">{{trnStatus}}</div>  
-    <tr> 
-        <td style="width: 46%;">
-            <div style="width: 650px;height:350px; " >
+ 
+    <table  style="border-style: solid;border-color: white; width: 100%;">   
+        <tr> 
+        <td >
+            <div style="width: 650px;height:375px; " >
                 <canvas baseChart
                 [datasets]="getfolioAssetHistory"
                 [labels]="assetHistorylbl"
@@ -79,49 +80,67 @@
                 (chartClick)="historyClick($event)">
                 </canvas>
             </div>
-            
+            <ng-container *ngIf="showGraph">
+                <div style="width: 520px;height:350px;float:left;" >
+                    <canvas baseChart
+                        [datasets]="rtnInvstmt"
+                        [labels]="rtnHistorylbl"
+                        [options]="rtnChartOptions"
+                        [plugins]="rtnChartPlugins"
+                        [legend]="rtnChartLegend"
+                        [colors]="rtnChartColors"
+                        [chartType]="rtnChartType">
+                    </canvas>
+                </div>
+            </ng-container>
         </td>
-        <td style="width: 54%;">
-            <table style="width: 100%;">                 
-                <tr  >                    
-                    <td style="width: 70%;"> 
-                        <div style="width: 580px;height: 350px;" >
-                            <canvas baseChart 
-                            [datasets]="sectorChartData"
-                            [labels]="barChartLabels"
-                            [options]="barChartOptions"
-                            [plugins]="barChartPlugins"
-                            [legend]="barChartLegend"
-                            [colors]="barChartColors"
-                            [chartType]="barChartType"
-                            (chartClick)="sectorSelection($event)">
-                            </canvas>                             
-                        </div>
-                    </td>                    
-                    <td style="width: 30%;">
-                        <table style="padding-left: 10px;width: 80%;">
-                            <tr class="header1" style="width:60%; " >
-                                <td style="cursor: pointer;" (click)="sort('Year')" >Year</td>
-                                <td>Xirr Return</td>
-                                <td>Net Return</td>
-                                <td>Dividend</td>                              
-                            </tr>
-                            <tr style="height: 24px;" *ngFor ="let q of assetReturns" >
-                                <td class="dt">{{q.year}}</td>
-                                <td class="percent" [ngStyle]="{color: getTrColor(q.return),'font-weight':'bold'}" >{{q.xirr|number:'1.2-2'}}%</td>                       
-                                <td class="percent">{{q.return|number:'1.2-2'}}</td>
-                                <td class="percent">{{q.dividend|number:'1.2-2'}}</td>
-                            </tr>
-                        </table>
-                    </td>
+        <td >
+            <div style="width: 650px;height:375px; " >
+                <canvas baseChart 
+                [datasets]="sectorChartData"
+                [labels]="barChartLabels"
+                [options]="barChartOptions"
+                [plugins]="barChartPlugins"
+                [legend]="barChartLegend"
+                [colors]="barChartColors"
+                [chartType]="barChartType"
+                (chartClick)="sectorSelection($event)">
+                </canvas>                             
+            </div>
+            <div> 
+                <ng-container *ngIf="showGraph"> 
+                <div style="width: 520px;height:350px;float:left;" >
+                    <table style="padding-left: 10px;width: 80%;">
+                        <tr class="header1" style="width:60%; " >
+                            <td style="cursor: pointer;" (click)="sort('Year')" >Year</td>
+                            <td>Return +Div<span class="headerSmall">(xirr)</span></td>
+                            <td>Net Return</td>
+                            <td>Dividend</td>                              
+                        </tr>
+                        <tr style="height: 24px;" *ngFor ="let q of assetReturns" >
+                            <td class="dt" (click)="showCompDividend(q.year)">{{q.year}}</td>
+                            <td class="percent" [ngStyle]="{color: getTrColor(q.xirr),'font-weight':'bold'}" >{{q.xirr|number:'1.2-2'}}%</td>                       
+                            <td class="percent">{{q.return|number:'1.2-2'}}</td>
+                            <td class="percent">{{q.dividend|number:'1.2-2'}}</td>
+                        </tr>
+                    </table>
+                </div>
+                </ng-container>
+        </div>
+            <table>                 
+                <tr>                    
+                    <td style="width: 60%;"> 
+                        
+                     </td>                    
+                    <td>                       
+                     </td>
                 </tr>  
-                
             </table>
         </td>     
         
-</tr>
-
-</table>
+        </tr>
+    </table>
+  
 <table *ngIf="isShown">
     <thead>
     <tr class="header1" style="vertical-align:middle">    
@@ -133,9 +152,9 @@
         <td class="headeramt">Avg Price</td>
         <td (click)="sort('Investment')" class="headeramt">Net Invst<div>{{eqInvstVal|number:'1.2-2'}}</div></td>     
         <td (click)="sort('Gain')" class="headeramt">Gain<div>{{netReturn|number:'1.2-2'}}</div></td>
-        <td (click)="sort('Return')" class="headeramt">xirr Return</td>
+        <td (click)="sort('Return')" class="headeramt">Return<span class="headerSmall"> (xirr)</span></td>
         <td (click)="sort('Dividend')" class="headeramt">Dividend<div>{{sdividend|number:'1.2-2'}}</div></td>
-        <td (click)="sort('Divyield')" class="headeramt">Div Yield</td>
+        <td (click)="sort('Divyield')" class="headeramt">Retrun + Div<span class="headerSmall"> (xirr)</span></td>
     </tr>
     </thead> 
     <tr class="header2" *ngFor ="let p of filterPortfolio">    
@@ -150,7 +169,7 @@
         <td class="amt" [ngStyle]="{color: getTrColor(p.profit),'font-weight':'bold'}">{{p.profit|number:'1.2-2'}}</td>        
         <td class="amt" [ngStyle]="{color: getTrColor(p.percentage),'font-weight':'bold'}">{{p.percentage|number:'1.2-2'}}%</td>
         <td class="amt">{{p.dividend.toFixed(2)}}</td>
-        <td class="amt" style="color:#48b534;">{{(p.dividend*100/(p.qty*p.avgprice)).toFixed(1)}}%</td>
+        <td class="amt" [ngStyle]="{color: getTrColor(p.divReturnXirr),'font-weight':'bold'}">{{p.divReturnXirr.toFixed(2)}}%</td>
     </tr>
 </table>
 <div>
@@ -214,7 +233,9 @@
                 <td class="headeramt">Total</td> 
                 <td class="headeramt">PB</td>          
                 <td class="headeramt">Market Cap</td>
-                <td class="headeramt">Buy/Sell</td>          
+                <td class="headeramt">Ownership</td>
+                <td class="headeramt">Buy/Sell</td>  
+                <td class="headeramt">Freefloat</td>          
             </tr>
             <tr class="header2" *ngFor ="let p of eqtTransaction">
                 <td class="dt">{{p.tranDate|date}}</td>  
@@ -222,12 +243,41 @@
                 <td class="amt">{{p.price.toFixed(1)}}</td>
                 <td class="amt">{{(p.price*p.qty).toFixed(0)|number:'1.2-2'}}</td>
                 <td class="amt">{{(p.pb).toFixed(2)}}</td>
-                <td class="amt">{{p.marketCap|number:'1.2-2'}}</td>
+                <td class="amt">{{p.marketCap|number:'1.2-2'}}</td>                
+                <td class="amt">{{p.ownership|number:'1.8-8'}}</td>
                 <td class="name" [ngStyle]="{color: getTranTypeColor(p.tranType)}">{{p.tranType}}</td>
+                            
+                <td class="amt">{{p.totalShare|number:'1.0-2'}}</td>
             </tr>        
         </table>
     </div>   
         
+</div>
+
+<div id="cmpDivDetails" class="popup" style="display: none;">
+    
+    <div class="popupCloseButton"><span (click)="hideShareDetails()">X</span></div>
+    <div class="header3">Dividend Details (Current year)</div>
+    <table>
+        <tr class="header1">
+            <td class="headername">Eqt Name</td>
+            <td class="headeramt">EqtId</td>
+            <td class="headeramt">Dividend Declared</td>
+            <td class="headeramt">qty</td>
+            <td (click)="sort('netDiv')" class="headeramt">Net Dividend Amt</td>
+            <td (click)="sort('DivReturn')" class="headeramt">DivReturn</td>
+            <td class="headeramt">livePrice</td>
+        </tr>
+       
+      <tr class="header2" *ngFor="let item of compDivDetails" >
+        <td class="name">{{item.eq.equityName}}</td>
+        <td  class="amt">{{item.eq.equityId}}</td>
+        <td  class="amt">{{item.dividend.toFixed(2)}}</td>
+        <td  class="amt">{{item.qty}}</td>
+        <td  class="amt">{{(item.dividend*item.qty).toFixed(2)}}</td>
+        <td  class="amt">{{(item.dividend*100/(item.eq.livePrice)).toFixed(2)}}</td>    
+        <td  class="amt">{{item.eq.livePrice}}</td>
+      </tr> </table>
 </div>
  
     

@@ -23,14 +23,14 @@ export class ExpenseComponent implements OnInit {
     this.GetFolioDetails();
     this.GetExpense();
     this.GetMonthlyExpenseHistory(0);
-  }
+  } 
   GetExpense()
   {
     this._shrdServ.getExpense(this.selectedfolio)
       .subscribe(data =>{ 
         console.log(data);
       });
-  }
+  } 
   public onSelect(option:any)
   {    
     this.router.navigate(['/']);

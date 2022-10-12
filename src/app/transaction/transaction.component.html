@@ -178,7 +178,7 @@
 
  <tr class="header2" *ngFor="let t of filterPortfolio">    
         <td class="dt">{{t.tranDate|date}}</td>
-        <td class="naming">{{t.equityName}}</td>
+        <td class="naming" (click)="showdividend(t.equityId,t.equityName)">{{t.equityName}}</td>
         <td class="amt">{{t.equityId}}</td>        
         <td class="amt">{{t.qty}}</td>
         <td class="amt">{{t.price|number : '1.2-2'}}</td>
@@ -224,3 +224,62 @@
         </td>
     </tr>
 </table>
+
+<!--POP UP-->
+<div id="sharedetails" class="popup" style="display: none;" >
+    <div class="popupCloseButton"><span (click)="HideSharedtl()">X</span></div>
+    <span class="header3">{{selectedEqt}}</span>
+    <div style="height:300px">
+        <div style="width: 520px;height:275px;float: left;" >
+            <canvas baseChart
+                [datasets]="EquityInvstmt"
+                [labels]="eqtyHistorylbl"
+                [options]="eqtChartOptions"
+                [plugins]="eqtChartPlugins"
+                [legend]="eqtChartLegend"
+                [colors]="eqtChartColors"
+                [chartType]="eqtChartType">
+            </canvas>
+        </div> 
+        <div style="width: 520px;height:275px; float: right;" >
+            <canvas baseChart
+                [datasets]="DivReturn"
+                [labels]="eqtyHstryDiv"
+                [options]="divChartOptions"
+                [plugins]="divChartPlugins"
+                [legend]="divChartLegend"
+                [colors]="divChartColors"
+                [chartType]="divChartType">
+            </canvas>
+        </div>
+    </div>     
+     
+    <div>
+        <table>
+            <tr class="header1">
+                <td (click)="sort('dtpurchase')" class="headeramt">Date</td>
+                <td class="headeramt">Qty</td>
+                <td class="headeramt">Price</td>
+                <td class="headeramt">Total</td> 
+                <td class="headeramt">PB</td>          
+                <td class="headeramt">Market Cap</td>
+                <td class="headeramt">Ownership</td>
+                <td class="headeramt">Buy/Sell</td>  
+                <td class="headeramt">Freefloat</td>          
+            </tr>
+            <tr class="header2" *ngFor ="let p of eqtTransaction">
+                <td class="dt">{{p.tranDate|date}}</td>  
+                <td class="amt">{{p.qty.toFixed(0)}}</td> 
+                <td class="amt">{{p.price.toFixed(1)}}</td>
+                <td class="amt">{{(p.price*p.qty).toFixed(0)|number:'1.2-2'}}</td>
+                <td class="amt">{{(p.pb).toFixed(2)}}</td>
+                <td class="amt">{{p.marketCap|number:'1.2-2'}}</td>                
+                <td class="amt">{{p.ownership|number:'1.8-8'}}</td>
+                <td class="name" [ngStyle]="{color: getTranTypeColor(p.tranType)}">{{p.tranType}}</td>
+                            
+                <td class="amt">{{p.totalShare|number:'1.0-2'}}</td>
+            </tr>        
+        </table>
+    </div>   
+        
+</div>

@@ -61,7 +61,7 @@ html {
   background: rgb(240, 240, 243);
   height: 25px;
   color: rgb(66, 66, 66);
-  font: 600 13px "Open Sans", Arial, Helvetica, sans-serif;
+  font: 530 15px "Open Sans", Arial, Helvetica, sans-serif;
   border-bottom: "1px solid #ddd";
 }
 .header3 {
@@ -270,4 +270,36 @@ body {
   width: 100px;
   text-align: center;
   color: green;
+}
+.divHeader {
+  display: inline-block;
+  width: 150px;
+  text-align: center;
+  background-color: #505f82;
+  color: white;
+ }
+ .divAmt{
+     display: inline-block;
+  width: 150px;
+  text-align: right;
+  font: 560 13px Helvetica, sans-serif;
+ }
+ .divName{
+     display: inline-block;
+  width: 150px;
+  text-align: left;
+  font: 560 13px Helvetica, sans-serif;
+ }
+ .popup {
+  background-color: #fff;
+  box-shadow: 10px 10px 60px #555;
+  cursor: pointer;
+  height: 650px;
+  width: 1200px;
+  padding: 6px;
+  z-index: 800;
+  position: absolute;
+  top: 50px;
+  left: 200px;
+  overflow: auto;
 }

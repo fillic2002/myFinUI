@@ -38,8 +38,7 @@
     </tr>
     <tr>
         <td>
-            <div style="font-weight: 550;">Add New Account</div>
-             
+            <div style="font-weight: 550;">Add New Account</div>             
             
             <span class="naming">Date:</span><input id="txtDt" type="date" class="inputdt">
              
@@ -49,12 +48,9 @@
                 </select>
             
             <span class="naming">Description:</span>
-                <select [(ngModel)]="descType" style="cursor: pointer; background-color: #eaea25de;"  id="txtDesc" (change)="changeDesc($event)">
-                    <option [value]="item.id" *ngFor="let item of desc" > {{item.name}}</option>  
-                    
-                </select>
-             
-
+            <select [(ngModel)]="descType" style="cursor: pointer; background-color: #eaea25de;"  id="txtDesc" (change)="changeDesc($event)">
+                <option [value]="item.id" *ngFor="let item of desc" > {{item.name}}</option>                
+            </select> 
             <span class="naming">AcctType:</span><input id="txtAcctType" class="inputT" type="text">
             <input class="savebtn" type="button" value="Save" (click)="AddNewAct()"> 
         </td>
@@ -107,4 +103,46 @@
     <span class="naming">Date:</span><input id="txtExpDt" type="date" class="inputdt">
     <span class="naming">Desc:</span><input id="txtExpDesc" type="textArea" class="inputdt">
     <input class="savebtn" type="button" value="Save" (click)="AddExpense()"> 
+</div>
+<!--Adding Propert Transaction-->
+<div>
+    <div style="font-weight: 550;">Add Prooerty Transaction</div>
+    <span class="naming">Date:</span><input id="txtPropertyTranDt" type="date" class="inputdt">
+    <span class="naming">Amt:</span><input name="propertAmt" id="propertAmt" class="inputT">
+    <span class="naming">Transaction Type:</span>
+        <select  style="cursor: pointer; background-color: #eaea25de;"  id="prpTranType" >
+            <option value="1">Buy</option>
+            <option value="0">Sell</option>
+        </select>
+    <span class="naming">Accout Type:</span>
+        <select   style="cursor: pointer; background-color: #eaea25de;"  id="asstType" >
+            <option value="7">Plot</option>
+            <option value="8">Flat</option>
+            <option value="12">Gold</option>
+        </select>
+    <input class="savebtn" type="button" value="Save" (click)="AddPropertyTran()">
+</div>
+<!--Adding Bonds Transaction-->
+<div>
+    <div style="font-weight: 550;">Add Bond Transaction</div>
+    <span class="naming">Date:</span><input id="txtPropertyTranDt" type="date" class="inputdt">
+    <span class="naming">AmtInvested:</span><input name="propertAmt" id="propertAmt" class="inputT">
+    <span class="naming">Transaction Type:</span>
+        <select  style="cursor: pointer; background-color: #eaea25de;"  id="prpTranType" >
+            <option value="1">Buy</option>
+            <option value="0">Sell</option>
+        </select>
+        <span class="naming">CouponRate:</span><input name="coupon" id="coupon" class="inputT">
+    <input class="savebtn" type="button" value="Save" (click)="AddBondTran()">
+</div>
+<!--Adding Bonds Details-->
+<div>
+    <div style="font-weight: 550;">Add Bond Details</div>
+    <span class="naming">Bond Name:</span><input id="bondName" class="inputT">
+    <span class="naming">MinInvest:</span><input name="minInvst" id="minInvst" class="inputT">
+    <span class="naming">BondId:</span><input name="bondId" id="bondID" class="inputT">        
+    <span class="naming">CouponRate:</span><input name="coupon" id="couponrt" class="inputT">
+    <span class="naming">YTM:</span><input name="ytm" id="ytm" class="inputT">
+    <span class="naming">DateOfMaturity:</span><input id="dtOfMaturity" type="date" class="inputdt">
+    <input class="savebtn" type="button" value="Save" (click)="AddBondTran()">
 </div>

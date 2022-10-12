@@ -4,19 +4,7 @@
 .space {
   margin-right: 200px;
 }
-.popup {
-  background-color: #fff;
-  box-shadow: 10px 10px 60px #555;
-  cursor: pointer;
-  height: 650px;
-  width: 1200px;
-  padding: 6px;
-  z-index: 800;
-  position: absolute;
-  top: 50px;
-  left: 200px;
-  overflow: auto;
-}
+ 
 .popupCloseButton {
   background-color: #fff;
   border: 3px solid #999;
@@ -37,4 +25,8 @@
 }
 .popupCloseButton:hover {
   background-color: #ccc;
+}
+.headerSmall{
+  font: 300 11px sans-serif;
+  color: yellow;
 }

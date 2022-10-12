@@ -5,8 +5,15 @@
  background-color: #505f82;
  color: white;
 }
-.divRow{
+.divAmt{
     display: inline-block;
  width: 150px;
  text-align: right;
+ font: 560 13px Helvetica, sans-serif;
+}
+.divName{
+    display: inline-block;
+ width: 150px;
+ text-align: left;
+ font: 560 13px Helvetica, sans-serif;
 }

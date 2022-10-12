@@ -1,12 +1,16 @@
 <!doctype html>
-<div style="height: 35px;">    
-    <span  value="H" (click)="onSelect(option)" style="font-size: 20px; cursor: pointer;">my<span style="color: orange;">f</span>in</span>
-    <span class="title" style="padding-left: 30%; vertical-align:middle;" >Bank Account Details</span>
-    <span class="pipe" style="padding-left: 30%;" (click)="selectnext(option)">Transaction</span>
-    
-</div><br> 
-<hr size="1"  color="lightgrey">
+
+
 <table style="width: 100%;">
+    <tr>
+        <td colspan="3">
+            <div>    
+                <span  value="H" (click)="onSelect(option)" style="font-size: 20px; cursor: pointer;">my<span style="color: orange;">f</span>in</span>
+                <span class="title" style="padding-left: 30%; vertical-align:middle;" >Bank Account Details</span>
+                <span class="pipe" style="padding-left: 30%;" (click)="selectnext(option)">Transaction</span>    
+            </div><br>  <hr size="1"  color="lightgrey">
+        </td>
+    </tr>
     <tr>
         <td style="width: 1%;"></td>        
         <td style="width: 98%;"><table style="width: 98%; align-items: center;" class="status">    
@@ -41,49 +45,13 @@
         <td></td>
     </tr>
 </table>
-<div (click)="showTrans(option)" class="dml">Add</div><br>
-<div style="float: left;" class="header4">Detail Statement:</div>
+<div (click)="showTrans(option)">Add</div><br>
+<div  class="header4">Detail Statement:</div>
                 
-<div>
+<div >
     <div style="width: 43%; vertical-align: top;float: left;">
         <table style="width: 100%;" >
-            <tr>       
-                <td colspan="5"><div style="font-size: 20px;color: green;">{{status}}</div></td>
-            </tr>
-            <tr>
-            <td style="width: 100%;" colspan="5">
-                 <br>
-              <!--  <ng-container *ngIf="show"> 
-                <table>
-                    <tr>
-                        <td><input id="txtUserId" class="headeramt" ref-sname type="text" (blur)="onChange('userid',$event)"></td>
-                        <td> <input id="txtId" class="headeramt" ref-sname type="text" (blur)="onChange('id',$event)"></td>
-                        <td><input id="txtAmt" class="headeramt" type="text" (blur)="onChange('amt',$event)"></td>
-                        <td><input id="txtRoi" class="headeramt" type="text" (blur)="onChange('roi',$event)"></td>
-                        <td><input id="txtDt"  type="date" (blur)="onChange('dt',$event)"></td>
-                        <input class="savebtn" type="button" value="Add Account" (click)="AddTransaction()">
-                    </tr>
-                    <tr style="text-align: center;">
-                        <td class="naming">User Id</td>
-                        <td class="naming">Acct Id</td>
-                        <td class="naming">Total Amt</td>
-                        <td class="naming">ROI</td>                                
-                        <td class="naming">Date of Update</td>
-                    </tr>
-                </table>
-            </ng-container>-->
-                <!--
-                        <ng-container *ngIf="show"> 
-                            <div style="display: inline;"> 
-                            
-                        
-                            <input id="txtId" class="headeramt" ref-sname type="text" (blur)="onChange('id',$event)">
-                        <span class="naming">ROI:</span><input id="txtRoi" class="headeramt" type="text" (blur)="onChange('roi',$event)">
-                        <span class="naming">Total Amt:</span><input id="txtAmt" class="headeramt" type="text" (blur)="onChange('amt',$event)">
-                        <span class="naming">Date of Update:</span><input id="txtDt"  type="date" (blur)="onChange('dt',$event)">
-                        <input class="savebtn" type="button" value="Save" (click)="AddTransaction()"></div></ng-container><br>-->
-            </td>
-        </tr> 
+           
       
         <tr class="header1"> 
             <td class="headeramt">UserId</td>    
@@ -127,4 +95,5 @@
  </div>
   
 </div>
+<table><tr><td></td></tr></table>
    

@@ -48,9 +48,9 @@
   <span class="divHeader">Action</span>
 </div>
 <div *ngFor="let item of monthlyExpense" >
-  <span class="divRow">{{item.folioId}}</span>
-  <span  class="divRow">{{item.expenseType.expTypeDesc}}</span>
-  <span  class="divRow">{{item.desc}}</span>
-  <span  class="divRow">{{item.amt}}</span>  
+  <span class="divName">{{item.folioId}}</span>
+  <span  class="divName">{{item.expenseType.expTypeDesc}}</span>
+  <span  class="divName">{{item.desc}}</span>
+  <span  class="divAmt">{{item.amt|number:'1.2-2'}}</span>  
   <span (click)="deleterecord(item.expId)" style="cursor: pointer" class="action" >Delete</span>
 </div>        

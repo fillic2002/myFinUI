@@ -5,6 +5,8 @@ import {Router} from '@angular/router';
 import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
 import {Color, Label } from 'ng2-charts';
 import { debug } from 'console';
+import { divHistory } from '../portfolio/portfolio.component';
+import { IDividend } from '../ShareDetail';
 
 @Component({
   selector: 'app-transaction',
@@ -59,7 +61,19 @@ export class TransactionComponent implements OnInit {
   //isMF:boolean=false;
   isShare:boolean=true;
   currentDt:Date | undefined;
-
+  selectedEqt:string="";  
+  divVal=[] as number[];
+  divDt=[] as any[];
+  public share=[] as any;
+  dividendTotal:number=0;
+  public companyDividend=[] as IDividend[]; 
+  eqtQty=[] as number[];
+  eqtTrandt=[] as Date[];
+  shareName:string="";  
+  public eqtTransaction=[] as any;
+  folioId:number=0;
+  datepipe: any;
+  
   constructor(private _eqTransaction:SharesService,private route:ActivatedRoute,private  router:Router) { }
 
   ngOnInit(): void {
@@ -161,7 +175,7 @@ export class TransactionComponent implements OnInit {
     .subscribe(data=>{
       data.forEach(element=>{
         
-        console.log(element);
+        //console.log(element);
         if(this.month.findIndex(x=>x==element.month+"-"+element.year) < 0)
         {          
           this.month.push(element.month+"-"+element.year);  
@@ -291,12 +305,12 @@ public onSelect(option:any)
       if(element.typeOfTransaction=="int")
         { 
           var inv:number=0;
-          inv= element.investmentEmplr+element.investmentEmp;     
+          inv= element.InvestmentEmplr+element.investmentEmp;   
           this.intrest.push(inv);   
       }else if(element.typeOfTransaction=="Deposit")
         {
           var inv:number=0;
-          inv= element.investmentEmplr+element.investmentEmp;     
+          inv= element.InvestmentEmplr+element.investmentEmp;     
           this.invstmnt.push(inv);        
         }
       });       
@@ -465,6 +479,49 @@ public onSelect(option:any)
     }
   }
   }
+  HideSharedtl()
+  {
+    (document.getElementById('sharedetails') as HTMLDivElement).style.display='none';
+    //document.getElementById('cmpDivDetails').style.display='none'; 
+  }
+  showdividend(e:string,eqtName:string)
+  {
+    this.selectedEqt =eqtName;
+    this.divVal.length=0;
+    this.divDt.length=0;
+    this._eqTransaction.getDividend(e)
+    .subscribe(data => { 
+      this.share = data;      
+      this.companyDividend=data;
+      //console.log(this.companyDividend);
+      data.forEach(element => {
+        this.dividendTotal += element.divValue;
+         this.divDt.push(new Date(element.dt).getFullYear());
+         this.divVal.push(element.divValue);         
+      }); 
+     }); 
+    console.log(this.divDt);
+    this._eqTransaction.getYrlyEqtInvestment(this.folioId, e)
+    .subscribe(data => { 
+      console.log(this.eqtTransaction);   
+      this.eqtQty.length=0;
+      this.eqtTrandt.length=0;
+      data.forEach(element=>{ 
+        console.log()   
+        this.eqtQty.push(element.qty);
+        let ss = this.datepipe.transform(element.tranDate, 'yyyy-MM-dd');
+        this.eqtTrandt.push( ss!=null?new Date(ss).getFullYear():new Date() );
+      });      
+     });
+     this._eqTransaction.getEqtTransaction(this.folioId, e)
+     .subscribe(data => { 
+       this.eqtTransaction=data;
+
+       }); 
+
+     document.getElementById('sharedetails').style.display='block';        
+    this.shareName = e;
+  }
   selectInvstOption(e: string): void   
   {
     this.yearEqt.length=0;
@@ -618,7 +675,7 @@ public ChartOptions: ChartOptions = {
   }
 };
 public ChartLabels: Label[] = this.year; 
-public ChartType: ChartType = 'bar';
+public ChartType: ChartType = 'bar'; 
 public ChartLegend = true;
 public ChartPlugins = [];
 public ChartColors: Color[] = [
@@ -645,8 +702,8 @@ public mnthInvstChartType: ChartType = 'bar';
 public mnthInvstChartLegend = true;
 public mnthInvstChartPlugins = []; 
 public mnthInvstChartColors: Color[] = [
-  { backgroundColor: '#726762 ' },
-  { backgroundColor: '#BFA584 ' },
+  { backgroundColor: '#08b100db ' },
+  { backgroundColor: 'skyblue ' },
   { backgroundColor: '#667D8B ' },
   { backgroundColor: '#8295AD ' },
   { backgroundColor: '#D1CDC4 ' }
@@ -680,30 +737,68 @@ public pfDataSet: ChartDataSets[] = [
   { data:this.pfinvstmnt, label: 'Investment',stack:'a' },        
   { data:this.pfintrest, label: 'Intrest',stack:'a' },     
 ];
+//---------------------Equity Investment History--------------------
+public eqtChartOptions: ChartOptions = {
+  responsive: true,
+  title: {
+    display: true,
+    text: "Investment over Time"
+  }
+};
+public eqtyHistorylbl: Label[] = this.eqtTrandt; 
+public eqtChartType: ChartType = 'bar';
+public eqtChartPlugins = []; 
+public eqtChartColors: Color[] = [
+  { backgroundColor: '#a05195 ' },
+  { backgroundColor: '#08b100db' },     
+]
+public EquityInvstmt:ChartDataSets[] = [
+  { data:this.eqtQty, label: 'No Of Shares',stack:'a' }    
+];
+//-------------------  Dividend Snapshot ----------------------------
+public divChartOptions: ChartOptions = {
+  responsive: true,
+  title: {
+    display: true,
+    text: "Dividend Paid"
+  }
+};
+public eqtyHstryDiv: Label[] = this.divDt; 
+public divChartType: ChartType = 'bar';
+public divChartPlugins = [];
+public divChartColors: Color[] = [
+  { backgroundColor: 'green ' },
+  { backgroundColor: '#08b100db' },     
+]
+public DivReturn:ChartDataSets[] = [
+  { data:this.divVal, label: 'Dividend',stack:'a' }    
+]; 
 //------------------------------------------------------------
 
 public chartClick(e: any): void {
   if (e.active.length > 0) {
     this.DetailSummary = true;
     const chart = e.active[0]._chart;
-    const activePoints = chart.getElementAtEvent(e.event);
+    const activePoints = chart.getElementAtEvent(e.event); 
     
-    if ( activePoints.length > 0) {
+    if ( activePoints.length > 0) { 
       const clickedElementIndex = activePoints[0]._index;
       const label = chart.data.labels[clickedElementIndex];
       const typeOfinvst =activePoints[0]._view.datasetLabel;      
-     // console.log(typeOfinvst);
+       
       if(typeOfinvst=="Debt MF")
       {
-        this.filterPortfolio =  this.equitytransaction.filter(s => new Date(s.tranDate).getFullYear()==label && s.assetType == 5);
+        this.filterPortfolio =  this.equitytransaction.filter(s => new Date(s.tranDate).getFullYear()==label && s.assetTypeId == 5);
+       console.log(this.equitytransaction);
+        //console.log(this.filterPortfolio);
       }
       if(typeOfinvst=='Shares')
       {       
-        this.filterPortfolio =  this.equitytransaction.filter(s => new Date(s.tranDate).getFullYear()==label && s.assetType == 1);
+        this.filterPortfolio =  this.equitytransaction.filter(s => new Date(s.tranDate).getFullYear()==label && s.assetTypeId == 1);
       }
       if(typeOfinvst=="Eqty MF")
       {
-        this.filterPortfolio =  this.equitytransaction.filter(s => new Date(s.tranDate).getFullYear()==label && s.assetType == 2);
+        this.filterPortfolio =  this.equitytransaction.filter(s => new Date(s.tranDate).getFullYear()==label && s.assetTypeId == 2);
       } 
     }   
   }}

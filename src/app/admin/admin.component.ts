@@ -53,18 +53,48 @@ export class AdminComponent implements OnInit {
   changeDesc(event:any){    
     this.selectedDesc = event.target.value;
    // console.log(this.selectedDesc);
+  }   
+  public selectnext(option:any)
+  {
+    if(option='Expense')   
+      this.router.navigate(['/expense']);
+    if(option='Tax')   
+      this.router.navigate(['/tax']);
   }
-
-  AddTransaction():void  {
+  AddPropertyTran():void{
+    var amt =(document.getElementById('propertAmt')as  HTMLInputElement).value;    
+    var txtDt = (document.getElementById('txtPropertyTranDt') as  HTMLInputElement).value;    
+    var asstType = (document.getElementById('asstType')as HTMLSelectElement).value;    
+    var trnType = (document.getElementById('prpTranType')as HTMLSelectElement).value;    
+    
+    this._eqTransaction.postPropertyTransaction(amt,txtDt,trnType,asstType,this.selectedfolio)
+    .subscribe(data => {
+    this.response="New Property Transaction added to the database.";
+  });
+  }
+  AddBondTran(){
     //debugger;
+    var bondName =(document.getElementById('bondName')as  HTMLInputElement).value;
+    var minInvst = (document.getElementById('minInvst') as  HTMLInputElement).value;    
+    var bondID = (document.getElementById('bondID')as HTMLInputElement).value;    
+    var coupon = (document.getElementById('couponrt')as HTMLInputElement).value;
+    var ytm = (document.getElementById('ytm')as HTMLInputElement).value;
+    var dom = (document.getElementById('dtOfMaturity')as HTMLInputElement).value;
+    
+    this._eqTransaction.postBondTransaction(bondName,bondID,coupon,ytm,minInvst,dom)
+    .subscribe(data => {
+    this.response="New Transaction added to the database.";
+  });
+  } 
+  AddTransaction():void{
+  
     var salary =(document.getElementById('txtAmt')as  HTMLInputElement).value;    
     var txtDt = (document.getElementById('txtDt') as  HTMLInputElement).value;    
     var txtAcctType = (document.getElementById('txtAcctType')as HTMLInputElement).value;    
     var trnType = (document.getElementById('trnType')as HTMLSelectElement).value;    
-    //var typ = (document.getElementById('portfolio')as HTMLInputElement).value;
-    //console.log(typ);
+    
     var desc = (document.getElementById('txtDesc')as HTMLInputElement).value;   
-    console.log(desc);
+    //console.log(desc);
     this._eqTransaction.postBankTransaction(salary,desc,txtDt,trnType,txtAcctType,this.selectedfolio)
       .subscribe(data => {
       this.response="New Transaction added to the database.";

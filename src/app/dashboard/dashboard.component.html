@@ -60,25 +60,39 @@
     </tr>
   </table>
 </div>
-<div>
+<div style="float: left;"> 
   <table>  
     <tr class="header1">
         <!--<td class="headername">Asset Type</td> -->           
-        <td class="headeramt">Invested(C-1)</td> 
+       <!-- <td class="headeramt">Invested(C-1)</td> -->
         <td class="headeramt">Net Investment<div>{{netAddition|number : '1.2-2'}}</div> </td>                   
     </tr>
     <tr class="header2" *ngFor ="let d of preMonthDshbrd">        
           <!--  <td class="naming" style="cursor: pointer;" (click)="showReturn(d.assetName)">{{d.assetName}}</td>  -->              
-            <td class="amt">{{d.invested|number : '1.2-2'}}</td>                            
+            <!--<td class="amt">{{d.invested|number : '1.2-2'}}</td> -->                           
             <td class="amt">{{d.diff|number : '1.2-2'}}</td>
     </tr>
   </table>
+  <div style="width: 600px;height:300px; " >
+    <canvas baseChart
+      [datasets]="getMonthlyExpense"
+      [labels]="expLbl"
+      [options]="expOption"
+      [plugins]="expPlugins" 
+      [legend]="barChartLegend"
+      [colors]="expColors"
+      [chartType]="expType"
+      (chartClick)="historyClick($event)">
+    </canvas>
+  </div>
 </div>
 </div>
 <table >  
  
   <tr>
-    <td style="width: 1%;"></td>
+    <td style="width: 1%;">
+      
+    </td>
     <td> <div style="text-align: center;font-size:14px; font-weight: bold;">Return on {{asttype}}</div>    
         <div style="width: 500px; height: 450px;padding-left: 50px;" > 
           <canvas baseChart 
