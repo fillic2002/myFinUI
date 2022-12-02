@@ -72,20 +72,35 @@ export class AdminComponent implements OnInit {
     this.response="New Property Transaction added to the database.";
   });
   }
-  AddBondTran(){
-    //debugger;
+  AddBondDetails(){
+  debugger;
     var bondName =(document.getElementById('bondName')as  HTMLInputElement).value;
     var minInvst = (document.getElementById('minInvst') as  HTMLInputElement).value;    
     var bondID = (document.getElementById('bondID')as HTMLInputElement).value;    
     var coupon = (document.getElementById('couponrt')as HTMLInputElement).value;
-    var ytm = (document.getElementById('ytm')as HTMLInputElement).value;
+    var facevalue = (document.getElementById('ytm')as HTMLInputElement).value;
     var dom = (document.getElementById('dtOfMaturity')as HTMLInputElement).value;
     
-    this._eqTransaction.postBondTransaction(bondName,bondID,coupon,ytm,minInvst,dom)
+    this._eqTransaction.postBondDetails(bondName,bondID,coupon,facevalue,minInvst,dom)
     .subscribe(data => {
-    this.response="New Transaction added to the database.";
-  });
-  } 
+       this.response="New Transaction added to the database.";
+    }); 
+  }
+  AddBondTran()  
+  {
+    // /debugger;
+    var tranType =(document.getElementById('bondTranType')as  HTMLInputElement).value;
+    var price = (document.getElementById('bondPurAmt') as  HTMLInputElement).value;    
+    var bondID = (document.getElementById('bondId')as HTMLInputElement).value;    
+    //var coupon = (document.getElementById('coupon')as HTMLInputElement).value;
+    var qty = (document.getElementById('bondPurQty')as HTMLInputElement).value;
+    var dt = (document.getElementById('bondPurchaseDt')as HTMLInputElement).value;
+
+    this._eqTransaction.postTransaction(price,bondID,qty,dt,this.selectedfolio,tranType,9,0,0)
+    .subscribe(data => {
+        this.response="New Transaction added to the database.";
+    });
+  }
   AddTransaction():void{
   
     var salary =(document.getElementById('txtAmt')as  HTMLInputElement).value;    

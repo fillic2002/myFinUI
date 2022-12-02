@@ -20,6 +20,7 @@ import { AdminComponent } from './admin/admin.component';
 import { FormsModule } from '@angular/forms';
 import { ExpenseComponent } from './expense/expense.component';
 import "@angular/common/locales/global/en-IN";
+import { BondsComponent } from './bonds/bonds.component';
 
 @NgModule({
   declarations: [
@@ -34,8 +35,8 @@ import "@angular/common/locales/global/en-IN";
     TaxcompuComponent,
     CommonYrComponent,
     AdminComponent,
-    ExpenseComponent,   
-     
+    ExpenseComponent,
+    BondsComponent,     
   ],
   imports: [
     BrowserModule,

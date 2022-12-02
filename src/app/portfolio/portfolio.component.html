@@ -29,7 +29,7 @@
                         </select>
                     </td>
                     <td *ngIf="isShare" class="header3">         
-                        <span style="display: inline-block;width: 190px;padding:2px;"  [ngStyle]="{color: getHeaderTrColor(eqPLPercent), 'font-size':'13px'}"><span style="font-size: 22px;">{{eqCurrVal-eqInvstVal|number:'1.2-2'}}</span>xirr-({{eqPLPercent|number:'1.2-2'}}%)</span>
+                        <span style="display: inline-block;width: 190px;padding:2px;"  [ngStyle]="{color: getHeaderTrColor(eqPLPercent), 'font-size':'13px'}"><span style="font-size: 22px;">{{eqCurrVal-eqInvstVal|number:'1.2-2'}}</span> </span>
                         <span style="display: inline-block;width: 190px;padding:2px;" class="shatusContent2">{{eqCurrVal|number:'1.2-2'}}</span>
                         <span style="display: inline-block;width: 190px;" class="shatusContent2">{{eqInvstVal|number:'1.2-2'}}</span>
                         <span style="display: inline-block;width: 190px;" class="shatusContent2">{{sdividend|number:'1.2-2'}} 
@@ -45,7 +45,7 @@
             
                     </td>
                     <td >
-                        <span style="display: inline-block;width: 190px;padding:2px;">Net Return</span>            
+                        <span style="display: inline-block;width: 190px;padding:2px;">Net Return <span style="color:#f5e97f;font-weight:bold;font-size: medium;">{{eqPLPercent|number:'1.2-2'}}% (xirr)</span> </span>            
                         <span style="display: inline-block;width: 190px;padding:2px;">Current</span>
                         <span style="display: inline-block;width: 190px;padding:2px;">Investment</span>
                         <span style="display: inline-block;width: 190px;padding:2px;" *ngIf="isShare">Dividend</span>
@@ -113,7 +113,7 @@
                     <table style="padding-left: 10px;width: 80%;">
                         <tr class="header1" style="width:60%; " >
                             <td style="cursor: pointer;" (click)="sort('Year')" >Year</td>
-                            <td>Return +Div<span class="headerSmall">(xirr)</span></td>
+                            <td>Return+Div<span class="headerSmall">(xirr)</span></td>
                             <td>Net Return</td>
                             <td>Dividend</td>                              
                         </tr>
@@ -143,7 +143,7 @@
   
 <table *ngIf="isShown">
     <thead>
-    <tr class="header1" style="vertical-align:middle">    
+    <tr class="header1" >    
         <td (click)="sort('name')" class="headername">Equity Name<div>{{sharecount}}</div></td>
         <td (click)="sort('pb')" class="headeramt">PB</td>    
         <td (click)="sort('marketcap')" class="headeramt">MarketCap</td>    
@@ -159,7 +159,7 @@
     </thead> 
     <tr class="header2" *ngFor ="let p of filterPortfolio">    
         <!--<div class="amt">{{p.trasactionId}}</div>-->         
-        <td class="naming" id="{{p.eq.equityId}}" (click)="showdividend(p.eq.equityId,p.eq.equityName)">{{p.eq.equityName}}<div id="{{p.eq.equityId}}" ng-show=""></div></td>
+        <td class="naming" id="{{p.eq.assetId}}" (click)="showdividend(p.eq.assetId,p.eq.equityName)">{{p.eq.equityName}}<div id="{{p.eq.assetId}}" ng-show=""></div></td>
         <td class="amt">{{p.eq.pb|number:'1.2-2'}}</td>        
         <td class="amt">{{p.eq.marketCap|number:'1.2-2'}}</td>        
         <td class="amt">{{p.eq.livePrice|number:'1.2-2'}}</td>        
@@ -185,12 +185,12 @@
         </tr>
         <tr class="header2" *ngFor ="let p of eqtTransaction">
             <td class="dt">{{p.tranDate|date}}</td>
-            <td class="name" (click)="showdividend(p.equityId,p.equityName)">{{p.equityName}}</td>  
+            <td class="name" (click)="showdividend(p.equityId,p.equityName)">{{p.equity.equityName}}</td>  
             <td class="amt">{{p.qty.toFixed(0)}}</td> 
             <td class="amt">{{p.price.toFixed(1)}}</td>
             <td class="amt">{{(p.price*p.qty).toFixed(0)}}</td>
-            <td class="amt">{{(p.pb).toFixed(2)}}</td>
-            <td class="amt">{{(p.marketCap|number:'1.2-2')}}</td>
+            <td class="amt">{{p.pB_Tran.toFixed(1)}}</td>
+            <td class="amt">{{p.marketCap_Tran.toFixed(1)}}</td>
         </tr>
     </table>
 </div>
@@ -198,7 +198,7 @@
 <!--POP UP-->
 <div id="sharedetails" class="popup" style="display: none;" >
     <div class="popupCloseButton"><span (click)="hideShareDetails()">X</span></div>
-    <span class="header3">{{selectedEqt}}</span>
+    <span class="header3">{{selectedEqt}} ({{selectedEqtID}})</span>
     <div style="height:300px">
         <div style="width: 520px;height:275px;float: left;" >
             <canvas baseChart
@@ -228,7 +228,7 @@
         <table>
             <tr class="header1">
                 <td (click)="sort('dtpurchase')" class="headeramt">Date</td>
-                <td class="headeramt">Qty</td>
+                <td class="headeramt">Qty <div>{{totalShare}}</div></td>
                 <td class="headeramt">Price</td>
                 <td class="headeramt">Total</td> 
                 <td class="headeramt">PB</td>          
@@ -237,17 +237,18 @@
                 <td class="headeramt">Buy/Sell</td>  
                 <td class="headeramt">Freefloat</td>          
             </tr>
+            
             <tr class="header2" *ngFor ="let p of eqtTransaction">
                 <td class="dt">{{p.tranDate|date}}</td>  
                 <td class="amt">{{p.qty.toFixed(0)}}</td> 
-                <td class="amt">{{p.price.toFixed(1)}}</td>
+                <td class="amt">{{p.price.toFixed(2)}}</td>
                 <td class="amt">{{(p.price*p.qty).toFixed(0)|number:'1.2-2'}}</td>
-                <td class="amt">{{(p.pb).toFixed(2)}}</td>
-                <td class="amt">{{p.marketCap|number:'1.2-2'}}</td>                
-                <td class="amt">{{p.ownership|number:'1.8-8'}}</td>
-                <td class="name" [ngStyle]="{color: getTranTypeColor(p.tranType)}">{{p.tranType}}</td>
+                <td class="amt">{{p.pB_Tran.toFixed(1)}}</td>
+                <td class="amt">{{p.marketCap_Tran.toFixed(1)}}</td>                
+                <td class="amt"></td>
+                <td class="name" style="text-align: center;" [ngStyle]="{color: getTranTypeColor(p.tranType)}">{{p.tranType}}</td>
                             
-                <td class="amt">{{p.totalShare|number:'1.0-2'}}</td>
+                <td class="amt"></td>
             </tr>        
         </table>
     </div>   

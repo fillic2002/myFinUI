@@ -72,7 +72,8 @@ export interface IAssetHistory
     month: number,
     year: number,
     qty: number,
-    assettype:number
+    assettype:number,
+    profitCurrentyear:number
 }
 
 export interface IDividend

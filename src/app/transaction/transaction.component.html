@@ -60,7 +60,7 @@
 <ng-container *ngIf="show">
 <table>
     <tr >        
-        <td><span class="naming" style="font-weight: 600;padding-right: 3px;">Asset Type:</span>
+        <td><span class="naming" style="font-weight: 800;padding-right: 3px;">Asset Type:</span>
             <select class="inputT" id="portfolio" (change)="changeAsset($event)">
                 <option value="1" >Shares</option>
                 <option value="2">Equity MF</option>
@@ -75,8 +75,8 @@
         
         <span class="naming" style="font-weight: 600;padding-right: 3px;" >Option:</span>
             <select id="option" class="inputT"  (change)="selectOption($event)"> 
-            <option value="B">Buy</option> 
-            <option value="S">Sell</option>
+            <option value=1>Buy</option> 
+            <option value=2>Sell</option>
         </select>
         </td>        
         <td *ngIf="isShown"> 
@@ -91,11 +91,10 @@
             
             <span class="naming" style="font-weight: 600;padding-right: 3px;">Date:</span>
                 <input class="inputT" id="txtDt" type="date" (change)="changeDate($event)">
-            <span class="naming" style="font-weight: 600;padding-right: 3px;">Quantity:</span>
-                <input class="inputT" id="txtQty"  type="text"> 
+            <span class="naming" style="font-weight: 600;padding-right: 3px;">Quantity:</span><input class="inputT" id="txtQty"  type="text"> 
             <span class="naming" style="font-weight: 600;padding-right: 3px;">Price:</span><input class="inputT" id="txtPrice"   type="text">
             <span class="naming" style="font-weight: 600;padding-right: 3px;">PB:</span><input class="inputT" id="txtPB"   type="text">
-            <span class="naming" style="font-weight: 600;padding-right: 3px;">MarketCap:</span><input class="inputT" id="txtMaretCap"  type="text">
+            <span class="naming" style="font-weight: 600;padding-right: 3px;">MarketCap:</span><input class="inputT" id="txtMarketCap"  type="text">
             <input class="savebtn" type="button" value="Save" (click)="AddTransaction()">
         </td>
     </tr>
@@ -106,7 +105,7 @@
 <div (click)="showTrans(option)" class="dml">{{trnStatus}}</div><br>
 <table>
     <tr>
-        <td><div style="width: 600px;height: 300px;" >
+        <td><div style="width: 800px;height: 500px;" >
             <canvas baseChart 
             [datasets]="invstShrDataSet"
             [labels]="barChartLabels"
@@ -176,16 +175,16 @@
         <td class="headeramt">Action</td>
     </tr>
 
- <tr class="header2" *ngFor="let t of filterPortfolio">    
+ <tr class="header2" *ngFor="let t of filterPortfolio">  
         <td class="dt">{{t.tranDate|date}}</td>
-        <td class="naming" (click)="showdividend(t.equityId,t.equityName)">{{t.equityName}}</td>
-        <td class="amt">{{t.equityId}}</td>        
+        <td class="naming" (click)="showdividend(t.equityId,t.equityName)">{{t.equity.equityName}}</td>
+        <td class="amt">{{t.equity.equityId}}</td>        
         <td class="amt">{{t.qty}}</td>
         <td class="amt">{{t.price|number : '1.2-2'}}</td>
         <td class="amt">{{t.qty*t.price|number : '1.2-2'}}</td>
-        <td class="amt">{{t.pb|number : '1.2-2'}}</td>
-        <td class="amt" [ngStyle]="{'background-color': getBGColor(t.marketCap)}">{{t.marketCap|number : '1.2-2'}}</td>
-        <td class="amt" [ngStyle]="{color: getTrColor(t.tranType)}">{{t.tranType}}</td>
+        <td class="amt">{{t.pB_tran|number : '1.2-2'}}</td>
+        <td class="amt" [ngStyle]="{'background-color': getBGColor(t.marketCap)}">{{t.marketCap_Tran|number : '1.2-2'}}</td>
+        <td class="amt" style="text-align:center ;" [ngStyle]="{color: getTrColor(t.tranType)}">{{t.tranType}}</td>
         <td (click)="deleterecord(t.equityId, t.tranDate)" style="cursor: pointer" class="action" >Delete</td>
     </tr> 
 </table>
@@ -215,7 +214,7 @@
      
 </table> 
  
-<table id="status" class="popup">
+<table id="status" class="popup" style="display: none;">
     <tr>
         <td colspan="2" (click)="hideShareDetails()" style="text-align: right;cursor: pointer;font-weight: bold;">X</td>
     </tr>
@@ -227,7 +226,7 @@
 
 <!--POP UP-->
 <div id="sharedetails" class="popup" style="display: none;" >
-    <div class="popupCloseButton"><span (click)="HideSharedtl()">X</span></div>
+    <div class="popupCloseButton"><span (click)="HideSharedtl()">XX</span></div>
     <span class="header3">{{selectedEqt}}</span>
     <div style="height:300px">
         <div style="width: 520px;height:275px;float: left;" >

@@ -9,6 +9,7 @@ import { BankdetailComponent } from './bankdetail/bankdetail.component';
 import { TaxcompuComponent } from './taxcompu/taxcompu.component';
 import { AdminComponent } from './admin/admin.component';
 import { ExpenseComponent } from './expense/expense.component';
+import { BondsComponent } from './bonds/bonds.component';
 
 const routes: Routes = [
   {path:'', component:OptionComponent},
@@ -19,7 +20,8 @@ const routes: Routes = [
   {path:'bankdetail',component:BankdetailComponent},
   {path:'tax',component:TaxcompuComponent},
   {path:'admin',component:AdminComponent},
-  {path:'expense',component:ExpenseComponent}
+  {path:'expense',component:ExpenseComponent},  
+  {path:'bonds',component:BondsComponent},
 ];
  
 @NgModule({

@@ -125,14 +125,16 @@
 <!--Adding Bonds Transaction-->
 <div>
     <div style="font-weight: 550;">Add Bond Transaction</div>
-    <span class="naming">Date:</span><input id="txtPropertyTranDt" type="date" class="inputdt">
-    <span class="naming">AmtInvested:</span><input name="propertAmt" id="propertAmt" class="inputT">
+    <span class="naming">BondId:</span><input id="bondId" class="inputT">
+    <span class="naming">Date:</span><input id="bondPurchaseDt" type="date" class="inputdt">
+    <span class="naming">Price:</span><input name="bondPurAmt" id="bondPurAmt" class="inputT">
+    <span class="naming">Qty:</span><input name="bondPurQty" id="bondPurQty" class="inputT">
     <span class="naming">Transaction Type:</span>
-        <select  style="cursor: pointer; background-color: #eaea25de;"  id="prpTranType" >
+        <select  style="cursor: pointer; background-color: #eaea25de;"  id="bondTranType" >
             <option value="1">Buy</option>
             <option value="0">Sell</option>
         </select>
-        <span class="naming">CouponRate:</span><input name="coupon" id="coupon" class="inputT">
+        
     <input class="savebtn" type="button" value="Save" (click)="AddBondTran()">
 </div>
 <!--Adding Bonds Details-->
@@ -142,7 +144,7 @@
     <span class="naming">MinInvest:</span><input name="minInvst" id="minInvst" class="inputT">
     <span class="naming">BondId:</span><input name="bondId" id="bondID" class="inputT">        
     <span class="naming">CouponRate:</span><input name="coupon" id="couponrt" class="inputT">
-    <span class="naming">YTM:</span><input name="ytm" id="ytm" class="inputT">
+    <span class="naming">FaceValue:</span><input name="ytm" id="ytm" class="inputT">
     <span class="naming">DateOfMaturity:</span><input id="dtOfMaturity" type="date" class="inputdt">
-    <input class="savebtn" type="button" value="Save" (click)="AddBondTran()">
+    <input class="savebtn" type="button" value="Save" (click)="AddBondDetails()">
 </div>

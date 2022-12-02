@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<table style="width: 100%">
+  <tr>
+    <td style="width: 15%">
+      <span
+        value="H"
+        (click)="onSelect(option)"
+        style="font-size: 22px; cursor: pointer"
+        >my<span style="color: orange">f</span>in</span
+      >
+    </td>
+    <td style="width: 70%">
+      <span class="title" style="padding-left: 30%" >Bonds</span>
+    </td>
+    <td style="width: 15%">
+      <span class="pipe" style="text-align: right;" (click)="selectnext(option)">Admin</span>
+    </td>
+  </tr>
+</table>
+<table>
+  <tr class="header1">
+    <td (click)="sort('updatedon')" class="headername">Purchsed ON</td>  
+    <td class="headername">BondName</td>
+    <td class="headername">BondID</td>
+    
+    <td class="headername">CouponRate</td>
+    <td (click)="sort('liveprice')"  class="headername">LivePrice</td>
+    <td class="headername">InvstedPrice</td>
+    <td (click)="sort('ytm')" class="headername">Invs <div>{{totalInvst|number:'1.2-2'}}</div> </td>
+    <td (click)="sort('maturity')" class="headername">Maturity</td>    
+    <td class="headername">IntrestCycle</td>  
+    
+    <td class="headername">Action</td>
+</tr>   
+<tr class="header2" *ngFor="let item of bondTransaction">
+  <td  class="dt">{{item.purchaseDate|date}}</td>
+  <td  class="naming">{{item.bondDetail.bondName}}</td>
+  <td class="naming">{{item.bondDetail.bondId}}</td>
+  
+  <td  class="naming">{{item.bondDetail.couponRate|number:'1.2-2'}}</td>
+  <td  class="naming">{{item.livePrice|number:'1.2-2'}}</td>
+  <td  class="naming">{{item.invstPrice|number:'1.2-2'}}</td>
+  <td  class="naming">{{item.qty*item.invstPrice|number:'1.2-2'}}</td>
+  <td  class="dt">{{item.bondDetail.dateOfMaturity|date}}</td>
+  <td  class="naming">{{item.bondDetail.intrestCycle}}</td>    
+  
+  <td (click)="deleterecord(item.expId)" style="cursor: pointer" class="action" >Delete</td> 
+</tr>   
+</table>
+<table>
+  <tr class="header1">
+    <td (click)="sort('updatedon')" class="headername">Updated On</td>  
+    <td class="headername">BondID</td>
+    <td class="headername">BondName</td>
+    <td class="headername">CouponRate</td>
+    <td (click)="sort('liveprice')"  class="headername">LivePrice</td>
+    <td class="headername">FaceValue</td>
+    <td (click)="sort('ytm')" class="headername">YTM</td>
+    <td class="headername">IntrestCycle</td>  
+    <td (click)="sort('maturity')" class="headername">Maturity</td>      
+    <td class="headername">Action</td>
+  </tr>
+  <tr class="header2" *ngFor="let item of bondDetails"> 
+    <td  class="dt">{{item.updateDate|date}}</td>  
+    <td class="naming">{{item.bondId}}</td>
+    <td  class="naming">{{item.bondName}}</td>
+    <td  class="amt">{{item.couponRate|number:'1.2-2'}}</td>
+    <td  class="amt">{{item.livePrice|number:'1.2-2'}}</td>
+    <td  class="amt">{{item.faceValue|number:'1.2-2'}}</td>
+    <td  class="amt">{{item.ytm|number:'1.2-2'}}</td>
+    <td  class="naming">{{item.intrestCycle}}</td>  
+    <td  class="dt">{{item.dateOfMaturity|date}}</td>     
+    <td (click)="deleterecord(item.expId)" style="cursor: pointer" class="action" >Delete</td>
+  </tr>   
+</table>
+<hr size="1" color="lightgrey" />
+

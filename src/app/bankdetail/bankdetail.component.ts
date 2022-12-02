@@ -54,7 +54,8 @@ export class BankdetailComponent implements OnInit {
   constructor(private _acct:SharesService, private route:ActivatedRoute,private router:Router) { }
 
   ngOnInit(): void {
-    this._acct.getBankAcDetails()
+    this.accDetail.length=0;
+    this._acct.getBankAcDetails()    
     .subscribe(data =>{ 
       this.accDetail = data;    
       var to:number=0;       

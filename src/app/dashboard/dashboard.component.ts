@@ -75,7 +75,8 @@ public GetDashboard()
       for (var i = 0; i < this.dbDetail.length; i++) {
         to= to + parseFloat(this.dbDetail[i].currentValue);       
         this.assetValue.push(this.dbDetail[i].currentValue);
-        this.assetName.push(this.dbDetail[i].assetName);          
+        this.assetName.push(this.dbDetail[i].assetName);
+               
       }         
       this.total=to.toFixed(2);
      }); 
@@ -163,7 +164,7 @@ public pieChartType: ChartType = 'bar';
 public pieChartLegend = true;
 public pieChartPlugins = [];
 public pieChartColors: Array < any > = [{
-  backgroundColor: ['#97CEEC', '#A68E34','#00b38a','lightblue','#EFCEC8','	#BBBFD2','#E8ACD6','#B5E1E1','#afb0d3', 'blue'], 
+  backgroundColor: ['#97CEEC', '#A68E34','#00b38a','lightblue','#EFCEC8','	#BBBFD2','#E8ACD6','#B5E1E1','#afb0d3', '#D1CDC4'], 
 }];
 public pieChartData: ChartDataSets[] = [
   { data:this.assetValue, label: 'Current Value' },       

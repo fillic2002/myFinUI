@@ -26,7 +26,7 @@ export class SortDirective {
     const ord = ele.getAttribute('data-order');
     const pro = ele.getAttribute('data-name');
     const type = ele.getAttribute('data-type');
-    
+     
     if(ord=="desc")
     {
       //sort(sort.startsort(ord,type,pro,));

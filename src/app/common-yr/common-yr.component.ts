@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CommonYrComponent implements OnInit {
 
-  constructor() { }
+  constructor() { } 
 
   ngOnInit(): void {
     console.log('asd');

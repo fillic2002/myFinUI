@@ -53,18 +53,24 @@ export class SharesService {
   getAssetsHistory(folioId:number):Observable<IAssetHistory[]>{    
     return this.client.get<IAssetHistory[]>("http://localhost:59921/portfolio/getAssetsHistory/");
   }
-  postTransaction(price:any,name:any,qty:any,dt:any,folioId: number,option:any,assetType:any,pb:any,mv:any):Observable<any>{   
+  postTransaction(price:any,name:any,qty:any,dt:any,folioId: any,option:any,assetType:any,pb:any,mv:any):Observable<any>{   
+  //debugger;
+   
+   
     return this.client.post("http://localhost:59921/transaction/postTransaction",{ 
-    price: parseFloat(price.value),
-    equityId:name.value,
+    price: parseFloat(price),
+    equity:{
+      assetId: String(name),
+      assetType:parseInt(assetType), 
+    },  
     qty:parseFloat(qty), 
-    tranDate:new Date(Date.parse(dt.value)),
-    tranType: option,
+    tranDate:new Date(Date.parse(dt)),
+    tranType: parseInt(option),
     portfolioId:parseInt(folioId),
-    assetTypeId:parseInt(assetType),
-    PB:parseFloat(pb.value),
-    MarketCap:parseFloat(mv.value),
-     });
+    PB_tran:parseFloat(pb),
+    MarketCap_Tran:parseFloat(mv)
+   
+    });
   }
   postBankTransaction(salary:any,desc:string,txtDt:any,trnType:any,acctid:any,id:any):Observable<boolean[]>{
    // console.log(id);
@@ -77,17 +83,23 @@ export class SharesService {
        AcctId:parseInt(acctid)
     })  
   }
-  postBondTransaction(bondName:string,bondID:string,coupon:string,ytm:string,minInvst:string,dom:string)
+  postBondDetails(bondName:string,bondID:string,coupon:string,facevalue:string,minInvst:string,dom:string)
   {
-    return this.client.post<boolean[]>("http://localhost:59921/Shares/AddBond",{
+    console.log(new Date(Date.parse(dom)));
+    console.log(parseFloat(minInvst));
+    console.log(bondID);
+    console.log(bondID);
+    console.log(parseFloat(facevalue));
+    console.log(parseFloat(coupon));
+    return this.client.post<boolean[]>("http://localhost:59921/Bonds/AddBond",{
       dateOfMaturity: new Date(Date.parse(dom)),
       minInvst:parseFloat(minInvst),
       BondId:bondID,
       BondName:bondName,
-      YTM:parseFloat(ytm),
+      facevalue:parseFloat(facevalue),
       couponRate:parseFloat(coupon)
     })  
-  }
+  }  
   postPropertyTransaction(salary:any,txtDt:any,trnType:any,asstType:any,folioId:any):Observable<boolean[]>{
     return this.client.post<boolean[]>("http://localhost:59921/transaction/postTransaction",{
       tranDate: new Date(Date.parse(txtDt)),
@@ -177,7 +189,7 @@ export class SharesService {
   return this.client.post("http://localhost:59921/portfolio/AddComment",{
     folioID:parseInt(id),
     comment:cmt
-  });
+  }); 
  }
  GetFolioComment(id:number):Observable<any>{
   return this.client.get("http://localhost:59921/portfolio/GetfolioComment/"+id);
@@ -187,11 +199,18 @@ export class SharesService {
  }
 
  getExpense(folioID:number)
- { return this.client.get("http://localhost:59921/portfolio/GetfolioExpense/"+folioID); }
+ { return this.client.get("http://localhost:59921/portfolio/GetfolioExpense/"+folioID);}
 
  getMonthlyExpense(folioID:number,my:string)
  { return this.client.get("http://localhost:59921/portfolio/GetMonthlyfolioExpense/"+folioID+"/"+my); }
  
+ getBondDetails(folioID:number,my:string)
+ { return this.client.get("http://localhost:59921/Bonds/GetBondsDetails"); }
+ 
+ getBondTransaction(folioID:number,my:string)
+ { return this.client.get("http://localhost:59921/Bonds/GetBondPerFolio/"+folioID); }
+
+
  getMonthlyInvstment(folioID:number,pastmonth:number)
  { return this.client.get("http://localhost:59921/portfolio/GetMonthlyInvestment/"+folioID+"/"+pastmonth); }
  
