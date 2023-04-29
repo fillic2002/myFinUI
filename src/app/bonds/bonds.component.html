@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <table style="width: 100%">
   <tr>
     <td style="width: 15%">
@@ -17,41 +17,163 @@
     </td>
   </tr>
 </table>
+<hr size="1"  color="lightgrey"> 
+<table style="border-style: solid;border-color: white; width: 100%;">
+  <tr>
+      <td style="width:1%;"></td>
+      <td>
+          <table style="width: 98%;" class="status">
+              <tr>
+                  <td style="width: 40%;">
+                      <select [(ngModel)]="selectedfolio" (change)="changeFolio($event)" style="cursor: pointer; background-color: #eaea25de;"  id="txtFolio" >
+                          <option value="0">All</option>
+                          <option [value]="item.folioID" *ngFor="let item of folios" > {{item.folioName}}</option>                    
+                        </select>                       
+                  </td>
+                  <td class="header3">         
+                      <span style="display: inline-block;width: 290px;padding:2px;"  ><span style="font-size: 22px;"> </span> </span>                      
+                      <span style="display: inline-block;width: 290px;" class="shatusContent2">{{totalInvst|number:'1.2-2'}}</span>                      
+                      
+                  </td>
+              </tr>                
+              <tr>
+                  <td>
+                    <div><span>Bond name/ID: </span>
+                      <input type="text" name="bname" [(ngModel)]="bName" (keypress)="SearchBond()"><br>
+                    </div>
+                  </td>
+                  <td >
+                      <span style="display: inline-block;width: 290px;padding:2px;">Net Return <span style="color:#f5e97f;font-weight:bold;font-size: medium;">{{eqPLPercent|number:'1.2-2'}}% (xirr)</span> </span>                                  
+                      <span style="display: inline-block;width: 290px;padding:2px;">Investment</span>
+                       
+                  </td>
+              </tr>
+              </table>                            
+      </td>
+      <td style="width:1%;"></td>
+  </tr>
+</table>
+<ng-container *ngIf="show">
+  <div>     
+    <div class="msg">{{response}}</div>
+    <div style="font-weight: 550;">Add Bond Transaction</div>
+    <span class="naming">BondId:</span><input id="bondId" class="inputT">
+    <span class="naming">Date:</span><input id="bondPurchaseDt" type="date" class="inputdt">
+    <span class="naming">Price:</span><input name="bondPurAmt" id="bondPurAmt" class="inputT">
+    <span class="naming">Qty:</span><input name="bondPurQty" id="bondPurQty" class="inputT">
+    <span class="naming">Transaction Type:</span>
+        <select  style="cursor: pointer; background-color: #eaea25de;"  id="bondTranType" >
+            <option value="1">Buy</option>
+            <option value="0">Sell</option>
+        </select>        
+    <input class="savebtn" type="button" value="Save" (click)="AddBondTran()">
+  </div>
+</ng-container>
+<div>{{status}}</div> 
+<div (click)="showTrans(option)" class="dml">{{trnStatus}}</div>  
+
+<div style="float: left;">
+  <div style="width: 600px;height:400px; " >
+  <canvas baseChart 
+  [datasets]="BondData"
+  [labels]="bondLbl"
+  [options]="bondChartOption"
+  [plugins]="bondPlugin"
+  [legend]="bondLegend"
+  [colors]="bondColors"
+  [chartType]="bondChartType"
+  (chartClick)="yearSelected($event)">
+  </canvas>                             
+  </div>  
+</div>
+<div style="float: right;"><span>Year:{{selectedYear}}</span>
+  <div style="width: 600px;height:400px; " >
+    <canvas baseChart 
+    [datasets]="mBondData"
+    [labels]="mbondLbl"
+    [options]="mbondChartOption"
+    [plugins]="mbondPlugin"
+    [legend]="mbondLegend"
+    [colors]="mbondColors"
+    [chartType]="mbondChartType"
+    (chartClick)="monthSelected($event)">
+    </canvas>                             
+  </div></div>
+
+<ng-container *ngIf="bondHoldingflag">
+<div style="float: left;"><span>Bond Holdings</span>
+  <table>
+    <tr class="header1">
+      <td class="headername">BondName</td>
+      <td class="headername">BondID</td>   
+      <td class="headername">Investment<div>{{totalInvst|number:'1.2-2'}}</div></td>   
+      <td class="headername">IntrestCycle</td>
+      <td class="headername" (click)="sort('maturityDate')">Maturity</td> 
+    </tr>
+    <tr class="header2" *ngFor="let item of bondHoldings">      
+      <td  class="naming" (click)="getBondDetail(item.bondDetail.bondId)">{{item.bondDetail.bondName}}</td>
+      <td  class="naming" >{{item.bondDetail.bondId}}</td>  
+      <td  class="naming">{{item.investment|number:'1.2-2'}}</td>
+      <td  class="naming">{{item.bondDetail.intrestCycle}}</td>
+      <td  class="dt" [ngStyle]="{color: getTranTypeColor(item.bondDetail.dateOfMaturity|date)}">{{item.bondDetail.dateOfMaturity|date}}</td>     
+    </tr>
+  </table>
+</div></ng-container>
+ 
+<ng-container *ngIf="bondTranFlag">
 <table>
   <tr class="header1">
-    <td (click)="sort('updatedon')" class="headername">Purchsed ON</td>  
-    <td class="headername">BondName</td>
-    <td class="headername">BondID</td>
-    
+    <td (click)="sort('purchaseDate')" class="headername">Purchsed ON</td>  
+    <!--<td class="headername">BondName</td>
+    <td class="headername">BondID</td>    -->
     <td class="headername">CouponRate</td>
     <td (click)="sort('liveprice')"  class="headername">LivePrice</td>
     <td class="headername">InvstedPrice</td>
     <td (click)="sort('ytm')" class="headername">Invs <div>{{totalInvst|number:'1.2-2'}}</div> </td>
-    <td (click)="sort('maturity')" class="headername">Maturity</td>    
-    <td class="headername">IntrestCycle</td>  
+    <!--<td (click)="sort('maturityPurchase')" class="headername">Maturity</td>    -->
     
     <td class="headername">Action</td>
 </tr>   
-<tr class="header2" *ngFor="let item of bondTransaction">
+<tr class="header2" *ngFor="let item of filterTransaction">
   <td  class="dt">{{item.purchaseDate|date}}</td>
-  <td  class="naming">{{item.bondDetail.bondName}}</td>
-  <td class="naming">{{item.bondDetail.bondId}}</td>
-  
+  <!--<td  class="naming">{{item.bondDetail.bondName}}</td>
+  <td  class="naming" (click)="showIntrest(item.bondDetail.bondId)">{{item.bondDetail.bondId}}</td>  -->
   <td  class="naming">{{item.bondDetail.couponRate|number:'1.2-2'}}</td>
   <td  class="naming">{{item.livePrice|number:'1.2-2'}}</td>
   <td  class="naming">{{item.invstPrice|number:'1.2-2'}}</td>
   <td  class="naming">{{item.qty*item.invstPrice|number:'1.2-2'}}</td>
-  <td  class="dt">{{item.bondDetail.dateOfMaturity|date}}</td>
-  <td  class="naming">{{item.bondDetail.intrestCycle}}</td>    
-  
-  <td (click)="deleterecord(item.expId)" style="cursor: pointer" class="action" >Delete</td> 
+  <!--<td  class="dt" [ngStyle]="{color: getTranTypeColor(item.bondDetail.dateOfMaturity|date)}">{{item.bondDetail.dateOfMaturity|date}}</td>
+  <td  class="naming" contenteditable="true" (keydown.Tab)="updateList($event,'id',item.intrestCycle,item.bondId,item.bondName,item.couponRate,item.dateOfMaturity,item.faceValue,item.livePrice)">{{item.bondDetail.intrestCycle}}</td>  -->
+  <td (click)="deleterecord(item.bondDetail.bondId,item.purchaseDate,item.qty,item.folioId)" style="cursor: pointer" class="action" >Delete</td> 
 </tr>   
 </table>
+</ng-container>
+<ng-container *ngIf="bondIntrest"> 
+<table>
+  <tr class="header1">
+      <td (click)="sort('intrestPaymentDate')" class="headername">Intest Credit Date</td>            
+      <td class="headername">Bond Name</td>
+      <td class="headeramt">BondId</td>
+      <td class="headeramt">Intrest Credited <span>{{totalBondIntrest|number:'1.2-2'}}</span></td>            
+      <td class="headeramt">livePrice</td>
+  </tr>
+ 
+  <tr class="header2" *ngFor="let item of filteredIntrest" >
+      <td class="dt">{{item.intrestPaymentDate|date}}</td>        
+      <td class="name">{{item.bondDetail.bondName}}</td>
+      <td class="amt">{{item.bondDetail.bondId}}</td>
+      <td class="amt">{{item.amt.toFixed(2)|number:'1.2-2'}}</td>        
+      <td class="amt">{{item.bondDetail.livePrice}}</td>
+  </tr> 
+</table></ng-container>
+<ng-container *ngIf="bondMasterListFlag">
+   
 <table>
   <tr class="header1">
     <td (click)="sort('updatedon')" class="headername">Updated On</td>  
     <td class="headername">BondID</td>
     <td class="headername">BondName</td>
+    <td class="headername">Series</td>
     <td class="headername">CouponRate</td>
     <td (click)="sort('liveprice')"  class="headername">LivePrice</td>
     <td class="headername">FaceValue</td>
@@ -62,16 +184,22 @@
   </tr>
   <tr class="header2" *ngFor="let item of bondDetails"> 
     <td  class="dt">{{item.updateDate|date}}</td>  
-    <td class="naming">{{item.bondId}}</td>
-    <td  class="naming">{{item.bondName}}</td>
+    <td  class="naming" (click)="moveId(item.bondId)">{{item.bondId}}</td>
+    <td  class="naming" contenteditable="true" (keydown.Tab)="updateList($event,'name',item.intrestCycle,item.bondId,item.bondName,item.couponRate,item.dateOfMaturity,item.faceValue,item.livePrice)" >{{item.bondName}}</td>
+    <td  class="amt">{{item.symbol}}</td>
     <td  class="amt">{{item.couponRate|number:'1.2-2'}}</td>
     <td  class="amt">{{item.livePrice|number:'1.2-2'}}</td>
     <td  class="amt">{{item.faceValue|number:'1.2-2'}}</td>
     <td  class="amt">{{item.ytm|number:'1.2-2'}}</td>
-    <td  class="naming">{{item.intrestCycle}}</td>  
-    <td  class="dt">{{item.dateOfMaturity|date}}</td>     
+    <td  class="naming" contenteditable="true" (keydown.Tab)="updateList($event,'Intrest',item.intrestCycle,item.bondId,item.bondName,item.couponRate,item.dateOfMaturity,item.faceValue,item.livePrice)" (blur)="onChange('amt',$event)">{{item.intrestCycle}}</td>  
+    <td  class="dt"  >{{item.dateOfMaturity|date}}</td>     
     <td (click)="deleterecord(item.expId)" style="cursor: pointer" class="action" >Delete</td>
   </tr>   
 </table>
-<hr size="1" color="lightgrey" />
+</ng-container>
+<div id="bondDetail" class="popup" style="display: none;">  
+  <div class="popupCloseButton"><span (click)="hideBondDetails()">X</span></div>
+  
+</div>
+
 

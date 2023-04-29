@@ -6,6 +6,7 @@ import localeIn from '@angular/common/locales/en-IN';
 import {Router} from '@angular/router';  
 import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
 import {Color, Label } from 'ng2-charts';
+import { Console } from 'console';
 
 registerLocaleData(localeIn);
 
@@ -35,6 +36,7 @@ export class DashboardComponent implements OnInit {
   monthyr:string="";
   monthYear=[] as string[];
   expAmt=[] as number[];
+  totalAmt :number=0; 
   
   constructor(private _dashbrd:SharesService,private route:ActivatedRoute,private router:Router) { }
  
@@ -61,6 +63,19 @@ export class DashboardComponent implements OnInit {
     });
     this.GetMonthlyExpenseHistory(0); 
   }
+  public onCheckChange(e:any,amt:number)
+  { 
+    console.log(e.srcElement.checked);
+    if(e.srcElement.checked==true)
+    {
+      this.totalAmt+= amt;       
+    }
+    else
+    {
+      this.totalAmt-= amt;
+    }
+    console.log(this.totalAmt);
+  }
 
 public GetDashboard()
 {
@@ -69,25 +84,31 @@ public GetDashboard()
       this.dbDetail = data;
       this.dbDetail.sort((a: { currentValue: number; },b: { currentValue: number; })=>a.currentValue-b.currentValue);
       this.dbDetail.sort((a: { currentValue: number; },b: { currentValue: number; })=>a.currentValue-b.currentValue);
-      console.log(this.dbDetail);
+      //debugger;
       var to:number; 
       to=0;
       for (var i = 0; i < this.dbDetail.length; i++) {
-        to= to + parseFloat(this.dbDetail[i].currentValue);       
-        this.assetValue.push(this.dbDetail[i].currentValue);
-        this.assetName.push(this.dbDetail[i].assetName);
-               
+        
+        if(this.dbDetail[i].assetName=="Bonds")
+        {
+          this.assetValue.push(this.dbDetail[i].invested);
+          to= to + parseFloat(this.dbDetail[i].invested);
+        }else{
+          this.assetValue.push(this.dbDetail[i].currentValue);  
+          to= to + parseFloat(this.dbDetail[i].currentValue);
+        }            
+        this.assetName.push(this.dbDetail[i].assetName);               
       }         
-      this.total=to.toFixed(2);
+      this.total=to.toFixed(2); 
      }); 
-     this.asttype="All";
+     this.asttype="All"; 
 }
 
   public showReturn(assetName:string)
   {
     this.astReturn.length=0;
     this.yearReturn.length=0;
-    console.log(assetName);
+    
     if(assetName=="Shares") 
     {
       this.assetId=1;
@@ -142,7 +163,7 @@ public GetDashboard()
       responsive: true,
       title: {
         display: true,
-        text: "Asset Over Time" 
+       // text: "Asset Over Time" 
       }
     };  
     public barChartLabels: Label[] = this.assetXaxis; 
@@ -151,10 +172,10 @@ public GetDashboard()
     public barChartPlugins = [];
     
     public assetHistory: ChartDataSets[] = [
-      { data:this.assetValues, label: 'Current Asset' },
-      { data:this.invstValues, label: 'investment' },    
+      { data:this.assetValues, label: 'Current Value' },
+      { data:this.invstValues, label: 'investment Value' },    
     ];
-//-------------------Pie Chart-------------------------------=----------
+//-------------------Asset Distribution -------------------------------=----------
 public pieChartOptions: ChartOptions = { 
   responsive: true,
 };
@@ -167,9 +188,8 @@ public pieChartColors: Array < any > = [{
   backgroundColor: ['#97CEEC', '#A68E34','#00b38a','lightblue','#EFCEC8','	#BBBFD2','#E8ACD6','#B5E1E1','#afb0d3', '#D1CDC4'], 
 }];
 public pieChartData: ChartDataSets[] = [
-  { data:this.assetValue, label: 'Current Value' },       
-];
-
+  { data:this.assetValue, label: 'Asset Distribution' },       
+]; 
 //-------------------Asset return-----------------------------------------
 public chartOptions: ChartOptions = {  
   responsive: true,
@@ -185,12 +205,25 @@ public chartColors1: Color[] = [
   { backgroundColor: '#08b100db' },     
 ]
 public chartDataset1: ChartDataSets[] = [
-  { data:this.astReturn, label: 'Return' },      
+  { data:this.astReturn, label: 'Return' },    
 ];
+public invstmtSelection(e: any): void {
+  if (e.event.type == "click") {
+    const clickedIndex = e.active[0]?.index; 
+    var lbl=e.active[0]._chart.getElementAtEvent(event)[0]._model.label;    
+    if(lbl=="Bonds")
+      {this.router.navigate(['/bonds']);   }
+    else if(lbl=="Debt_MF"||lbl=="PF"||lbl=="PPF")    
+      {this.router.navigate(['/transaction']);   }
+    else if(lbl=="Shares"||lbl=="Equity_MF")    
+      {this.router.navigate(['/portfolio']);   }
+    else if(lbl=="Bank")    
+      {this.router.navigate(['/bankdetail']);   }
+  }
+}
 public chartClick(e: any): void {
   if (e.active.length > 0) { 
-    this.netAddition=0;
-    
+    this.netAddition=0;    
     const chart = e.active[0]._chart;
     const activePoints = chart.getElementAtEvent(e.event);
     if ( activePoints.length > 0) {
@@ -220,7 +253,7 @@ public chartClick(e: any): void {
         this.netAddition =0;
       this._dashbrd.getMonthDashBoard(label.split('-')[0]-1, label.split('-')[1])
       .subscribe(data=>{
-        console.log(data);
+        
           this.preMonthDshbrd = data;                    
           for (var i = 0; i < this.preMonthDshbrd.length; i++) {
             if(this.dbDetail[i].id==6)

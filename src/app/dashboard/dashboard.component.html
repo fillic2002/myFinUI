@@ -15,7 +15,8 @@
 <table style="width: 100%;"  >
   <tr>
     <td style="width: 1%;"></td>
-     <td class="status"  style="width: 98%;"><div class="shatusContent2"> {{total|number : '1.2-2'}}</div><span>Current Asset Size</span></td>
+     <td class="status"  style="width: 98%;"><div class="shatusContent2"> {{total|number : '1.2-2'}}</div>
+                                                            <span>Current Asset Size</span></td>
   </tr>   
 </table>    
 <div style="display:flex;">   
@@ -40,19 +41,21 @@
   [plugins]="pieChartPlugins"
   [legend]="pieChartLegend"
   [chartType]="pieChartType"
-   >
+  (chartClick)="invstmtSelection($event)">
 </canvas></div>
 </div>
-<div style="display:flex ;">
-  <div> 
+<div>{{totalAmt|number : '1.2-2'}}</div>
+<div style="display:flex;">  <div> 
   <table> 
-    <tr class="header1">        
+    <tr class="header1"> 
+        <td>Amt</td>
         <td class="headeramt">XiRR Return</td>  
         <td class="headeramt">Current<div>{{monthyr}}</div></td>               
         <td class="headeramt">Invested</td>            
         <td class="headername" >Asset Type</td>    
     </tr>
-    <tr class="header2" *ngFor ="let d of dbDetail">                    
+    <tr class="header2" *ngFor ="let d of dbDetail">
+      <td><input type="checkbox" (change)="onCheckChange($event,d.currentValue)"></td>                    
       <td class="amt" [ngStyle]="{color: getTrColor(d.currentValue-d.invested)}" >{{d.xirrReturn|number : '1.2-2'}}%</td>      
       <td class="amt">{{d.currentValue|number : '1.2-2'}}</td>                            
       <td class="amt">{{d.invested|number : '1.2-2'}}</td>

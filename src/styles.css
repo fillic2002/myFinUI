@@ -104,7 +104,7 @@ html {
   padding: 7px;
 }
 .headername {
-  width: 350px;
+  width: 190px;
   font: 14px Arial;
 }
 .headernameDiv {
@@ -125,7 +125,7 @@ html {
 }
 .amt {
   height: 30px;
-  color: #3b3a3a;
+  color: #3b3a3ac7;
   text-align: right;
   font: 560 14px Helvetica, sans-serif;
   padding-right: 6px;

@@ -105,7 +105,7 @@
 <div (click)="showTrans(option)" class="dml">{{trnStatus}}</div><br>
 <table>
     <tr>
-        <td><div style="width: 800px;height: 500px;" >
+        <td><div style="width: 700px;height: 350px;" >
             <canvas baseChart 
             [datasets]="invstShrDataSet"
             [labels]="barChartLabels"
@@ -118,7 +118,24 @@
             </canvas>                             
         </div></td>
         <td>
-            <div style="width: 550px;height: 300px; float: left; padding-left: 40px;" >
+            <div style="width: 600px;height: 250px; float: left; padding-left: 40px;" >
+                <canvas baseChart 
+                [datasets]="mnthInvstDataSet"
+                [labels]="mnthInvstlbl"
+                [options]="mnthInvstChartOptions"
+                [plugins]="mnthInvstChartPlugins"
+                [legend]="mnthInvstChartLegend"
+                [colors]="mnthInvstChartColors"
+                [chartType]="mnthInvstChartType"
+                (chartClick)="getMonthlyInvest($event)">
+                </canvas>                             
+            </div>
+          
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div style="width: 550px;height: 250px; float: left; padding-left: 40px;" >
                 <canvas baseChart 
                 [datasets]="pfDataSet"
                 [labels]="pfChartLabels"
@@ -130,24 +147,10 @@
                 (chartClick)="getPFDetail($event)">
                 </canvas>                             
             </div>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <div style="width: 600px;height: 300px; float: left; padding-left: 40px;" >
-                <canvas baseChart 
-                [datasets]="mnthInvstDataSet"
-                [labels]="mnthInvstlbl"
-                [options]="mnthInvstChartOptions"
-                [plugins]="mnthInvstChartPlugins"
-                [legend]="mnthInvstChartLegend"
-                [colors]="mnthInvstChartColors"
-                [chartType]="mnthInvstChartType">
-                </canvas>                             
-            </div>
+
         </td>
         <td> 
-            <div style="width: 550px;height: 300px; float: left; padding-left: 40px;" >
+          <div style="width: 550px;height: 250px; float: left; padding-left: 40px;" >
             <canvas baseChart 
             [datasets]="ppfDataSet"
             [labels]="ChartLabels"
@@ -157,9 +160,10 @@
             [colors]="ChartColors"
             [chartType]="ChartType">
             </canvas>                             
-        </div></td>
+        </div>  </td>
     </tr>
 </table>
+<div style="padding: 40px;"></div>
 <ng-container *ngIf="DetailSummary">
 <table >
     <tr class="header1">
@@ -177,15 +181,15 @@
 
  <tr class="header2" *ngFor="let t of filterPortfolio">  
         <td class="dt">{{t.tranDate|date}}</td>
-        <td class="naming" (click)="showdividend(t.equityId,t.equityName)">{{t.equity.equityName}}</td>
-        <td class="amt">{{t.equity.equityId}}</td>        
+        <td class="naming" (click)="showdividend(t.equityId,t.equityName)">{{t.equity.symbol}}</td>
+        <td class="amt">{{t.equity.assetId}}</td>        
         <td class="amt">{{t.qty}}</td>
         <td class="amt">{{t.price|number : '1.2-2'}}</td>
         <td class="amt">{{t.qty*t.price|number : '1.2-2'}}</td>
-        <td class="amt">{{t.pB_tran|number : '1.2-2'}}</td>
+        <td class="amt">{{t.pB_Tran|number : '1.2-2'}}</td>
         <td class="amt" [ngStyle]="{'background-color': getBGColor(t.marketCap)}">{{t.marketCap_Tran|number : '1.2-2'}}</td>
         <td class="amt" style="text-align:center ;" [ngStyle]="{color: getTrColor(t.tranType)}">{{t.tranType}}</td>
-        <td (click)="deleterecord(t.equityId, t.tranDate)" style="cursor: pointer" class="action" >Delete</td>
+        <td (click)="deleterecord(t.equity.assetId, t.tranDate)" style="cursor: pointer" class="action" >Delete</td>
     </tr> 
 </table>
 </ng-container>

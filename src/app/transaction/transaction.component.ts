@@ -25,6 +25,7 @@ export class TransactionComponent implements OnInit {
   public mftotal:any;
   public selectedLevel:any;
   public selectedfolio: number =0;
+  public selectedMonth: number =0;
   public purchaseOption: any=1;
   isShown: boolean = true;
   public assetType: Number=1;
@@ -44,7 +45,11 @@ export class TransactionComponent implements OnInit {
   public proftMF =[] as number[];
   public yearDebt =[] as number[];
   public invstDebt =[] as number[];
+  public proftDebt =[] as number[];
   public invstBonds =[] as number[];
+  public proftBonds =[] as number[];
+  public proftPf =[] as number[];
+  public proftPPf =[] as number[];
   public invstPPF =[] as number[];
   pfinvstmnt=[] as number[];
   public monthlyInvstShr =[] as number[];
@@ -90,17 +95,18 @@ export class TransactionComponent implements OnInit {
     this.invstBonds.length=0;
     this.proftEqt.length=0;
     this.proftMF.length=0;
-    this._eqTransaction.getTransaction(0)
-    .subscribe(data =>{
-     this.equitytransaction = data
-     this.filterPortfolio=data;
-     //console.log(this.filterPortfolio);
-     var to:number;
-     to=0;  
-     for (var i = 0; i < this.equitytransaction.length; i++) {
-       to= to + parseFloat(this.equitytransaction[i].price)*parseFloat(this.equitytransaction[i].qty);        
-     }
-     this.eqtotal=to.toFixed(2);     
+
+    this._eqTransaction.getTransaction(0) 
+      .subscribe(data =>{ 
+      this.equitytransaction = data; 
+      this.filterPortfolio=data;  
+      console.log(this.filterPortfolio);   
+      var to:number;
+      to=0;  
+      for (var i = 0; i < this.equitytransaction.length; i++) {
+        to= to + parseFloat(this.equitytransaction[i].price)*parseFloat(this.equitytransaction[i].qty);        
+      }
+      this.eqtotal=to.toFixed(2);     
     }); 
 
     this._eqTransaction.getYearlyInvestment("Yearly")
@@ -121,18 +127,23 @@ export class TransactionComponent implements OnInit {
         {
           this.addYear(element.year)
           this.invstDebt.push(element.investment.toFixed(2));
+          this.proftDebt.push(element.profitCurrentyear.toFixed(2));
+           
         }else if(element.assettype==9) //bonds
         {
           this.addYear(element.year)
           this.invstBonds.push(element.investment.toFixed(2));
+          this.proftBonds.push(element.profitCurrentyear.toFixed(2));
         }else if(element.assettype==3) //pf
         {
           this.addYear(element.year)
           this.pfinvstmnt.push(element.investment.toFixed(2));
+          this.proftPf.push(element.profitCurrentyear.toFixed(2));
         }else if(element.assettype==4) //ppf
         {
           this.addYear(element.year)
           this.invstPPF.push(element.investment.toFixed(2));
+          this.proftPPf.push(element.profitCurrentyear.toFixed(2));
         }
       });   
       this.invstEqt.reverse(); 
@@ -140,10 +151,15 @@ export class TransactionComponent implements OnInit {
       this.year.reverse();
       this.yearDebt.reverse();
       this.invstDebt.reverse();
-      this.invstBonds.reverse();
+      this.invstBonds.reverse(); 
       this.invstPPF.reverse();
       this.proftEqt.reverse();
       this.proftMF.reverse();
+      this.proftDebt.reverse();
+      this.proftBonds.reverse();
+      this.proftPPf.reverse();
+      this.proftPf.reverse();
+      this.pfinvstmnt.reverse();
     });  
 
    /* this.intrest.length=0;
@@ -172,6 +188,7 @@ export class TransactionComponent implements OnInit {
     this.getPf_PPFInvestment();
     */
     //this.year.reverse();
+   
   }
 
 getPf_PPFInvestment()
@@ -242,7 +259,7 @@ GetFolioDetails()
       this.assetId = (document.getElementById('txtName')as HTMLInputElement).value;
     }
     //debugger; 
-    console.log(this.purchaseOption);
+    
     this.qty = (document.getElementById('txtQty') as HTMLInputElement).value;
     var PB = (document.getElementById('txtPB') as HTMLInputElement).value;
     var price = (document.getElementById('txtPrice') as HTMLInputElement).value;
@@ -288,10 +305,10 @@ public onSelect(option:any)
     this.router.navigate(['/portfolio']);   
   }
   
-  selected(){
+selected(){
  
   }
-  changeFolio(e :any) {
+changeFolio(e :any) {
     this.status="";
     
     this.selectedfolio=e.target.value;
@@ -317,9 +334,9 @@ public onSelect(option:any)
      this.eqtotal=eqto.toFixed(2);
      this.mftotal=mfto.toFixed(2);
      if(this.isShare)
-         this.filterPortfolio =  this.equitytransaction.filter(s => s.assetType===1);
+         this.filterPortfolio =  this.equitytransaction.filter(s => s.equity.assetType===1);
      else  
-         this.filterPortfolio =  this.equitytransaction.filter(s => s.assetType===2 ||s.assetType===5 );
+         this.filterPortfolio =  this.equitytransaction.filter(s => s.equity.assetType===2 ||s.equity.assetType===5 );
     });
     this.intrest.length=0;
     this.invstmnt.length=0;
@@ -339,11 +356,10 @@ public onSelect(option:any)
           inv= element.InvestmentEmplr+element.investmentEmp;     
           this.invstmnt.push(inv);        
         }
-      });       
-    });
-    
-  }
-  private addYear(yr:number)
+      });  
+    });    
+}
+private addYear(yr:number)
   {     
     var found=this.year.indexOf(yr);
     if(found < 0)
@@ -351,15 +367,15 @@ public onSelect(option:any)
       this.year.push(yr);
     }   
   }
-  changeDate(e:any){
+changeDate(e:any){
     this.status="";
   }
-  selectOption(e:any)
+selectOption(e:any)
   {
     this.purchaseOption = e.target.value;
-    console.log(e.target.value)
+    
   }
-  changeAsset(e:any)
+changeAsset(e:any)
   {   
     this.assetType =e.target.value;
      if(e.target.value==12 || e.target.value==7|| e.target.value==8)
@@ -412,11 +428,11 @@ public onSelect(option:any)
     this.companyid=e;
    // alert(e);
   }
-  public deleterecord(id:any,dt:any)
-  {
+  public deleterecord(eqtid:any,dt:any)
+  {    
     if(confirm("Are you sure to delete ")) {    
     
-    this._eqTransaction.deleteTransaction(id, dt)
+    this._eqTransaction.deleteTransaction(eqtid, dt)
       .subscribe(data =>{
         this.result = data;        
       });
@@ -527,7 +543,7 @@ public onSelect(option:any)
          this.divVal.push(element.divValue);         
       }); 
      }); 
-    console.log(e);
+    //console.log(e);
     this._eqTransaction.getYrlyEqtInvestment(this.folioId, e)
     .subscribe(data => { 
       //console.log(this.eqtTransaction);   
@@ -645,22 +661,32 @@ public onSelect(option:any)
   public barChartPlugins = [];
   public barChartColors: Color[] = [
     { backgroundColor: '#97CEEC' },
-    { backgroundColor: '#A68E34' },
     { backgroundColor: '#00b38a' },
-    { backgroundColor: '#EFCEC8' },
+    { backgroundColor: 'lightblue' },
+    { backgroundColor: '#00b38a' },
     { backgroundColor: '#BBBFD2' },
-    { backgroundColor: '#E8ACD6' },   
-              
+    { backgroundColor: '#33cc99' },
+    { backgroundColor: '#B5E1E1' },
+    //{ backgroundColor: '#33b864' },
+    { backgroundColor: '#D1CDC4' },
+    //{ backgroundColor: '#8A9A5B' },  
+    //{ backgroundColor: '#EFCEC8' },  
+    //{ backgroundColor: '#3F704D' },  
+               
   ]
   public invstShrDataSet: ChartDataSets[] = [
-    { data:this.invstDebt, label: 'Debt MF',stack:'b'},    
+    { data:this.invstDebt, label: 'Debt MF',stack:'d'},    
+    { data:this.proftDebt, label: 'prft_DebtMF',stack:'d'},    
     { data:this.invstMF, label: 'Eqty MF',stack:'m' },   
     { data:this.proftMF, label: 'p_MF',stack:'m' },   
     { data:this.invstEqt, label: 'Shares',stack:'s'  }, 
     { data:this.proftEqt, label: 'p_Eqt',stack:'s' },  
-    { data:this.invstBonds, label: 'Bonds'  },
-    { data:this.invstPPF, label: 'ppf',stack:'a' },        
-    { data:this.intrest, label: 'ppf_Intrest',stack:'a' },   
+    { data:this.invstBonds, label: 'Bonds',stack:'b'},
+    { data:this.proftBonds, label: 'prft_Bonds',stack:'b'},
+    //{ data:this.invstPPF, label: 'ppf',stack:'a' },        
+    //{ data:this.proftPPf, label: 'ppf_Intrest',stack:'a' },   
+    //{ data:this.pfinvstmnt, label: 'pf',stack:'pf' },   
+    //{ data:this.proftPf, label: 'pf_Intrest',stack:'pf' },   
     
   ];
 
@@ -716,8 +742,8 @@ public ChartColors: Color[] = [
 ]
 
 public ppfDataSet: ChartDataSets[] = [
-  { data:this.invstmnt, label: 'Investment',stack:'a' },        
-  { data:this.intrest, label: 'Intrest',stack:'a' },   
+  { data:this.invstPPF, label: 'Investment',stack:'a' },        
+  { data:this.proftPPf, label: 'Intrest',stack:'a' },   
   
 ];
 //-------------------- Monthly Invst -----------------------
@@ -736,16 +762,16 @@ public mnthInvstChartPlugins = [];
 public mnthInvstChartColors: Color[] = [
   { backgroundColor: '#08b100db ' },
   { backgroundColor: 'skyblue ' },
-  { backgroundColor: '#667D8B ' },
-  { backgroundColor: '#8295AD ' },
+  //{ backgroundColor: '#667D8B ' },
+  //{ backgroundColor: '#8295AD ' },
   { backgroundColor: '#D1CDC4 ' }
 ]
 public mnthInvstDataSet: ChartDataSets[] = [
   { data:this.monthlyInvstShr, label: 'Shares',stack:'inv' },
   { data:this.monthlyInvstEqtMF, label: 'EqtMF',stack:'inv' },
   { data:this.monthlyInvstDebtMF, label: 'DebtMF',stack:'inv' },
-  { data:this.monthlyInvstPF, label: 'PF',stack:'inv' },
-  { data:this.monthlyInvstPPF, label: 'PPF',stack:'inv' }
+  //{ data:this.monthlyInvstPF, label: 'PF',stack:'inv' },
+  //{ data:this.monthlyInvstPPF, label: 'PPF',stack:'inv' }
 ];
 
  //--------------------PF Investment -----------------------
@@ -766,8 +792,9 @@ public pfChartColors: Color[] = [
 ]
 
 public pfDataSet: ChartDataSets[] = [
-  { data:this.pfinvstmnt, label: 'Investment',stack:'a' },        
-  { data:this.pfintrest, label: 'Intrest',stack:'a' },     
+  
+  { data:this.pfinvstmnt, label: 'pf',stack:'pf' },   
+  { data:this.proftPf, label: 'pf_Intrest',stack:'pf' },   
 ];
 //---------------------Equity Investment History--------------------
 public eqtChartOptions: ChartOptions = {
@@ -808,6 +835,7 @@ public DivReturn:ChartDataSets[] = [
 //------------------------------------------------------------
 
 public chartClick(e: any): void {
+  
   if (e.active.length > 0) {
     this.DetailSummary = true;
     const chart = e.active[0]._chart;
@@ -817,12 +845,11 @@ public chartClick(e: any): void {
       const clickedElementIndex = activePoints[0]._index;
       const label = chart.data.labels[clickedElementIndex];
       const typeOfinvst =activePoints[0]._view.datasetLabel;      
-       
+ 
       if(typeOfinvst=="Debt MF")  
       {
         this.filterPortfolio =  this.equitytransaction.filter(s => new Date(s.tranDate).getFullYear()==label && s.equity.assetType == 5);
-       //console.log(this.equitytransaction);
-        console.log(this.equitytransaction);
+       //console.log(this.equitytransaction);         
       }
       if(typeOfinvst=='Shares')
       {       
@@ -831,6 +858,10 @@ public chartClick(e: any): void {
       if(typeOfinvst=="Eqty MF")
       {
         this.filterPortfolio =  this.equitytransaction.filter(s => new Date(s.tranDate).getFullYear()==label && s.equity.assetType == 2);
+      } 
+      if(typeOfinvst=="Bonds")
+      {
+        this.filterPortfolio =  this.equitytransaction.filter(s => new Date(s.tranDate).getFullYear()==label && s.equity.assetType == 9);
       } 
     }   
   }}
@@ -851,4 +882,23 @@ public chartClick(e: any): void {
     }  
  }
  
+ public getMonthlyInvest(e: any)
+ {
+  if (e.active.length > 0) {  
+    const chart = e.active[0]._chart;
+    const activePoints = chart.getElementAtEvent(e.event); 
+      if ( activePoints.length > 0) {
+        // get the internal index of slice in pie chart
+        const clickedElementIndex = activePoints[0]._index;
+        const label = chart.data.labels[clickedElementIndex];
+        // get value by index
+        const value = chart.data.datasets[0].data[clickedElementIndex];     
+        this.selectedMonth = label.split('-')[0];     
+        console.log(this.equitytransaction);
+        this.filterPortfolio=this.equitytransaction.filter(s => new Date(s.tranDate).getFullYear()==label.split('-')[1] 
+                    && new Date(s.tranDate).getMonth()+1 == label.split('-')[0] && s.equity.assetType==1);
+      }
+   } 
+  }
+
 }

@@ -78,8 +78,9 @@
             <input  id="txtISIN" class="inputT" type="text"  (keypress)="getasset($event)" value="{{companyid}}" >
             <span class="naming">Symbol:</span><input name="symbol" id="symbol" class="inputT">
             <span class="naming">Sector:</span><input id="txtSector" class="inputT" type="text">
-            <span class="naming">Description:</span><input id="desc" class="inputT" type="text">
-            <span class="naming">Div Link:</span><input id="txtDivLink" class="inputT" type="text">
+            <span class="naming">Description(MC):</span><input id="desc" class="inputT" type="text">
+            <span class="naming">Div Link(BSE):</span><input id="txtDivLink" class="inputT" type="text">
+            <span class="naming">AssetType:</span><input id="txtAsttype" class="inputT" type="text">
             <input class="savebtn" type="button" value="Save" (click)="UpdateEquity()"> 
         </td>
     </tr>

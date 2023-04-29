@@ -21,7 +21,7 @@ export class SharesService {
     return this.client.get<IFolio[]>("http://localhost:59921/portfolio/GetAllfolio")  
   }
   getTransaction(id:Number):Observable<ITransaction[]>{
-    return this.client.get<ITransaction[]>("http://localhost:59921/transaction/getfolio/"+id)  
+    return this.client.get<ITransaction[]>("http://localhost:59921/transaction/getAllTransaction/"+id)  
   } 
   getEqtTransaction(folioid:Number,eqtId:string):Observable<ITransaction[]>{
     return this.client.get<ITransaction[]>("http://localhost:59921/transaction/tran/"+folioid+"/"+eqtId)  
@@ -52,7 +52,7 @@ export class SharesService {
   }
   getAssetsHistory(folioId:number):Observable<IAssetHistory[]>{    
     return this.client.get<IAssetHistory[]>("http://localhost:59921/portfolio/getAssetsHistory/");
-  }
+  } 
   postTransaction(price:any,name:any,qty:any,dt:any,folioId: any,option:any,assetType:any,pb:any,mv:any):Observable<any>{   
   //debugger;
    
@@ -61,7 +61,7 @@ export class SharesService {
     price: parseFloat(price),
     equity:{
       assetId: String(name),
-      assetType:parseInt(assetType), 
+      assetType:parseInt(assetType),
     },  
     qty:parseFloat(qty), 
     tranDate:new Date(Date.parse(dt)),
@@ -83,14 +83,18 @@ export class SharesService {
        AcctId:parseInt(acctid)
     })  
   }
+  deleteBondTransaction(bondId:any,id:string,txtDt:Date):Observable<boolean[]>{
+    // console.log(id);
+     return this.client.post<boolean[]>("http://localhost:59921/Bonds/DeleteBondTransaction",{
+      purchaseDate:txtDt,       
+       folioId:parseInt(id),       
+        BondDetail:{
+          BondId:bondId
+        }
+     });  
+   }
   postBondDetails(bondName:string,bondID:string,coupon:string,facevalue:string,minInvst:string,dom:string)
   {
-    console.log(new Date(Date.parse(dom)));
-    console.log(parseFloat(minInvst));
-    console.log(bondID);
-    console.log(bondID);
-    console.log(parseFloat(facevalue));
-    console.log(parseFloat(coupon));
     return this.client.post<boolean[]>("http://localhost:59921/Bonds/AddBond",{
       dateOfMaturity: new Date(Date.parse(dom)),
       minInvst:parseFloat(minInvst),
@@ -163,6 +167,16 @@ export class SharesService {
  getCompDividend(year:string):Observable<IDividend[]>{
   return this.client.get<IDividend[]>("http://localhost:59921/Shares/getYearlyCompDividend/"+year)  
  }
+ 
+ getBondIntrest(year:string):Observable<any[]>{
+  return this.client.get<any[]>("http://localhost:59921/Bonds/getBondIntrest/"+year)  
+ }
+ getMonthlyBondIntrest(year:string):Observable<any[]>{
+  return this.client.get<any[]>("http://localhost:59921/Bonds/getMonthlyBondIntrest/"+year)  
+ }
+ getYearlyBondIntrest():Observable<any[]>{
+  return this.client.get<any[]>("http://localhost:59921/Bonds/getYearlyBondIntrest")  
+ }
  getMonthlyPFDetails(folioid:any,acttype:any,year:number):Observable<IPfAcct[]>{
   return this.client.get<IPfAcct[]>("http://localhost:59921/bankasset/GetMonthlyPFDetails/"+folioid+"/"+acttype+"/"+year)  
  }
@@ -171,11 +185,14 @@ export class SharesService {
  }
  deleteTransaction(id:string,dt:Date):Observable<any>{   
   return this.client.post("http://localhost:59921/transaction/deletetransction",{    
-    equityId:id,    
+    equity:
+    {
+      assetId:id
+    },
     tranDate: dt,
     price:0,    
     qty:0,    
-    tranType: 'B',
+    tranType: 1,
     portfolioId:1,
     typeAsset:1
   });
@@ -208,7 +225,36 @@ export class SharesService {
  { return this.client.get("http://localhost:59921/Bonds/GetBondsDetails"); }
  
  getBondTransaction(folioID:number,my:string)
- { return this.client.get("http://localhost:59921/Bonds/GetBondPerFolio/"+folioID); }
+ { return this.client.get("http://localhost:59921/Bonds/GetBondTrasaction/"+folioID); }
+ getBondHoldings(folioID:number,my:string)
+ { return this.client.get("http://localhost:59921/Bonds/GetBondHolding/"+folioID); }
+ searchBond(searchString:string)
+ { 
+  return this.client.post("http://localhost:59921/Bonds/SearchBond/",
+    {
+      BondName:searchString
+    }); 
+  }
+ updateBondDetails(bondId:string,bondName:string,coupon:number,DOM:string,intrestPayCycle:string,fv:number,CP:number)
+ { 
+  return this.client.post("http://localhost:59921/Bonds/UpdateBondDetails/",
+  {
+   
+		couponRate:coupon,
+    BondName:bondName,
+		BondId:bondId,
+		 //minInvst:,
+		dateOfMaturity:DOM,
+		 //firstIPDate:,
+		LivePrice:CP,
+		 //YTM :,
+		faceValue:fv,
+		 //BondLink:,
+		intrestCycle:intrestPayCycle,
+		 //rating:,
+		 //symbol :,  
+ }); 
+}
 
 
  getMonthlyInvstment(folioID:number,pastmonth:number)

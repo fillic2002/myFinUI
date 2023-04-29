@@ -18,17 +18,52 @@ export class ExpenseComponent implements OnInit {
   monthYear=[] as string[];
   expAmt=[] as number[];
   monthlyExpense=[] as any[]; 
+  public expType1!: number;
+  expType!:string;
+  expTypes=[] as any;
+ 
 
   ngOnInit(): void {
     this.GetFolioDetails();
+    this.GetExpenseType();
     this.GetExpense();
     this.GetMonthlyExpenseHistory(0);
+  }
+  CopyOver(e:any)
+  {
+    console.log(e);
+    (document.getElementById("txtExpDesc") as HTMLInputElement).value= e.desc;
+    (document.getElementById("expamt") as HTMLInputElement).value=e.amt;
+
   } 
+  GetExpenseType()
+  {
+    this._shrdServ.getExpenseType()
+    .subscribe(data=>{
+      this.expTypes =data;      
+    });
+  }
+  AddExpense()
+  {
+    var desc=(document.getElementById("txtExpDesc") as HTMLInputElement).value;
+    var dtOfTran=(document.getElementById("txtExpDt") as HTMLInputElement).value;
+    var amt=(document.getElementById("expamt") as HTMLInputElement).value;    
+
+    this._shrdServ.AddExpense(desc,this.selectedfolio,parseFloat(amt), new Date(Date.parse(dtOfTran)),this.expType1)
+    .subscribe(data=>{
+     // console.log(data);
+      if(data=="fasle")
+      { this.response="Expense Added failed."; }       
+      else{this.response="Expense Added Successfully."; }
+        
+    });
+    this.GetExpenseType();
+  }
   GetExpense()
   {
     this._shrdServ.getExpense(this.selectedfolio)
       .subscribe(data =>{ 
-        console.log(data);
+        //console.log(data);
       });
   } 
   public onSelect(option:any)
@@ -52,7 +87,7 @@ export class ExpenseComponent implements OnInit {
   {
       this._shrdServ.getMonthlyExpense(f,my)
       .subscribe(data =>{ 
-        console.log(data);
+        //console.log(data);
         this.monthlyExpense = data;
       });
   }
@@ -82,7 +117,7 @@ changeFolio(e:any)
  }
  public deleterecord(id:any)
   {
-    console.log(id);
+    //console.log(id);
     if(confirm("Are you sure to delete ")) {        
       this._shrdServ.deleteExpense(id)
         .subscribe(data =>{

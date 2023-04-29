@@ -41,6 +41,17 @@
   </canvas>
 </div>
 <div>
+  <div style="font-weight: 550;">Add Expense</div>     
+  <span class="naming">Expense Type:</span>
+  <select [(ngModel)]="expType1" style="cursor: pointer; background-color: #eaea25de;"  id="txtType" (change)="changeAccount($event)">
+      <option [value]="item.expTypeId" *ngFor="let item of expTypes" > {{item.expTypeDesc}}</option>                    
+  </select>
+  <span class="naming">Amt:</span><input name="expamt" id="expamt" class="inputT">
+  <span class="naming">Date:</span><input id="txtExpDt" type="date" class="inputdt">
+  <span class="naming">Desc:</span><input id="txtExpDesc" type="textArea" class="inputdt">
+  <input class="savebtn" type="button" value="Save" (click)="AddExpense()"> 
+</div>
+<div >
   <span class="divHeader">FolioID</span>
   <span class="divHeader">Description</span>
   <span class="divHeader">Details</span>
@@ -49,8 +60,8 @@
 </div>
 <div *ngFor="let item of monthlyExpense" >
   <span class="divName">{{item.folioId}}</span>
-  <span  class="divName">{{item.expenseType.expTypeDesc}}</span>
-  <span  class="divName">{{item.desc}}</span>
-  <span  class="divAmt">{{item.amt|number:'1.2-2'}}</span>  
+  <span class="divName" (click)="CopyOver(item)">{{item.expenseType.expTypeDesc}}</span>
+  <span class="divName">{{item.desc}}</span>
+  <span class="divAmt">{{item.amt|number:'1.2-2'}}</span>  
   <span (click)="deleterecord(item.expId)" style="cursor: pointer" class="action" >Delete</span>
 </div>        

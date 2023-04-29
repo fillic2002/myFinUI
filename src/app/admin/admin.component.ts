@@ -49,10 +49,11 @@ export class AdminComponent implements OnInit {
   } 
   changeAccount(event:any){
     this.selectedTranType = event.target.value;
+    this.response="";
   }
   changeDesc(event:any){    
     this.selectedDesc = event.target.value;
-   // console.log(this.selectedDesc);
+    this.response="";
   }   
   public selectnext(option:any)
   {
@@ -149,6 +150,7 @@ export class AdminComponent implements OnInit {
     (document.getElementById("txtDivLink") as HTMLInputElement).value = re.divlink;
     (document.getElementById("symbol") as HTMLInputElement).value = re.shortName;
     (document.getElementById("txtName") as HTMLInputElement).value = re.fullName;     
+       
   }
   UpdateEquity()
   {
@@ -162,6 +164,7 @@ export class AdminComponent implements OnInit {
       sector: (document.getElementById("txtSector") as HTMLInputElement).value,
       shortName: (document.getElementById("symbol") as HTMLInputElement).value,
       fullName: (document.getElementById("txtName") as HTMLInputElement).value
+      
     };    
       
     this._eqTransaction.postEquityUpdate(shr)
