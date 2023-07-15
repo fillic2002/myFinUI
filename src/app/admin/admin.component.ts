@@ -10,7 +10,7 @@ import { Console } from 'console';
   styleUrls: ['./admin.component.css']
 })
 export class AdminComponent implements OnInit {
-  data = [
+  TypeOfTran = [
     { id: 1, name: 'Deposit'},
     { id: 2, name: 'Withdrawl'}]; 
     desc = [  
@@ -115,8 +115,8 @@ export class AdminComponent implements OnInit {
       .subscribe(data => {
       this.response="New Transaction added to the database.";
     });
-
   }
+
   public onSelect(option:any)
   {    
     this.router.navigate(['/']);

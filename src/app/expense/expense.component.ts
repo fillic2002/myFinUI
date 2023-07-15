@@ -20,8 +20,8 @@ export class ExpenseComponent implements OnInit {
   monthlyExpense=[] as any[]; 
   public expType1!: number;
   expType!:string;
-  expTypes=[] as any;
- 
+  public expTypes=[] as any;
+  selectedValues: any[] = [];
 
   ngOnInit(): void {
     this.GetFolioDetails();
@@ -31,7 +31,7 @@ export class ExpenseComponent implements OnInit {
   }
   CopyOver(e:any)
   {
-    console.log(e);
+    
     (document.getElementById("txtExpDesc") as HTMLInputElement).value= e.desc;
     (document.getElementById("expamt") as HTMLInputElement).value=e.amt;
 
@@ -40,8 +40,10 @@ export class ExpenseComponent implements OnInit {
   {
     this._shrdServ.getExpenseType()
     .subscribe(data=>{
-      this.expTypes =data;      
+      this.expTypes =data; 
+       console.log(data);     
     });
+  
   }
   AddExpense()
   {
@@ -68,7 +70,7 @@ export class ExpenseComponent implements OnInit {
   } 
   public onSelect(option:any)
   {    
-    this.router.navigate(['/']);
+    this.router.navigate(['/']); 
   }
   GetMonthlyExpenseHistory(f:number)
   {
@@ -88,7 +90,9 @@ export class ExpenseComponent implements OnInit {
       this._shrdServ.getMonthlyExpense(f,my)
       .subscribe(data =>{ 
         //console.log(data);
-        this.monthlyExpense = data;
+        this.monthlyExpense = data; 
+        this.selectedValues =data.map((x: { expenseType: string; })=>x.expenseType);
+        console.log(this.selectedValues);
       });
   }
 
@@ -122,8 +126,9 @@ changeFolio(e:any)
       this._shrdServ.deleteExpense(id)
         .subscribe(data =>{
           this.monthlyExpense = data;   
+           
         });
-    }
+    } 
     this.ngOnInit();
   }
  public selectnext(option:any)

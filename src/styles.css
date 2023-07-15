@@ -74,7 +74,7 @@ html {
   text-align: center;
   height: 25px;
   font: 300 14px sans-serif;
-  color: #808080eb;
+  color: #FFA500;
 }
 .savebtn {
   background-color: rgb(240, 240, 240);
@@ -115,7 +115,10 @@ html {
 .headerdt {
   width: 110px;
 }
-
+.clickable{
+  cursor: pointer;
+  background-color: darkgoldenrod;
+}
 .naming {
   width: 180px;
   padding-left: 5px;
@@ -242,12 +245,13 @@ body {
   border-width: 0 3px 3px 0;
 }
 .pipe {
-  margin: 0;
+  margin-right: 5px;
   font-family: Roboto, "Helvetica Neue", sans-serif;
   vertical-align: bottom;
   font-size: 11px;
   font-weight: bold;
   color: grey;
+  float: right;
 }
 .pipe:hover {
   color: goldenrod;
@@ -299,10 +303,22 @@ body {
   cursor: pointer;
   height: 650px;
   width: 1200px;
-  padding: 6px;
+  padding: 0px;
   z-index: 800;
   position: absolute;
   top: 50px;
   left: 200px;
-  overflow: auto;
+  overflow: auto; 
+  border-radius: 10px;
+}
+.round{
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;border-radius: 10px;
+}
+.link{
+  cursor: pointer; 
+  
+}
+.link:hover{
+    color: #1c54d6;
+    font-weight: bold;
 }

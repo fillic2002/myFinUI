@@ -17,6 +17,9 @@ export class SharesService {
   getSectorPortfolio(id:number):Observable<any[]>{
     return this.client.get<any[]>("http://localhost:59921/portfolio/SectorWiseAssetDistribution/"+id)  
   }
+  getAssetClass(folioId:Number):Observable<any[]>{
+    return this.client.get<any[]>("http://localhost:59921/portfolio/GetAssetAllocationBySize/"+folioId)  
+  }
   getAllfolio():Observable<IFolio[]>{
     return this.client.get<IFolio[]>("http://localhost:59921/portfolio/GetAllfolio")  
   }
@@ -32,8 +35,8 @@ export class SharesService {
   getEqtMonthlyTransaction(folioid:Number,month:number,year:number,astType:string):Observable<ITransaction[]>{
     return this.client.get<ITransaction[]>("http://localhost:59921/transaction/tran/"+folioid+"/"+month+"/"+year+"/"+astType)  
   }
-  getYearlyInvestment(flag:string):Observable<IAssetHistory[]>{
-    return this.client.get<IAssetHistory[]>("http://localhost:59921/transaction/getInvestment/"+flag)  
+  getYearlyInvestment(folioId:Number,flag:string):Observable<IAssetHistory[]>{
+    return this.client.get<IAssetHistory[]>("http://localhost:59921/transaction/getInvestment/"+flag+"/"+folioId)  
   }
   getCashFlow({ folioId, pastmonth }: { folioId: number; pastmonth: number; }):Observable<ICashflow[]>{    
     return this.client.get<ICashflow[]>("http://localhost:59921/portfolio/GetCashFlowStatment/"+folioId+"/"+pastmonth)  
@@ -54,8 +57,6 @@ export class SharesService {
     return this.client.get<IAssetHistory[]>("http://localhost:59921/portfolio/getAssetsHistory/");
   } 
   postTransaction(price:any,name:any,qty:any,dt:any,folioId: any,option:any,assetType:any,pb:any,mv:any):Observable<any>{   
-  //debugger;
-   
    
     return this.client.post("http://localhost:59921/transaction/postTransaction",{ 
     price: parseFloat(price),
@@ -68,8 +69,14 @@ export class SharesService {
     tranType: parseInt(option),
     portfolioId:parseInt(folioId),
     PB_tran:parseFloat(pb),
-    MarketCap_Tran:parseFloat(mv)
-   
+    MarketCap_Tran:parseFloat(mv)   
+    });
+  }  
+  UpdateTransaction(tranid:string)
+  {    
+    return this.client.post("http://localhost:59921/transaction/verifyTransaction",{ 
+    verified: true,   
+    tranId:tranid  
     });
   }
   postBankTransaction(salary:any,desc:string,txtDt:any,trnType:any,acctid:any,id:any):Observable<boolean[]>{
@@ -83,6 +90,18 @@ export class SharesService {
        AcctId:parseInt(acctid)
     })  
   }
+  postPFTransaction(txtDt:any,empInvst:string,folioId:any,trnType:any,pension:any,emplrInvst:any,actType:any):Observable<boolean[]>{
+    // console.log(id);
+     return this.client.post<boolean[]>("http://localhost:59921/transaction/AddPFTransaction",{
+       DateOfTransaction: new Date(Date.parse(txtDt)),
+       InvestmentEmp:parseFloat(empInvst),
+       Folioid:parseInt(folioId),
+       TypeOfTransaction:trnType,
+       Pension:parseInt(pension),
+       AccountType:parseInt(actType),
+       InvestmentEmplr:parseInt(emplrInvst)
+     })  
+   }
   deleteBondTransaction(bondId:any,id:string,txtDt:Date):Observable<boolean[]>{
     // console.log(id);
      return this.client.post<boolean[]>("http://localhost:59921/Bonds/DeleteBondTransaction",{

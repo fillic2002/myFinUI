@@ -1,50 +1,42 @@
 <!doctype html>
 
-
-<table style="width: 100%;">
+<table style="width: 100%; background-color: #000000d9;">
     <tr>
-        <td colspan="3">
-            <div>    
-                <span  value="H" (click)="onSelect(option)" style="font-size: 20px; cursor: pointer;">my<span style="color: orange;">f</span>in</span>
-                <span class="title" style="padding-left: 30%; vertical-align:middle;" >Bank Account Details</span>
-                <span class="pipe" style="padding-left: 30%;" (click)="selectnext(option)">Transaction</span>    
-            </div><br>  <hr size="1"  color="lightgrey">
+        <td style="color:aliceblue;vertical-align: top;">
+            <span value="H" (click)="onSelect(option)" style="font-size: 22px;cursor: pointer;">my<span style="color: orange; ">f</span>in</span>
+        </td>
+        
+        <td style="width: 10%;color:aliceblue;font-size: 20px; text-align: center;margin: 1px;">
+          <div> {{cash|number:'1.2-2'}}</div>
+          <div class="header4">Bank</div>           
+        </td>
+        <td style="width: 10%;color:aliceblue;font-size: 20px; text-align: center;margin: 1px;">
+            <div> {{pf|number:'1.2-2'}}</div>
+            <div class="header4">PF</div>           
+        </td>
+        <td style="width: 10%;color:aliceblue;font-size: 20px; text-align: center;margin: 1px;">
+            <div> {{ppf|number:'1.2-2'}}</div>
+            <div class="header4">PPF</div>           
         </td>
     </tr>
-    <tr>
-        <td style="width: 1%;"></td>        
-        <td style="width: 98%;"><table style="width: 98%; align-items: center;" class="status">    
-            <tr>
-                <td style="width: 45%;">
-                    <div>
-                        <select style="cursor: pointer; background-color: #eaea25de;"  id="portfolio" (change)="ChangeAccount($event)">
-                            <option value="0">Account</option>    
-                            <option value="2">Renuka</option>
-                            <option value="3">Fillic</option>    
-                        </select>
-                    </div>
-                </td>
-                <td style="display: inline-block;width: 180px;padding:2px;">
-                    <span class="shatusContent2">{{cash|number:'1.2-2'}}</span>
-                </td>
-                <td style="display: inline-block;width: 180px;padding:2px;">
-                    <span class="shatusContent2">{{pf|number:'1.2-2'}}</span>
-                </td>
-                <td style="display: inline-block;width: 180px;padding:2px;">
-                    <span class="shatusContent2">{{ppf|number:'1.2-2'}}</span>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td style="display: inline-block;width: 170px;padding:2px;"><span >Bank</span></td>
-                <td style="display: inline-block;width: 170px;padding:2px;"><span >PF</span></td>
-                <td style="display: inline-block;width: 170px;padding:2px;"><span >PPF</span></td>
-            </tr>
-        </table>
-        </td>
-        <td></td>
-    </tr>
-</table>
+     
+  </table>
+  <span class="header4" style="font-size: 20px; "  >Bank Account Details</span>
+  <span style="margin-left: 18%;"> 
+    <select [(ngModel)]="selectedfolio" (change)="changeFolio($event)" style="cursor: pointer; background-color: #eaea25de;"  id="txtFolio" >
+        <option value="0">All</option>
+        <option [value]="item.folioID" *ngFor="let item of folios" > {{item.folioName}}</option>                    
+   </select> 
+   <span>
+    <select style="cursor: pointer; background-color: #eaea25de;"  id="portfolio" (change)="ChangeAccount($event)">
+        <option value="0">Account</option>    
+        <option value="2">Renuka</option>
+        <option value="3">Fillic</option>    
+    </select>
+</span> 
+  </span> 
+   
+ 
 <div (click)="showTrans(option)">Add</div><br>
 <div  class="header4">Detail Statement:</div>
                 

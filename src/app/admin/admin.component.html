@@ -22,7 +22,7 @@
             <span class="naming">Amount:</span><input id="txtAmt" class="inputT" type="text"> 
             <span class="naming">Transaction Type:</span>
                 <select [(ngModel)]="tranType" style="cursor: pointer; background-color: #eaea25de;"  id="trnType" (change)="changeAccount($event)">
-                    <option [value]="item.name" *ngFor="let item of data" > {{item.name}}</option>                    
+                    <option [value]="item.name" *ngFor="let item of TypeOfTran" > {{item.name}}</option>                    
                 </select>
             
             <span class="naming">Description:</span>

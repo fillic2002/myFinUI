@@ -1,24 +1,28 @@
 <!doctype html> 
-<table style="width: 100%;">
+<table style="width: 100%; background-color: #000000d9;">
   <tr>
-      <td style="width: 15%;">
+      <td style="width: 15%;color:aliceblue">
           <span value="H" (click)="onSelect(option)" style="font-size: 22px;cursor: pointer;">my<span style="color: orange; ">f</span>in</span>
       </td>
-      <td style="width: 70%;">
-          <span class="title" style="padding-left: 30%;" (click)="onClick($event)">Dashboard</span>
+      <td style="width: 70%;text-align: center;">
+          <!--<span class="title" style="padding-left: 30%;" (click)="onClick($event)">Dashboard</span>-->
+           
       </td>
-      <td style="width: 15%;">
-          <span class="pipe"  (click)="selectnext(option)">Portfolio</span>
+      <td style="width: 15%;color:aliceblue;font-size: 22px;">
+        <div> {{total|number : '1.2-2'}}</div> 
       </td>
   </tr>
-</table><hr size="1"  color="lightgrey"> 
-<table style="width: 100%;"  >
   <tr>
-    <td style="width: 1%;"></td>
-     <td class="status"  style="width: 98%;"><div class="shatusContent2"> {{total|number : '1.2-2'}}</div>
-                                                            <span>Current Asset Size</span></td>
-  </tr>   
-</table>    
+    <td> </td>
+    <td></td>
+    <td >
+      <span class="header4">Current Asset Size</span></td>      
+  </tr>
+</table>
+
+<span class="header4" style="font-size: 20px; " (click)="onClick($event)">Dashboard</span>
+<span class="header4" style="font:14px bold;float: right;margin-right:1%;" (click)="selectnext(option)">Portfolio</span>
+
 <div style="display:flex;">   
 <div style="width: 650px; height: 450px;padding-left: 50px;" >
   <canvas baseChart 
@@ -48,18 +52,20 @@
 <div style="display:flex;">  <div> 
   <table> 
     <tr class="header1"> 
-        <td>Amt</td>
+      
         <td class="headeramt">XiRR Return</td>  
         <td class="headeramt">Current<div>{{monthyr}}</div></td>               
         <td class="headeramt">Invested</td>            
-        <td class="headername" >Asset Type</td>    
+        <td class="headername" >Asset Type</td>   
+        <td>Amt</td> 
     </tr>
     <tr class="header2" *ngFor ="let d of dbDetail">
-      <td><input type="checkbox" (change)="onCheckChange($event,d.currentValue)"></td>                    
+      
       <td class="amt" [ngStyle]="{color: getTrColor(d.currentValue-d.invested)}" >{{d.xirrReturn|number : '1.2-2'}}%</td>      
       <td class="amt">{{d.currentValue|number : '1.2-2'}}</td>                            
       <td class="amt">{{d.invested|number : '1.2-2'}}</td>
       <td class="naming" style="cursor: pointer; text-align: center;" (click)="showReturn(d.assetName)">{{d.assetName}}</td>
+      <td><input type="checkbox" (change)="onCheckChange($event,d.currentValue)"></td>                    
     </tr>
   </table>
 </div>

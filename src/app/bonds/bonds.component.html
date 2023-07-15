@@ -1,4 +1,29 @@
-
+<table style="width: 100%; background-color: #000000d9;">
+  <tr>
+      <td style="color:aliceblue;vertical-align: top;">
+          <span value="H" (click)="onSelect(option)" style="font-size: 22px;cursor: pointer;">my<span style="color: orange; ">f</span>in</span>
+      </td>
+      <td style="width: 70%;text-align: center;font-size: 20px; color: aliceblue;">
+          <!--<span class="title" style="padding-left: 30%;" (click)="onClick($event)">Dashboard</span>-->
+              
+      </td>
+      <td style="width: 15%;color:aliceblue;font-size: 20px; text-align: center;margin: 1px;">
+        <div> {{totalInvst|number:'1.2-2'}}</div>
+        <div class="header4">Investment</div>           
+      </td>
+  </tr>
+  
+</table>
+<span class="header4" style="font-size: 20px; " (click)="onClick($event)">Bonds</span>
+<span><select [(ngModel)]="selectedfolio" (change)="changeFolio($event)" style="cursor: pointer; background-color: #eaea25de;"  id="txtFolio" >
+  <option value="0">All</option>
+  <option [value]="item.folioID" *ngFor="let item of folios" > {{item.folioName}}</option>                    
+</select>       </span> 
+<span><span>Bond name/ID: </span>
+  <input type="text" name="bname" [(ngModel)]="bName" (keypress)="SearchBond()">
+</span>
+<span class="header4" style="font:14px bold;float: right;margin-right:1%;" (click)="selectnext(option)">Admin</span>
+<!-- 
 <table style="width: 100%">
   <tr>
     <td style="width: 15%">
@@ -16,8 +41,8 @@
       <span class="pipe" style="text-align: right;" (click)="selectnext(option)">Admin</span>
     </td>
   </tr>
-</table>
-<hr size="1"  color="lightgrey"> 
+</table>-->
+<!--<hr size="1"  color="lightgrey"> 
 <table style="border-style: solid;border-color: white; width: 100%;">
   <tr>
       <td style="width:1%;"></td>
@@ -52,7 +77,7 @@
       </td>
       <td style="width:1%;"></td>
   </tr>
-</table>
+</table>-->
 <ng-container *ngIf="show">
   <div>     
     <div class="msg">{{response}}</div>
@@ -198,8 +223,7 @@
 </table>
 </ng-container>
 <div id="bondDetail" class="popup" style="display: none;">  
-  <div class="popupCloseButton"><span (click)="hideBondDetails()">X</span></div>
-  
+  <div class="popupCloseButton"><span (click)="hideBondDetails()">X</span></div>  
 </div>
 
 
