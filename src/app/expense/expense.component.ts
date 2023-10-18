@@ -81,9 +81,23 @@ export class ExpenseComponent implements OnInit {
       data.forEach(element => {
         this.monthYear.push(element.monthYear);
         this.expAmt.push(element.totalExpAmt);
-        //console.log( this.monthYear);  
+        //console.log( this.monthYear); 
       });  
     });
+  }
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+      // You can now work with the selected file
+      console.log('Selected file:', file);
+      this._shrdServ.fileUpload(file)
+      .subscribe(data =>{ 
+
+      });
+      // If you want to upload the file to a server, you can use HttpClient
+      // Example:
+      // this.uploadFileToServer(file);
+    }
   }
   GetMonthlyExpense(f:number, my:string)
   {

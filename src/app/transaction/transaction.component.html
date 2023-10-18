@@ -80,8 +80,8 @@
             <span class="naming" style="font-weight: 600;padding-right: 3px;">Asset ID/Name:</span>
             <div style="z-index: -1" *ngIf="showresult"> 
                 <div  id="result" *ngFor="let t of result">    
-                    <span (click)="getId(t.id)" class="dt">{{t.id}}</span>
-                    <span class="naming">{{t.fullName}}</span>                
+                    <span (click)="getId(t.assetId)" class="dt">{{t.assetId}}</span>
+                    <span class="naming">{{t.equityName}}</span>                
                 </div>
             </div>
             <input *ngIf="isShown" id="txtName" class="inputT" type="text"  (keypress)="getasset($event)" value="{{companyid}}" >

@@ -179,7 +179,7 @@ export class SharesService {
  }
  getShare(name:string):Observable<IShareDetail[]>{
   return this.client.get<IShareDetail[]>("http://localhost:59921/Shares/search/"+name)  
- }
+ } 
  getDividend(name:string):Observable<IDividend[]>{
   return this.client.get<IDividend[]>("http://localhost:59921/Shares/getdividend/"+name)  
  }
@@ -193,7 +193,7 @@ export class SharesService {
  getMonthlyBondIntrest(year:string):Observable<any[]>{
   return this.client.get<any[]>("http://localhost:59921/Bonds/getMonthlyBondIntrest/"+year)  
  }
- getYearlyBondIntrest():Observable<any[]>{
+ getYearlyBondIntrest():Observable<any[]>{ 
   return this.client.get<any[]>("http://localhost:59921/Bonds/getYearlyBondIntrest")  
  }
  getMonthlyPFDetails(folioid:any,acttype:any,year:number):Observable<IPfAcct[]>{
@@ -304,5 +304,13 @@ export class SharesService {
       expTypeId:parseInt(expType)   
     }
    });
+  }
+  fileUpload(file:any,folioID:number)
+  {
+    return this.client.post("http://localhost:59921/UploadTransactionFile/",
+    {
+      data:file,
+      folioID: folioID
+    });
   }
 }

@@ -399,7 +399,7 @@ changeFolio(e :any) {
     this.selectedfolio=e.target.value;
     //this.filterMonthlyInvstPPF = this.monthlyInvstPPF.filter(x=>x.)
     console.log(this.selectedfolio);
-    debugger;
+    //debugger;
     this.getYearlyPfIvestment(this.selectedfolio);
     this.getMonthlyInvestment(this.selectedfolio);
     //this.monthlyInvest(this.filterMonthlyInvst.filter(x=>x.));
@@ -821,19 +821,19 @@ public mnthInvstChartColors: Color[] = [
   { backgroundColor: 'skyblue ' },
   //{ backgroundColor: '#667D8B ' },
   //{ backgroundColor: '#8295AD ' },
-  { backgroundColor: '#D1CDC4 ' }
+  { backgroundColor: '#D1CDC4 '}
 ]
 public mnthInvstDataSet: ChartDataSets[] = [
   { data:this.monthlyInvstShr, label: 'Shares',stack:'inv' },
   { data:this.monthlyInvstEqtMF, label: 'EqtMF',stack:'inv' },
-  { data:this.monthlyInvstDebtMF, label: 'DebtMF',stack:'inv' },
+  { data:this.monthlyInvstDebtMF, label: 'DebtMF',stack:'inv'}, 
   //{ data:this.monthlyInvstPF, label: 'PF',stack:'inv' },
-  //{ data:this.monthlyInvstPPF, label: 'PPF',stack:'inv' }
-];
+  //{ data:this.monthlyInvstPPF, label: 'PPF',stack:'inv' } 
+]; 
 
  //--------------------PF Investment -----------------------
 public pfChartOptions: ChartOptions = {
-  responsive: true,
+  responsive: true, 
   title: {
     display: true,
     text: "PF Investment"
@@ -967,9 +967,11 @@ public chartClick(e: any): void {
         // get value by index
         const value = chart.data.datasets[0].data[clickedElementIndex];     
         this.selectedMonth = label.split('-')[0];     
-        //console.log(this.equitytransaction);
+        console.log(this.equitytransaction);
+        console.log(value);
+        
         this.filterPortfolio=this.equitytransaction.filter(s => new Date(s.tranDate).getFullYear()==label.split('-')[1] 
-                    && new Date(s.tranDate).getMonth()+1 == label.split('-')[0] && s.equity.assetType==1);
+                    && new Date(s.tranDate).getMonth()+1 == label.split('-')[0] );
       }
    } 
   }

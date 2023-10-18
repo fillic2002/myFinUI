@@ -180,7 +180,7 @@ public pieChartOptions: ChartOptions = {
   responsive: true,
 };
 
-public pieChartLabels: Label[] = this.assetName;  
+public pieChartLabels: Label[] = this.assetName;
 public pieChartType: ChartType = 'bar';
 public pieChartLegend = true;
 public pieChartPlugins = [];

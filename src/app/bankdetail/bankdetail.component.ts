@@ -193,7 +193,7 @@ export class BankdetailComponent implements OnInit {
       this.tAmt= editField.toString().replace(',','');
       this.tRoi=Number(ROI.toString().replace('%',''));
     }
-    else if(property=='roi') 
+    else if(property=='roi')  
     {      
       const editField = event.target.textContent.toString().replace('%','');
       this.tRoi=editField;

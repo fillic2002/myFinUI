@@ -22,7 +22,9 @@
   </select>
   <span class="pipe" (click)="selectnext(option)">Admin</span>
 </div>
-
+<div style=" ">Add File
+  <input type="file" (change)="onFileSelected($event)" />
+</div>
 
  
 <div style="width: 650px;height:350px; " >
@@ -35,8 +37,9 @@
     [colors]="expColors"
     [chartType]="expType"
     (chartClick)="historyClick($event)">
-  </canvas>
+  </canvas>   
 </div>
+
 <div>
   <div style="font-weight: 550;">Add Expense</div>     
   <span class="naming">Expense Type:</span>
