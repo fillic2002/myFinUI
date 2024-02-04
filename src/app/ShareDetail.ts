@@ -1,8 +1,8 @@
 export interface IShareDetail
 {
-    id: string
-    shortName: string
-    equityname:string
+    assetId: string
+    symbol: string
+    equityName:string
     livePrice:number
     desc:string
     divLink:string

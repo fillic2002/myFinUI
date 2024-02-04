@@ -25,7 +25,10 @@
 <div style=" ">Add File
   <input type="file" (change)="onFileSelected($event)" />
 </div>
-
+<form (ngSubmit)="uploadFile()" #fileForm="ngForm">
+  <input type="file" (change)="onFileChange($event)" #fileInput>
+  <button type="submit">Upload File</button>
+</form>
  
 <div style="width: 650px;height:350px; " >
   <canvas baseChart

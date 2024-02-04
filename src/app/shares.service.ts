@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { IPortfolio, ITransaction,IDashboard,IFolio,IBankAcDetail, IShareDetail, IAssetHistory, IAssetReturn, ICashflow,IPfAcct, IDividend } from './ShareDetail';
 import { __core_private_testing_placeholder__ } from '@angular/core/testing';
 import * as _ from 'lodash';
+import { debug } from 'console';
 
 @Injectable({
     providedIn: 'root'
@@ -56,8 +57,8 @@ export class SharesService {
   getAssetsHistory(folioId:number):Observable<IAssetHistory[]>{    
     return this.client.get<IAssetHistory[]>("http://localhost:59921/portfolio/getAssetsHistory/");
   } 
-  postTransaction(price:any,name:any,qty:any,dt:any,folioId: any,option:any,assetType:any,pb:any,mv:any):Observable<any>{   
-   
+  postTransaction(price:any,name:any,qty:any,dt:any,folioId: any,option:any,assetType:any,pb:any,mv:any, ver:any):Observable<any>{   
+   debugger;
     return this.client.post("http://localhost:59921/transaction/postTransaction",{ 
     price: parseFloat(price),
     equity:{
@@ -69,9 +70,11 @@ export class SharesService {
     tranType: parseInt(option),
     portfolioId:parseInt(folioId),
     PB_tran:parseFloat(pb),
-    MarketCap_Tran:parseFloat(mv)   
+    MarketCap_Tran:parseFloat(mv),
+    verified: ver === 0 ? false :ver
     });
   }  
+  // Need to remove this with new method
   UpdateTransaction(tranid:string)
   {    
     return this.client.post("http://localhost:59921/transaction/verifyTransaction",{ 
@@ -79,8 +82,22 @@ export class SharesService {
     tranId:tranid  
     });
   }
+  UpdateTransactionNew(pb:any, dt:string, astId: string,price:number, folioId:number,id:string):Observable<boolean[]>{  
+ 
+    return this.client.post<boolean[]>("http://localhost:59921/transaction/updateTransaction",{ 
+      tranDate:new Date(Date.parse(dt)),   
+      PB_Tran:parseFloat(pb),
+      equity:{
+        assetId: astId.toString()
+      },
+      portfolioId:folioId,
+      price: parseFloat(price.toString()),
+      tranId:id,
+      verified:true
+    });
+  }
   postBankTransaction(salary:any,desc:string,txtDt:any,trnType:any,acctid:any,id:any):Observable<boolean[]>{
-   // console.log(id);
+   
     return this.client.post<boolean[]>("http://localhost:59921/transaction/AddBankTransaction",{
       tranDate: new Date(Date.parse(txtDt)),
       amt:parseFloat(salary),
@@ -147,16 +164,17 @@ export class SharesService {
       transactionDate:new Date(Date.parse(dt))      
     })  
   }
-  postEquityUpdate(shareDtl: IShareDetail)
+  postEquityUpdate(shareDtl: any)
   {
+    
     return this.client.post("http://localhost:59921/Shares/updateequity",{
-    id:shareDtl.id,
-    shortName:shareDtl.shortName,
-    fullName:shareDtl.fullName,
-    livePrice:shareDtl.livePrice,
-    desc:shareDtl.desc,
-    divlink:shareDtl.divLink, 
-    sector:shareDtl.sector
+      assetId:shareDtl.assetId,
+      symbol:shareDtl.symbol,
+      equityName:shareDtl.equityName,
+      livePrice:shareDtl.livePrice,
+      sourceurl:shareDtl.sourceurl,
+      divUrl:shareDtl.divUrl, 
+      sector:shareDtl.sector
     }); 
   }
 
@@ -202,18 +220,14 @@ export class SharesService {
  getPFAcDetails(folioid:string,acttype:any):Observable<IPfAcct[]>{
   return this.client.get<IPfAcct[]>("http://localhost:59921/bankasset/GetPfYearlyDetails/"+folioid+"/"+acttype)    
  }
- deleteTransaction(id:string,dt:Date):Observable<any>{   
+ deleteTransaction(tranId:string):Observable<any>{   
   return this.client.post("http://localhost:59921/transaction/deletetransction",{    
-    equity:
-    {
-      assetId:id
-    },
-    tranDate: dt,
     price:0,    
     qty:0,    
     tranType: 1,
     portfolioId:1,
-    typeAsset:1
+    typeAsset:1,
+    tranId:tranId
   });
  }
  deleteExpense(id:number) :Observable<any>{   
@@ -307,10 +321,6 @@ export class SharesService {
   }
   fileUpload(file:any,folioID:number)
   {
-    return this.client.post("http://localhost:59921/UploadTransactionFile/",
-    {
-      data:file,
-      folioID: folioID
-    });
+    return this.client.post("http://localhost:59921/transaction/UploadTransactionFile/"+file+"/"+folioID);
   }
 }

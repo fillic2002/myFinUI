@@ -22,6 +22,7 @@ export class ExpenseComponent implements OnInit {
   expType!:string;
   public expTypes=[] as any;
   selectedValues: any[] = [];
+  public selectedFile: File | null = null;
 
   ngOnInit(): void {
     this.GetFolioDetails();
@@ -85,22 +86,25 @@ export class ExpenseComponent implements OnInit {
       });  
     });
   }
-  onFileSelected(event: any) {
-    const file: File = event.target.files[0];
-    if (file) {
-      // You can now work with the selected file
-      console.log('Selected file:', file);
-      this._shrdServ.fileUpload(file)
+  onFileChange(event: any) {
+    this.selectedFile = event.target.files[0];
+  }
+
+  uploadFile(event: any) {
+    if (this.selectedFile) {
+      const formData = new FormData();
+      formData.append('file', this.selectedFile);
+      this._shrdServ.fileUpload(this.selectedFile,0)
       .subscribe(data =>{ 
 
       });
-      // If you want to upload the file to a server, you can use HttpClient
-      // Example:
-      // this.uploadFileToServer(file);
+      console.log(this.selectedFile);
     }
+   
+   
   }
   GetMonthlyExpense(f:number, my:string)
-  {
+  { 
       this._shrdServ.getMonthlyExpense(f,my)
       .subscribe(data =>{ 
         //console.log(data);

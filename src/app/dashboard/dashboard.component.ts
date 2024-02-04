@@ -173,15 +173,15 @@ public GetDashboard()
     
     public assetHistory: ChartDataSets[] = [
       { data:this.assetValues, label: 'Current Value' },
-      { data:this.invstValues, label: 'investment Value' },    
+      { data:this.invstValues, label: 'investment Value' },  
     ];
 //-------------------Asset Distribution -------------------------------=----------
 public pieChartOptions: ChartOptions = { 
   responsive: true,
 };
 
-public pieChartLabels: Label[] = this.assetName;
-public pieChartType: ChartType = 'bar';
+public pieChartLabels: Label[] = this.assetName; 
+public pieChartType: ChartType = 'bar'; 
 public pieChartLegend = true;
 public pieChartPlugins = [];
 public pieChartColors: Array < any > = [{

@@ -4,7 +4,7 @@ import { SharesService } from '../shares.service';
 import {Router} from '@angular/router';
 import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
 import {Color, Label } from 'ng2-charts';
-import { debug } from 'console';
+import { Console, debug } from 'console';
 import { divHistory } from '../portfolio/portfolio.component';
 import { IDividend } from '../ShareDetail';
 import { element } from 'protractor';
@@ -97,6 +97,9 @@ export class TransactionComponent implements OnInit {
   stackedDatasetSector=[] as any[];
   filteredStacedData=[] as any[];
   datas=[] as any[];
+  compName:string='';
+  pb_tran:number =0;
+  msg:string ='';
 
 
   constructor(private _eqTransaction:SharesService,private route:ActivatedRoute,private  router:Router) { }
@@ -114,8 +117,8 @@ export class TransactionComponent implements OnInit {
     this._eqTransaction.getTransaction(0) 
       .subscribe(data =>{ 
       this.equitytransaction = data;    
-      this.filterPortfolio=  this.equitytransaction.filter(s => s.equity.assetType===1 && (s.tranType===1 || s.tranType===2));  
-      //console.log(this.filterPortfolio);   
+      this.filterPortfolio=  this.equitytransaction.filter(s => s.equity.assetType===1 && (s.tranType===1 || s.tranType===2));      
+      console.log(this.filterPortfolio);
       var to:number;
       to=0;  
       for (var i = 0; i < this.equitytransaction.length; i++) {
@@ -123,13 +126,12 @@ export class TransactionComponent implements OnInit {
       }
       this.eqtotal=to.toFixed(2);     
     }); 
-
-    this.getYearlyPfIvestment(0);
+    console.log(this.filterPortfolio);
+    this.getYearlyIvestment(0);
   }
 
-getYearlyPfIvestment(folioId:number)
-{
-  
+getYearlyIvestment(folioId:number)
+{  
     this.invstEqt.length=0; 
     this.invstMF.length=0;
     this.year.length=0;
@@ -265,7 +267,7 @@ drawChartSectorWiseInvst(sectordata:any[])
       y: { stacked: true,beginAtZero:true }
     },
     onClick:(event,elements)=>{
-       //debugger;
+  
       if (elements.length > 0) { 
         var activePoint = myChart.getElementAtEvent(event)[0];
         var data = activePoint._chart.data;
@@ -291,7 +293,7 @@ drawChartSectorWiseInvst(sectordata:any[])
  
 getMonthlyInvestment(folioId:any)
   {
-    //debugger;
+    
     this.filterMonthlyInvst.length=0;    
     this.MonthlyInvst.length=0;
 
@@ -343,7 +345,7 @@ GetFolioDetails()
     else{
       this.assetId = (document.getElementById('txtName')as HTMLInputElement).value;
     }
-    //debugger; 
+    
     
     this.qty = (document.getElementById('txtQty') as HTMLInputElement).value;
     var PB = (document.getElementById('txtPB') as HTMLInputElement).value;
@@ -394,15 +396,13 @@ selected(){
  
   }
 changeFolio(e :any) {
-    this.status="";
+    this.status="";    
+    this.selectedfolio=e.target.value;    
+    //console.log(this.selectedfolio);
+   
+    this.getYearlyIvestment(this.selectedfolio);
     
-    this.selectedfolio=e.target.value;
-    //this.filterMonthlyInvstPPF = this.monthlyInvstPPF.filter(x=>x.)
-    console.log(this.selectedfolio);
-    //debugger;
-    this.getYearlyPfIvestment(this.selectedfolio);
-    this.getMonthlyInvestment(this.selectedfolio);
-    //this.monthlyInvest(this.filterMonthlyInvst.filter(x=>x.));
+    this.getMonthlyInvestment(this.selectedfolio);    
 
     this._eqTransaction.getTransaction(e.target.value)
     .subscribe(data =>{
@@ -452,8 +452,7 @@ changeFolio(e :any) {
     });    
 }
 private addYear(yr:number)
-  {   
-    //debugger;
+  {    
     if(this.year===0)
     {
       this.year.push(yr);
@@ -465,6 +464,7 @@ private addYear(yr:number)
       }   
     }
   }
+
 changeDate(e:any){
     this.status="";
   }
@@ -494,7 +494,7 @@ changeAsset(e:any)
        to= to + parseFloat(this.equitytransaction[i].price)*parseFloat(this.equitytransaction[i].qty);        
      }
      this.eqtotal=to.toFixed(2);
-    });
+    }); 
   }
   public showTrans() {
     this.show = !this.show;
@@ -525,12 +525,12 @@ changeAsset(e:any)
     this.showresult =false;
     this.companyid=e;
    // alert(e);
-  }
-  public deleterecord(eqtid:any,dt:any)
+  } 
+  public deleterecord(t:any)
   {    
-    if(confirm("Are you sure to delete ")) {    
-    
-    this._eqTransaction.deleteTransaction(eqtid, dt)
+    if(confirm("Are you sure to delete ")) {
+ 
+    this._eqTransaction.deleteTransaction(t.tranId)
       .subscribe(data =>{
         this.result = data;        
       });
@@ -545,9 +545,9 @@ changeAsset(e:any)
     if(x<100000 && x>70000)
       return '#e0abfa'
   }
-  public getTrColor(x:any):string
+  public getTranTypeColor(x:any):string
   {   
-    if(x=='1')
+    if(x=='1'|| x=="true")
           return '#22a704';
     else
       return '#ff000091'
@@ -625,6 +625,39 @@ changeAsset(e:any)
     (document.getElementById('sharedetails') as HTMLDivElement).style.display='none';
     //document.getElementById('cmpDivDetails').style.display='none'; 
   }
+  public filterAsset(e:any)
+  {
+    //console.log(this.equitytransaction);
+    
+    this.filterPortfolio =  this.equitytransaction.filter(s => s.equity.equityName.toLowerCase().includes(this.compName.toLowerCase()));
+    
+    this.filterPortfolio.forEach(item => {
+      item.isEdit = false;
+    });
+    console.log(this.filterPortfolio);
+  }
+ updateTransaction( t:any)
+  { 
+    this._eqTransaction.UpdateTransactionNew(t.pB_Tran,t.tranDate,t.equity.assetId,t.price, t.portfolioId,t.tranId)
+      .subscribe(data =>{
+        //this.result = data;
+        console.log(data);
+        this.msg="Trasnsaction for "+ t.equity.equityName + " has been updated "+ data ;
+        this.ngOnInit();
+      });
+  }
+  editRow(item:any)
+  {
+  
+    item.isEdit = true;
+  }
+  //onChange(event:any,pb:number, dt:Date, astId:string)
+  //{
+  //  debugger;
+   // this.pb_tran =pb;
+     
+  //}
+  
   showdividend(e:string,eqtName:string)
   {
     this.selectedEqt =eqtName;
@@ -742,7 +775,9 @@ changeAsset(e:any)
         else  
           this.filterPortfolio =  this.equitytransaction.filter(s => s.assetType===2 ||s.assetType===5 );
 
-          //console.log(this.filterPortfolio );
+          this.filterPortfolio.forEach(item => {
+            item.isEdit = false;
+          });
   }
    
    //.................... Shares Investment........................
@@ -908,13 +943,14 @@ public invstDataset:ChartDataSets[] = [
 ]; 
 //------------------------------------------------------------
 public chartClick(e: any): void {
-  
+  console.log('In');
+ 
   if (e.active.length > 0) {
     this.DetailSummary = true;
     const chart = e.active[0]._chart;
     const activePoints = chart.getElementAtEvent(e.event); 
     
-    if ( activePoints.length > 0) {  
+    if ( activePoints.length > 0) { 
       const clickedElementIndex = activePoints[0]._index;
       const label = chart.data.labels[clickedElementIndex];
       const typeOfinvst =activePoints[0]._view.datasetLabel;      
@@ -957,7 +993,7 @@ public chartClick(e: any): void {
  
  public getMonthlyInvest(e: any)
  {
-  if (e.active.length > 0) {  
+   if (e.active.length > 0) {  
     const chart = e.active[0]._chart;
     const activePoints = chart.getElementAtEvent(e.event); 
       if ( activePoints.length > 0) {
@@ -967,8 +1003,8 @@ public chartClick(e: any): void {
         // get value by index
         const value = chart.data.datasets[0].data[clickedElementIndex];     
         this.selectedMonth = label.split('-')[0];     
-        console.log(this.equitytransaction);
-        console.log(value);
+       // console.log(this.equitytransaction);
+        //console.log(value);
         
         this.filterPortfolio=this.equitytransaction.filter(s => new Date(s.tranDate).getFullYear()==label.split('-')[1] 
                     && new Date(s.tranDate).getMonth()+1 == label.split('-')[0] );
@@ -995,7 +1031,7 @@ public chartClick(e: any): void {
    }
   MovePFDetails(tran:any)
   {
-    console.log(tran);
+    //console.log(tran);
     (document.getElementById('txtEmp')as  HTMLInputElement).value =  tran.investmentEmp;
     (document.getElementById('txtEmplyr')as  HTMLInputElement).value =  tran.investmentEmplr;
     (document.getElementById('txtPension')as  HTMLInputElement).value =  tran.pension;
@@ -1012,4 +1048,5 @@ function getRandomValue(arg0: number, arg1: number) {
 function getRandomColor() {
   throw new Error('Function not implemented.');
 }
+ 
 

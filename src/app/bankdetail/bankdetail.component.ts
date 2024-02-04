@@ -203,6 +203,7 @@ export class BankdetailComponent implements OnInit {
     this.status="Account Updated Successfully!";
     this.ngOnInit();
   }
+  
   onChange(item:string,event:any)
   {     
     if(item=='amt') 

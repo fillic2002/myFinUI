@@ -3,6 +3,7 @@ import { SharesService } from '../shares.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IAcctType, IShareDetail } from '../ShareDetail';
 import { Console } from 'console';
+import { EquitysearchComponent } from '../common/equitysearch/equitysearch.component';
 
 @Component({
   selector: 'app-admin',

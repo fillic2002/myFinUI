@@ -21,6 +21,7 @@ import { FormsModule } from '@angular/forms';
 import { ExpenseComponent } from './expense/expense.component';
 import "@angular/common/locales/global/en-IN";
 import { BondsComponent } from './bonds/bonds.component';
+import { EquitysearchComponent } from './common/equitysearch/equitysearch.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,9 @@ import { BondsComponent } from './bonds/bonds.component';
     CommonYrComponent,
     AdminComponent,
     ExpenseComponent,
-    BondsComponent,     
+    BondsComponent,
+    EquitysearchComponent,
+    
   ],
   imports: [
     BrowserModule,

@@ -2,6 +2,25 @@
 html {
   background-color: rgba(0, 0, 0, 0.007);
 }
+
+.savebtn {
+  background:#c4cad7a8;
+  height: 20px;
+  width: 90px;
+  margin-left: 20px;
+  border-radius: 4px;
+  border-width: 1px;
+  color: rgba(80, 79, 79, 0.507);
+  font-weight: bold;
+  border: 1px solid grey;
+}
+.savebtn:hover {
+  color: rgb(17, 17, 16);
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 1px 16px 0 rgba(0, 0, 0, 0.24),
+    0 17px 50px 0 rgba(0, 0, 0, 0.19);
+}
 .button {
   display: inline-block;
   margin-left: 40px;
@@ -20,6 +39,24 @@ html {
   cursor: pointer;
   color: rgb(65, 64, 64);
   box-shadow: 10px 10px 5px #868686;
+}
+.button1{
+  background-color: #ededed;
+  border-radius: 3px;
+  border: 1px solid #7aa7c7;
+  box-shadow: rgba(255, 255, 255, .7) 0 1px 0 0 inset;
+  box-sizing: border-box;
+  color: #39739d;
+  cursor: pointer;
+  height: 32px;
+  width: 10%;
+}
+.button1:hover{
+ 
+  background-color: #b3d3ea;
+   
+color: #2c5777;
+   
 }
 .status {
   display: inline-block;
@@ -63,7 +100,7 @@ html {
   height: 25px;
   color: rgb(66, 66, 66);
   font: 530 15px "Open Sans", Arial, Helvetica, sans-serif;
-  border-bottom: "1px solid #ddd";
+  /*border-bottom: "1px solid #ddd";*/
 }
 .header3 {
   height: 25px;
@@ -76,24 +113,7 @@ html {
   font: 300 14px sans-serif;
   color: #FFA500;
 }
-.savebtn {
-  background-color: rgb(240, 240, 240);
-  height: 20px;
-  width: 90px;
-  margin-left: 20px;
-  border-radius: 4px;
-  border-width: 1px;
-  color: rgba(80, 80, 80, 0.507);
-  font-weight: bold;
-  border-color: rgba(128, 128, 128, 0.719);
-}
-.savebtn:hover {
-  color: green;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 1px 16px 0 rgba(0, 0, 0, 0.24),
-    0 17px 50px 0 rgba(0, 0, 0, 0.19);
-}
+
 .cellrow {
   background-color: rgb(197, 196, 196);
 
@@ -121,8 +141,16 @@ html {
 }
 .naming {
   width: 180px;
-  padding-left: 5px;
-  font: 13px 600 bold arial;
+  padding: 5px;
+  font-size: medium;
+  color: #3b3a3a;
+  border-bottom: 1px dotted #bfbfbf;
+}
+.naming1 {
+  width: 180px;
+  padding-left: 8px;
+  padding-right: 2px;
+  font-size: large;
   color: #3b3a3a;
   border-bottom: 1px dotted #bfbfbf;
 }
@@ -147,7 +175,7 @@ html {
   height: 30px;
   color: #666;
   text-align: center;
-  font: 560 13px Helvetica, sans-serif;
+  font: 550 15px Helvetica, sans-serif;
   padding-right: 6px;
   border-bottom: 1px dotted #bfbfbf;
 }
@@ -257,11 +285,42 @@ body {
   color: goldenrod;
   cursor: pointer;
 }
+.dropDown {
+  cursor: pointer;
+   
+  font-size: larger;
+  border: 1px solid #69696999;
+  background-color: #eaea25de;
+  width: 150px;
+  border-radius: 5px;
+  height: 27px;
+  padding: 3px;
+}
 .inputT {
+  font-size: medium;
+  background-color: palegoldenrod;
+  width: 100px;
+  border-radius: 5px;
+  height: 25px;
+  border: 1px dotted #696969;
+}
+.inputT1 {
   font-weight: 7px;
   border: 1px dotted;
   background-color: palegoldenrod;
-  width: 100px;
+  width: 250px;
+}
+.inputT2 {
+  font-weight: 7px;
+  border: 1px dotted;
+  background-color: palegoldenrod;
+  width: 500px;
+}
+.inputT3 {
+  font-weight: 7px;
+  border: 1px dotted;
+  background-color: palegoldenrod;
+  width: 700px;
 }
 .inputDt {
   font-weight: 7px;

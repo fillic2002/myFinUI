@@ -1,4 +1,4 @@
-<!doctype html>
+<div>
 <table style="width: 100%; background-color: #000000d9;">
     <tr>
         <td style="color:aliceblue;vertical-align: top;">
@@ -21,7 +21,7 @@
   </table>
   <div>
   <span class="header4" style="font-size: 20px;">Investment</span>
-   <span style="padding-left: 2%;"><select [(ngModel)]="selectedfolio" style="cursor: pointer; background-color: #eaea25de;"  id="portfolio" (change)="changeFolio($event)" >
+   <span style="padding-left: 2%;"><select class="dropDown" [(ngModel)]="selectedfolio"   id="portfolio" (change)="changeFolio($event)" >
       <option [value]="item.folioID" *ngFor="let item of folio"> {{item.folioName}}</option>                    
      </select>
      <span style="padding-left: 70px;">
@@ -48,17 +48,15 @@
     </div>
 </div>
   
-<div id="comment" class="comment">{{status}}</div>
- 
-
- 
+<div id="comment" class="comment">{{status}}</div> 
 <br>
-<!--<app-common-yr></app-common-yr>-->
+
 <ng-container *ngIf="show">
-<table>
+<table style="background-color: beige;">
     <tr >        
-        <td><span class="naming" style="font-weight: 800;padding-right: 3px;">Asset Type:</span>
-            <select class="inputT" id="portfolio" (change)="changeAsset($event)">
+        <td>
+            <span class="naming" >Asset Type:</span>
+                <select class="inputT" id="portfolio" (change)="changeAsset($event)">
                 <option value="1" >Shares</option>
                 <option value="2">Equity MF</option>
                 <option value="3">PF</option>
@@ -68,16 +66,16 @@
                 <option value="12">Gold</option> 
                 <option value="7">Plot</option> 
                 <option value="6">Bank</option> 
-         </select>        
-        
-        <span class="naming" style="font-weight: 600;padding-right: 3px;" >Option:</span>
+                </select>           
+         
+            <span class="naming">Option:</span>
             <select id="option" class="inputT"  (change)="selectOption($event)"> 
-            <option value=1>Buy</option> 
-            <option value=2>Sell</option>
-        </select>
+                <option value=1>Buy</option> 
+                <option value=2>Sell</option>
+            </select>
         </td>        
         <td *ngIf="isShown"> 
-            <span class="naming" style="font-weight: 600;padding-right: 3px;">Asset ID/Name:</span>
+            <span class="naming"  >Asset ID/Name:</span>
             <div style="z-index: -1" *ngIf="showresult"> 
                 <div  id="result" *ngFor="let t of result">    
                     <span (click)="getId(t.assetId)" class="dt">{{t.assetId}}</span>
@@ -85,17 +83,20 @@
                 </div>
             </div>
             <input *ngIf="isShown" id="txtName" class="inputT" type="text"  (keypress)="getasset($event)" value="{{companyid}}" >
-            
-            <span class="naming" style="font-weight: 600;padding-right: 3px;">Date:</span>
-                <input class="inputT" id="txtDt" type="date" (change)="changeDate($event)">
-            <span class="naming" style="font-weight: 600;padding-right: 3px;">Quantity:</span><input class="inputT" id="txtQty"  type="text"> 
-            <span class="naming" style="font-weight: 600;padding-right: 3px;">Price:</span><input class="inputT" id="txtPrice"   type="text">
-            <span class="naming" style="font-weight: 600;padding-right: 3px;">PB:</span><input class="inputT" id="txtPB"   type="text">
-            <span class="naming" style="font-weight: 600;padding-right: 3px;">MarketCap:</span><input class="inputT" id="txtMarketCap"  type="text">
-            <input class="savebtn" type="button" value="Save" (click)="AddTransaction()">
+           <span class="naming"  >Date:</span>
+                <input class="inputT" id="txtDt" type="date" (change)="changeDate($event)"> 
         </td>
     </tr>
-
+    
+    <tr>
+        <td>
+            <span class="naming"  >Price:</span><input class="inputT" id="txtPrice"   type="text"> 
+            <span class="naming"  >Quantity:</span><input class="inputT" id="txtQty"  type="text"></td>
+        <td> 
+            <span class="naming"  >MarketCap:</span> <input class="inputT" id="txtMarketCap"  type="text">
+            <span class="naming"  >PB:</span><input class="inputT" id="txtPB"   type="text">
+            <input class="button1" type="button" value="Save" (click)="AddTransaction()"></td>
+    </tr>
 </table>
 </ng-container>
 
@@ -168,6 +169,9 @@
 </table>
 <div style="padding: 40px;"></div>
 <ng-container *ngIf="DetailSummary">
+    <span class="naming" style="font-weight: 600;padding-right: 3px;">Asset ID/Name:</span>
+    <input  id="txtCompName" [(ngModel)]="compName" class="inputT" type="text"  (keypress)="filterAsset($event)">    
+    <div class="name">{{msg}}</div>
 <table >
     <tr class="header1">
         <td (click)="sort('purchaseDt')" class="headerdt">Date of Purchase</td>
@@ -179,40 +183,81 @@
         <td class="headeramt" (click)="sort('pb')">PB</td>
         <td class="headeramt" (click)="sort('mc')">MarketCap</td>
         <td class="headeramt">Transation Type</td>
+        <td class="headeramt">verified</td>
         <td class="headeramt">Action</td>
+        <td class="headeramt">Option</td>
     </tr>
 
  <tr class="header2" *ngFor="let t of filterPortfolio">  
-        <td class="dt">{{t.tranDate|date}}</td>
+        <td class="dt">
+          {{t.tranDate|date}}
+        </td>
         <td class="naming" (click)="showdividend(t.equityId,t.equityName)">{{t.equity.symbol}}</td>
         <td class="amt">{{t.equity.assetId}}</td>        
-        <td class="amt">{{t.qty}}</td>
-        <td class="amt">{{t.price|number : '1.2-2'}}</td>
+        <td class="amt">
+            <div *ngIf="t.isEdit">
+                <input type="text" [(ngModel)]="t.qty">
+            </div>
+            <div *ngIf="!t.isEdit">
+                {{t.qty}}
+            </div>     
+          
+        </td>
+        <td class="amt">
+            <div *ngIf="t.isEdit">
+                <input type="text" [(ngModel)]="t.price">
+            </div>
+            <div *ngIf="!t.isEdit">
+                {{t.price|number : '1.2-2'}}
+            </div>            
+        </td>
         <td class="amt">{{t.qty*t.price|number : '1.2-2'}}</td>
-        <td class="amt">{{t.pB_Tran|number : '1.2-2'}}</td>
-        <td class="amt" [ngStyle]="{'background-color': getBGColor(t.marketCap)}">{{t.marketCap_Tran|number : '1.2-2'}}</td>
-        <td class="amt" style="text-align:center ;" [ngStyle]="{color: getTrColor(t.tranType)}">{{t.tranType}}</td>
-        <td (click)="deleterecord(t.equity.assetId, t.tranDate)" style="cursor: pointer" class="action" >Delete</td>
+        <td class="amt">
+            <div *ngIf="t.isEdit">
+                <input type="text" [(ngModel)]="t.pB_Tran">
+            </div>
+            <div *ngIf="!t.isEdit">
+                {{t.pB_Tran|number : '1.2-2'}}
+            </div>
+        </td>
+        <td class="amt" [ngStyle]="{'background-color': getBGColor(t.marketCap)}">
+            <div *ngIf="t.isEdit">
+                <input type="text" [(ngModel)]="t.marketCap_Tran">
+            </div>
+            <div *ngIf="!t.isEdit">
+                {{t.marketCap_Tran|number : '1.2-2'}}
+            </div>
+        </td>         
+        <td class="amt" style="text-align:center ;" [ngStyle]="{color: getTranTypeColor(t.tranType)}">{{t.tranType}}</td>
+        <td class="amt" style="text-align:center ;" [ngStyle]="{color: getTranTypeColor(t.verified)}">             
+            {{t.verified}}
+        </td>
+        <td (click)="deleterecord(t)" style="cursor: pointer" class="action" >Delete</td>
+        <td><button class="savebtn" (click)="editRow(t)">Edit</button>
+            <button class="savebtn" (click)="updateTransaction(t)">Save</button>
+        </td>
+        
     </tr> 
 </table>
+ 
 </ng-container>
 <table>
     <tr>
         <td>
             <div style="font-weight: 550;">Add PF Transaction</div>              
             
-            <span class="naming">Date:</span><input id="txtDt" type="date" class="inputdt">
-            <span class="naming">Emp:</span><input id="txtEmp" class="inputT" type="text"> 
-            <span class="naming">Emplyr:</span><input id="txtEmplyr" class="inputT" type="text"> 
-            <span class="naming">Pension:</span><input id="txtPension" class="inputT" type="text"> 
-            <span class="naming">FolioId:</span><input id="txtFolio" class="inputT" type="text"> 
-            <span class="naming">Transaction Type:</span>
-                <select style="cursor: pointer; background-color: #eaea25de;"  id="trnType">
+            <span class="naming1">Date:</span><input id="txtDt" type="date" class="inputdt">
+            <span class="naming1">Emp:</span><input id="txtEmp" class="inputT" type="text"> 
+            <span class="naming1">Emplyr:</span><input id="txtEmplyr" class="inputT" type="text"> 
+            <span class="naming1">Pension:</span><input id="txtPension" class="inputT" type="text"> 
+            <span class="naming1">FolioId:</span><input id="txtFolio" class="inputT" type="text"> 
+            <span class="naming1">Transaction Type:</span>
+                <select class="dropDown"  id="trnType">
                     <option [value]="item.id" *ngFor="let item of TypeOfTran" > {{item.name}}</option>                    
                 </select>
             
               
-            <input class="savebtn" type="button" value="Save" (click)="AddPFTransaction()"> 
+            <input class="button1" type="button" value="Save" (click)="AddPFTransaction()"> 
         </td>
     </tr></table>
 <table>
@@ -285,3 +330,4 @@
         
 </div>
  
+</div>
