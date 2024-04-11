@@ -1,3 +1,4 @@
+<div style="height: 220%;"> 
 <table style="width: 100%; background-color: #000000d9;">
   <tr>
       <td style="color:aliceblue;vertical-align: top;">
@@ -14,6 +15,7 @@
   </tr>
   
 </table>
+<div>
 <span class="header4" style="font-size: 20px; " (click)="onClick($event)">Bonds</span>
 <span><select [(ngModel)]="selectedfolio" (change)="changeFolio($event)" style="cursor: pointer; background-color: #eaea25de;"  id="txtFolio" >
   <option value="0">All</option>
@@ -23,6 +25,8 @@
   <input type="text" name="bname" [(ngModel)]="bName" (keypress)="SearchBond()">
 </span>
 <span class="header4" style="font:14px bold;float: right;margin-right:1%;" (click)="selectnext(option)">Admin</span>
+<span style="padding-left: 20%;">Selected Year:{{selectedYear}}</span>
+</div>
 <!-- 
 <table style="width: 100%">
   <tr>
@@ -78,53 +82,95 @@
       <td style="width:1%;"></td>
   </tr>
 </table>-->
-<ng-container *ngIf="show">
-  <div>     
-    <div class="msg">{{response}}</div>
-    <div style="font-weight: 550;">Add Bond Transaction</div>
-    <span class="naming">BondId:</span><input id="bondId" class="inputT">
-    <span class="naming">Date:</span><input id="bondPurchaseDt" type="date" class="inputdt">
-    <span class="naming">Price:</span><input name="bondPurAmt" id="bondPurAmt" class="inputT">
-    <span class="naming">Qty:</span><input name="bondPurQty" id="bondPurQty" class="inputT">
-    <span class="naming">Transaction Type:</span>
-        <select  style="cursor: pointer; background-color: #eaea25de;"  id="bondTranType" >
-            <option value="1">Buy</option>
-            <option value="0">Sell</option>
-        </select>        
-    <input class="savebtn" type="button" value="Save" (click)="AddBondTran()">
+ 
+  
+ <table>
+  <tr>
+    <td>
+      <div style="float: left;" class="container">
+        <div style="width: 700px;height:400px; " >
+        <canvas baseChart 
+        [datasets]="BondData"
+        [labels]="bondLbl"
+        [options]="bondChartOption"
+        [plugins]="bondPlugin"
+        [legend]="bondLegend"
+        [colors]="bondColors"
+        [chartType]="bondChartType"
+        (chartClick)="yearSelected($event)">
+        </canvas>                             
+        </div>  
+      </div>
+    </td>
+    <td style="width: 40px;" ></td>
+    <td>
+      <div style="float: right;" class="container"> 
+        <div style="width: 700px;height:400px; " >
+          <canvas baseChart 
+          [datasets]="mBondData"
+          [labels]="mbondLbl"
+          [options]="mbondChartOption"
+          [plugins]="mbondPlugin"
+          [legend]="mbondLegend"
+          [colors]="mbondColors"
+          [chartType]="mbondChartType"
+          (chartClick)="monthSelected($event)">
+          </canvas>                             
+        </div></div>
+    </td>
+  </tr>
+ </table>
+
+ 
+ 
+   
+  <div> 
+    <div (click)="showTrans(option)" class="dml">{{trnStatus}}</div> <br>
+    <div>{{status}}</div>
+      <ng-container *ngIf="show">
+        <div>     
+          <div class="msg">{{response}}</div>
+          <div style="font-weight: 550;">Add Bond Transaction</div>
+          <span class="naming">BondId:</span><input id="bondId" class="inputT">
+          <span class="naming">Date:</span><input id="bondPurchaseDt" type="date" class="inputdt">
+          <span class="naming">Price:</span><input name="bondPurAmt" id="bondPurAmt" class="inputT">
+          <span class="naming">Qty:</span><input name="bondPurQty" id="bondPurQty" class="inputT">
+          <span class="naming">Transaction Type:</span>
+              <select  style="cursor: pointer; background-color: #eaea25de;"  id="bondTranType" >
+                  <option value="1">Buy</option>
+                  <option value="0">Sell</option>
+              </select>        
+          <input class="savebtn" type="button" value="Save" (click)="AddBondTran()">
+        </div>
+      </ng-container>
+      <ng-container *ngIf="bondIntrest"> 
+      <table>
+        <tr class="header1">
+            <td (click)="sort('intrestPaymentDate')" class="headername sortable">Intest Credit Date</td>            
+            <td class="headername">Bond Name</td>
+            <td class="headeramt">BondId</td>
+            <td class="headeramt">Intrest Credited <span>{{totalBondIntrest|number:'1.2-2'}}</span></td>            
+            <td class="headeramt">livePrice</td>
+            <td class="headeramt">FolioId</td>
+            <td class="headername">BondTranId</td>
+            <td class="headeramt">Validated</td>
+             
+        </tr>
+    
+        <tr class="header2" *ngFor="let item of filteredIntrest" >
+            <td class="dt">{{item.intrestPaymentDate|date}}</td>        
+            <td class="name">{{item.bondDetail.bondName}}</td>
+            <td class="amt">{{item.bondDetail.bondId}}</td>
+            <td class="amt">{{item.intrestAmt.toFixed(2)|number:'1.2-2'}}</td>        
+            <td class="amt">{{item.bondDetail.livePrice}}</td>
+            <td class="amt">{{item.folioId}}</td>
+            <td class="name">{{item.bondTranId}}</td>
+            <td class="transtatus" (click)="Validated(item)" [ngStyle]="{color: getTranTypeColor(item.validated)}">{{item.validated}}</td>
+             
+        </tr> 
+      </table>
+      </ng-container>
   </div>
-</ng-container>
-<div>{{status}}</div> 
-<div (click)="showTrans(option)" class="dml">{{trnStatus}}</div>  
-
-<div style="float: left;">
-  <div style="width: 600px;height:400px; " >
-  <canvas baseChart 
-  [datasets]="BondData"
-  [labels]="bondLbl"
-  [options]="bondChartOption"
-  [plugins]="bondPlugin"
-  [legend]="bondLegend"
-  [colors]="bondColors"
-  [chartType]="bondChartType"
-  (chartClick)="yearSelected($event)">
-  </canvas>                             
-  </div>  
-</div>
-<div style="float: right;"><span>Year:{{selectedYear}}</span>
-  <div style="width: 600px;height:400px; " >
-    <canvas baseChart 
-    [datasets]="mBondData"
-    [labels]="mbondLbl"
-    [options]="mbondChartOption"
-    [plugins]="mbondPlugin"
-    [legend]="mbondLegend"
-    [colors]="mbondColors"
-    [chartType]="mbondChartType"
-    (chartClick)="monthSelected($event)">
-    </canvas>                             
-  </div></div>
-
 <ng-container *ngIf="bondHoldingflag">
 <div style="float: left;"><span>Bond Holdings</span>
   <table>
@@ -140,59 +186,36 @@
       <td  class="naming" >{{item.bondDetail.bondId}}</td>  
       <td  class="naming">{{item.investment|number:'1.2-2'}}</td>
       <td  class="naming">{{item.bondDetail.intrestCycle}}</td>
-      <td  class="dt" [ngStyle]="{color: getTranTypeColor(item.bondDetail.dateOfMaturity|date)}">{{item.bondDetail.dateOfMaturity|date}}</td>     
+      <td  class="dt" [ngStyle]="{color: getTranMaturityColor(item.bondDetail.dateOfMaturity|date)}">{{item.bondDetail.dateOfMaturity|date}}</td>     
     </tr>
   </table>
 </div></ng-container>
- 
+
+<div>
 <ng-container *ngIf="bondTranFlag">
 <table>
   <tr class="header1">
     <td (click)="sort('purchaseDate')" class="headername">Purchsed ON</td>  
-    <!--<td class="headername">BondName</td>
-    <td class="headername">BondID</td>    -->
     <td class="headername">CouponRate</td>
     <td (click)="sort('liveprice')"  class="headername">LivePrice</td>
     <td class="headername">InvstedPrice</td>
-    <td (click)="sort('ytm')" class="headername">Invs <div>{{totalInvst|number:'1.2-2'}}</div> </td>
-    <!--<td (click)="sort('maturityPurchase')" class="headername">Maturity</td>    -->
-    
+    <td (click)="sort('ytm')" class="headername">Invs <div>{{totalInvst|number:'1.2-2'}}</div> </td>    
     <td class="headername">Action</td>
 </tr>   
 <tr class="header2" *ngFor="let item of filterTransaction">
-  <td  class="dt">{{item.purchaseDate|date}}</td>
-  <!--<td  class="naming">{{item.bondDetail.bondName}}</td>
-  <td  class="naming" (click)="showIntrest(item.bondDetail.bondId)">{{item.bondDetail.bondId}}</td>  -->
+  <td  class="dt">{{item.purchaseDate|date}}</td>  
   <td  class="naming">{{item.bondDetail.couponRate|number:'1.2-2'}}</td>
   <td  class="naming">{{item.livePrice|number:'1.2-2'}}</td>
   <td  class="naming">{{item.invstPrice|number:'1.2-2'}}</td>
-  <td  class="naming">{{item.qty*item.invstPrice|number:'1.2-2'}}</td>
-  <!--<td  class="dt" [ngStyle]="{color: getTranTypeColor(item.bondDetail.dateOfMaturity|date)}">{{item.bondDetail.dateOfMaturity|date}}</td>
-  <td  class="naming" contenteditable="true" (keydown.Tab)="updateList($event,'id',item.intrestCycle,item.bondId,item.bondName,item.couponRate,item.dateOfMaturity,item.faceValue,item.livePrice)">{{item.bondDetail.intrestCycle}}</td>  -->
+  <td  class="naming">{{item.qty*item.invstPrice|number:'1.2-2'}}</td>  
   <td (click)="deleterecord(item.bondDetail.bondId,item.purchaseDate,item.qty,item.folioId)" style="cursor: pointer" class="action" >Delete</td> 
 </tr>   
 </table>
 </ng-container>
-<ng-container *ngIf="bondIntrest"> 
-<table>
-  <tr class="header1">
-      <td (click)="sort('intrestPaymentDate')" class="headername">Intest Credit Date</td>            
-      <td class="headername">Bond Name</td>
-      <td class="headeramt">BondId</td>
-      <td class="headeramt">Intrest Credited <span>{{totalBondIntrest|number:'1.2-2'}}</span></td>            
-      <td class="headeramt">livePrice</td>
-  </tr>
+</div> 
  
-  <tr class="header2" *ngFor="let item of filteredIntrest" >
-      <td class="dt">{{item.intrestPaymentDate|date}}</td>        
-      <td class="name">{{item.bondDetail.bondName}}</td>
-      <td class="amt">{{item.bondDetail.bondId}}</td>
-      <td class="amt">{{item.amt.toFixed(2)|number:'1.2-2'}}</td>        
-      <td class="amt">{{item.bondDetail.livePrice}}</td>
-  </tr> 
-</table></ng-container>
-<ng-container *ngIf="bondMasterListFlag">
-   
+
+<ng-container *ngIf="bondMasterListFlag"> 
 <table>
   <tr class="header1">
     <td (click)="sort('updatedon')" class="headername">Updated On</td>  
@@ -227,3 +250,4 @@
 </div>
 
 
+</div>

@@ -50,7 +50,7 @@
     <table  style="border-style: solid;border-color: white; width: 100%;  ">   
         <tr> 
         <td >
-            <div style="width: 750px;height:375px;box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;border-radius: 10px;">
+            <div style="width: 750px;height:375px;" class="container">
                 <canvas baseChart
                 [datasets]="getfolioAssetHistory"
                 [labels]="assetHistorylbl"
@@ -67,7 +67,7 @@
         </td>
         <td >
             
-            <div class="round" style="width: 650px;height:375px; " >
+            <div class="container " style="width: 650px;height:375px; " >
                 <canvas baseChart 
                 [datasets]="sectorChartData"
                 [labels]="barChartLabels"
@@ -93,7 +93,7 @@
         </tr>
         <tr>
             <td><ng-container *ngIf="showGraph">
-                <div class="round" style="width: 750px;height:375px;float:left;" >
+                <div class="container" style="width: 750px;height:375px;float:left;" >
                     <canvas baseChart
                         [datasets]="rtnInvstmt"
                         [labels]="rtnHistorylbl"
@@ -112,18 +112,20 @@
                 <div> 
                     <ng-container *ngIf="showGraph"> 
                     <div>
-                        <table class="round"  style="padding-left: 10px;width: 80%;">
+                        <table class="container"  style="padding-left: 10px;width: 80%;">
                             <tr class="header1" style="width:60%; " >
                                 <td (click)="sort('Year')" >Year</td>
                                 <td>Return+Div<span class="headerSmall">(xirr)</span></td>
                                 <td>Net Return</td>
-                                <td>Dividend</td>                              
+                                <td>Dividend</td>
+                                <td>Net Invstmnt</td>
                             </tr>
                             <tr style="height: 24px;" *ngFor ="let q of assetReturns" >
                                 <td class="dt link" (click)="showCompDividend(q.year)">{{q.year}}</td>
                                 <td class="percent" [ngStyle]="{color: getTrColor(q.xirr),'font-weight':'bold'}" >{{q.xirr|number:'1.2-2'}}%</td>                       
                                 <td class="percent">{{q.return|number:'1.2-2'}}</td>
                                 <td class="percent">{{q.dividend|number:'1.2-2'}}</td>
+                                <td class="percent">{{q.netInvstmnt|number:'1.2-2'}}</td>
                             </tr>
                         </table>
                     </div>
@@ -137,22 +139,22 @@
     <thead>
     <tr class="header1" >    
         <td (click)="sort('name')" class="headername ">Equity Name<div>{{sharecount}}</div></td>
-        <td (click)="sort('pb')" class="headeramt">PB</td>    
-        <td (click)="sort('marketcap')" class="headeramt">MarketCap</td>    
+        <td (click)="sort('pb')" class="headeramt sortable">PB</td>    
+        <td (click)="sort('marketcap')" class="headeramt sortable">MarketCap</td>    
         <td class="headeramt">Live Price</td>    
         <td class="headeramt">Qty</td>
         <td class="headeramt">Avg Price</td>
-        <td (click)="sort('Investment')" class="headeramt">Net Invst<div>{{eqInvstVal|number:'1.2-2'}}</div></td>     
-        <td (click)="sort('Gain')" class="headeramt">Gain<div>{{netReturn|number:'1.2-2'}}</div></td>
-        <td (click)="sort('Return')" class="headeramt">Return<span class="headerSmall"> (xirr)</span></td>
-        <td (click)="sort('Dividend')" class="headeramt">Dividend<div>{{sdividend|number:'1.2-2'}}</div></td>
-        <td (click)="sort('Divyield')" class="headeramt">Retrun + Div<span class="headerSmall"> (xirr)</span></td>
-        <td class="headeramt">Notes</td>
+        <td (click)="sort('Investment')" class="headeramt sortable">Net Invst<div>{{eqInvstVal|number:'1.2-2'}}</div></td>     
+        <td (click)="sort('Gain')" class="headeramt sortable">Gain<div>{{netReturn|number:'1.2-2'}}</div></td>
+        <td (click)="sort('Return')" class="headeramt sortable">Return<span class="headerSmall"> (xirr)</span></td>
+        <td (click)="sort('Dividend')" class="headeramt sortable">Dividend<div>{{sdividend|number:'1.2-2'}}</div></td>
+        <td (click)="sort('Divyield')" class="headeramt sortable">Retrun + Div<span class="headerSmall"> (xirr)</span></td>
+        <td class="headeramt">AmtTotal</td>
     </tr>
     </thead> 
     <tr class="header2" *ngFor ="let p of filterPortfolio">    
         <!--<div class="amt">{{p.trasactionId}}</div>-->         
-        <td class="naming link" id="{{p.eq.assetId}}" (click)="showdividend(p.eq.assetId,p.eq.equityName)">{{p.eq.symbol}}<div id="{{p.eq.assetId}}" ng-show=""></div></td>
+        <td class="naming link" id="{{p.eq.assetId}}" (click)="showdividend(p)">{{p.eq.symbol}}<div id="{{p.eq.assetId}}" ng-show=""></div></td>
         <td class="amt">{{p.eq.pb|number:'1.2-2'}}</td>        
         <td class="amt">{{p.eq.marketCap|number:'1.2-2'}}</td>        
         <td class="amt">{{p.eq.livePrice|number:'1.2-2'}}</td>        
@@ -163,10 +165,14 @@
         <td class="amt" [ngStyle]="{color: getTrColor(p.percentage),'font-weight':'bold'}">{{p.percentage|number:'1.2-2'}}%</td>
         <td class="amt">{{p.dividend.toFixed(2)}}</td>
         <td class="amt" [ngStyle]="{color: getTrColor(p.divReturnXirr),'font-weight':'bold'}">{{p.divReturnXirr.toFixed(2)}}%</td>
-        <td><input type="text"></td>
+        <td><input type="checkbox">{{p.eq.livePrice*p.qty|number:'1.2-2'}}</td>
     </tr>
 </table>
-<div class="header4">Total Investment in {{selectedMonth}}<span (click)="NextInvest()"> => Next</span></div> 
+<div class="header4">
+    <span class="clickable" (click)="PreviousInvest()"> <= </span>
+    <span >Total Investment in {{selectedMonth}}</span>          
+    <span class="clickable" (click)="NextInvest()"> => Next</span>
+</div> 
 <div style=" display: flex;justify-content: center;">
     <table> 
         <tr class="header1">
@@ -199,7 +205,7 @@
         <td>
     <table style="width: 100%;">
         <tr  >
-            <td><span style="width: 15%;color:#FFA500; font-size: 20px;" >{{selectedEqt}} ({{selectedEqtID}})</span></td>
+            <td><a [href]="companyurl" style="width: 15%;color:#FFA500; font-size: 20px;" >{{selectedEqt}} ({{selectedEqtID}})</a></td>
             <td> <span class="popupCloseButton" (click)="hideShareDetails()">X</span></td>
         </tr>
     </table>
@@ -229,7 +235,7 @@
             </canvas>
         </div>
     </div>     
-     
+     <div>{{status}}</div>
     <div>
         <table>
             <tr class="header1">

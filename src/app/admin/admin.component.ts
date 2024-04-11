@@ -36,13 +36,14 @@ export class AdminComponent implements OnInit {
   name:string='';
   shrdetail!: IShareDetail;
   response!: string;
-  expType!:string;
+  expType!:string; 
   expTypes=[] as any;
   folios=[] as any;
   folioId:number=1;
   public selectedfolio!: number;
   public expType1!: number;
-
+  showContainer: number = 1; 
+  
   ngOnInit(): void {
     this.GetExpenseType();
     this.GetFolioDetails();
@@ -88,6 +89,9 @@ export class AdminComponent implements OnInit {
        this.response="New Transaction added to the database.";
     }); 
   }
+  toggleContainer(containerNumber: number): void {
+    this.showContainer = containerNumber;
+  }
   AddBondTran()  
   {
     // /debugger;
@@ -101,7 +105,7 @@ export class AdminComponent implements OnInit {
     this._eqTransaction.postTransaction(price,bondID,qty,dt,this.selectedfolio,tranType,9,0,0)
     .subscribe(data => {
         this.response="New Transaction added to the database.";
-    });
+    }); 
   }
   AddTransaction():void{
   

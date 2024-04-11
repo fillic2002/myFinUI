@@ -1,25 +1,31 @@
-<div style="background-color: bisque;"> 
-<p>Equity Module</p>
-<span class="naming" style="font-weight: 600;padding-right: 3px;">Asset ID/Name:</span>
-            
-<div style="z-index: -1" *ngIf="showresult"> 
-    <div  id="result" *ngFor="let t of result">    
-        <span (click)="getId(t.assetId)" class="dt">{{t.assetId}}</span>
-        <span class="naming">{{t.equityName}}</span>
-                 
+<div class="boundary" > 
+    <H1 style="background-color: lightgray; padding: 10px; font:550 14px bold, Open Sans, Arial, Helvetica, sans-serif">Equity Search</H1>
+    <span class="naming" style="font-weight: 600;padding-right: 3px;">Asset ID/Name:</span>
+                
+    <div style="z-index: -1" *ngIf="showresult"> 
+        <div  id="result" *ngFor="let t of result">    
+            <span (click)="getId(t.assetId)" class="dt">{{t.assetId}}</span>
+            <span class="naming">{{t.equityName}}</span>
+                    
+        </div>
     </div>
-</div>
-<input id="txtName" class="inputT" type="text"  (keypress)="getasset($event)" value="{{companyid}}" >
-<div  id="selecttion" *ngFor="let s of selectedvalue">
-    <span class="naming" style="font-weight: 600; padding-right: 5px;">DivUrl(BSE):</span>
-    <input [(ngModel)]="s.divUrl" id="txtDiv" class="inputT2" type="text"  (keypress)="getasset($event)" value="{{s.divUrl}}" ><br>
-    <span  class="naming" style="font-weight: 600;padding-right: 5px;">Symbol:</span>
-    <input [(ngModel)]="s.symbol" id="txtDiv" class="inputT" type="text"  (keypress)="getasset($event)" value="{{s.symbol}}" >    <br>
-    <span class="naming" style="font-weight: 600;padding-right: 5px;">SourceURL(Moneycontrol):</span>
-    <input [(ngModel)]="s.sourceurl" id="txtDiv" class="inputT3" type="text"  (keypress)="getasset($event)" value="{{s.sourceurl}}" >    <br>
-    <span class="naming" style="font-weight: 600;padding-right: 5px;">Sector:</span>
-    <input [(ngModel)]="s.sector" id="txtDiv" class="inputT" type="text"  (keypress)="getasset($event)" value="{{s.sector}}" >    <br>
-    <input class="savebtn" type="button" value="Save" (click)="UpdateEquity()">
-</div>
+    <input id="txtName" class="inputT" type="text"  (keypress)="getasset($event)" value="{{companyid}}" >
+    <div  id="selecttion" *ngFor="let s of selectedvalue">
+        <span class="naming" style="font-weight: 600; padding-right: 5px;">DivUrl(BSE):</span>
+        <input [(ngModel)]="s.divUrl" id="txtDiv" class="inputT2" type="text"  (keypress)="getasset($event)" value="{{s.divUrl}}" ><br>
+
+        <span  class="naming" style="font-weight: 600;padding-right: 5px;">Symbol:</span>
+        <input [(ngModel)]="s.symbol" id="txtDiv" class="inputT" type="text"  (keypress)="getasset($event)" value="{{s.symbol}}" ><br>
+
+        <span class="naming" style="font-weight: 600;padding-right: 5px;">SourceURL(Moneycontrol):</span>
+        <input [(ngModel)]="s.sourceurl" id="txtDiv" class="inputT3" type="text"  (keypress)="getasset($event)" value="{{s.sourceurl}}" ><br>
+
+        <span class="naming" style="font-weight: 600;padding-right: 5px;">AnalysisUrl(Screener):</span>
+        <input [(ngModel)]="s.analysisurl" id="txtDiv" class="inputT3" type="text"  (keypress)="getasset($event)" value="{{s.analysisurl}}" ><br>
+        
+        <span class="naming" style="font-weight: 600;padding-right: 5px;">Sector:</span>
+        <input [(ngModel)]="s.sector" id="txtDiv" class="inputT" type="text"  (keypress)="getasset($event)" value="{{s.sector}}" >    <br>
+        <input class="savebtn" type="button" value="Save" (click)="UpdateEquity()">
+    </div>
 
 </div>

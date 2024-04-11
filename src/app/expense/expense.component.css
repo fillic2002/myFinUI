@@ -17,3 +17,7 @@
  text-align: left;
  font: 560 13px Helvetica, sans-serif;
 }
+.linkButton{
+    cursor: pointer;
+    padding: 2px;
+}

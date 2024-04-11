@@ -23,6 +23,7 @@ export class ExpenseComponent implements OnInit {
   public expTypes=[] as any;
   selectedValues: any[] = [];
   public selectedFile: File | null = null;
+  selectedTranType!: string
 
   ngOnInit(): void {
     this.GetFolioDetails();
@@ -30,19 +31,19 @@ export class ExpenseComponent implements OnInit {
     this.GetExpense();
     this.GetMonthlyExpenseHistory(0);
   }
+  changeAccount(event:any){   
+    this.selectedTranType = event.target.value;    
+  }
   CopyOver(e:any)
-  {
-    
+  {    
     (document.getElementById("txtExpDesc") as HTMLInputElement).value= e.desc;
     (document.getElementById("expamt") as HTMLInputElement).value=e.amt;
-
   } 
   GetExpenseType()
   {
     this._shrdServ.getExpenseType()
     .subscribe(data=>{
-      this.expTypes =data; 
-       console.log(data);     
+      this.expTypes =data;        
     });
   
   }
@@ -55,7 +56,7 @@ export class ExpenseComponent implements OnInit {
     this._shrdServ.AddExpense(desc,this.selectedfolio,parseFloat(amt), new Date(Date.parse(dtOfTran)),this.expType1)
     .subscribe(data=>{
      // console.log(data);
-      if(data=="fasle")
+      if(data=="false")
       { this.response="Expense Added failed."; }       
       else{this.response="Expense Added Successfully."; }
         
@@ -71,19 +72,29 @@ export class ExpenseComponent implements OnInit {
   } 
   public onSelect(option:any)
   {    
-    this.router.navigate(['/']); 
+    this.router.navigate(['/']);
   }
   GetMonthlyExpenseHistory(f:number)
-  {
+  { 
     this.expAmt.length =0;
     this.monthYear.length=0;
     this._shrdServ.getMonthlyExpenseHistory(f,6)
-    .subscribe(data =>{ 
-      data.forEach(element => {
+    .subscribe(data =>{
+      data.forEach(element => { 
         this.monthYear.push(element.monthYear);
         this.expAmt.push(element.totalExpAmt);
         //console.log( this.monthYear); 
       });  
+    });
+  }
+  UpdateExpense(expItem: any)
+  {    
+    expItem.expenseType =  this.selectedTranType;
+    console.log(expItem);
+    this._shrdServ.updateMonthlyExpense(expItem)
+    .subscribe(data =>{ 
+      console.log(data);
+      expItem.editRow=false;
     });
   }
   onFileChange(event: any) {
@@ -107,11 +118,18 @@ export class ExpenseComponent implements OnInit {
   { 
       this._shrdServ.getMonthlyExpense(f,my)
       .subscribe(data =>{ 
-        //console.log(data);
+        console.log(data);
         this.monthlyExpense = data; 
         this.selectedValues =data.map((x: { expenseType: string; })=>x.expenseType);
         console.log(this.selectedValues);
+        this.monthlyExpense.forEach(item => {
+          item.isEdit = false;
+        });
       });
+  }
+  editRow(item:any)
+  {  
+    item.isEdit = true;
   }
 
 GetFolioDetails()  

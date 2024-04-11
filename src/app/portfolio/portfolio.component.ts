@@ -22,6 +22,7 @@ export interface returnonassets{
   return:number;
   dividend:number;
   xirr:number;
+  netInvstmnt:number;
 }
 export interface compDivYear{
   liveprice:number;
@@ -120,6 +121,7 @@ export class PortfolioComponent implements OnInit {
   const assetClassInvstmnt=[];
   totalBondIntrest:number=0;
   public maxY :number=0;
+  companyurl : string="";
 
   selectedfolio: number=0;
   selectedAssetClass:number=1;
@@ -204,13 +206,11 @@ export class PortfolioComponent implements OnInit {
         if(element.equityType==this.selectedAssetClass)
         {
           element.profit= element.qty*(element.eq.livePrice - element.avgprice);
-          element.percentage = element.xirr; 
-        }
-      
+          element.percentage = element.xirr;
+        } 
         
         if(element.eq.sector!="")
-          {
-          
+          {          
             this.assetValue[this.sector.indexOf(element.eq.sector)] += parseFloat((element.avgprice*element.qty).toFixed(2));
             this.assetProfit[this.sector.indexOf(element.eq.sector)] += parseFloat(((element.eq.livePrice-element.avgprice)*element.qty).toFixed(2));
             //console.log( this.assetProfit[this.sector.indexOf(element.sector)] );
@@ -242,14 +242,14 @@ export class PortfolioComponent implements OnInit {
        } 
      }
      this.eqInvstVal=eto; 
-     this.eqCurrVal = eato; 
+     this.eqCurrVal = eato;
      //this.eqPLPercent = (eato-eto+this.sdividend)*100/eto; 
      this.mfInvstVal=mto;    
      this.mfCurrVal =mato; 
      this.mfPLPercent = (this.mfCurrVal-this.mfInvstVal)*100/this.mfInvstVal;
      this.barChartLabels=this.sector;     
      this.filterPortfolio =  this.portfolio.filter((s: { equityType: number; }) => s.equityType==this.selectedAssetClass);
-     
+     console.log(this.filterPortfolio );
     });
   
     this.assetReturns.length=0;    
@@ -279,7 +279,7 @@ export class PortfolioComponent implements OnInit {
     .subscribe(data=>{
       var i=0;
       data.forEach(element => {            
-          let a:returnonassets={ year:element.year,return:element.return,dividend:element.dividend,xirr:element.xirr};        
+          let a:returnonassets={ year:element.year,return:element.return,dividend:element.dividend,xirr:element.xirr,netInvstmnt:element.netInvstmnt};        
           this.assetReturns.push(a);
           if(i>0)
           { 
@@ -302,7 +302,7 @@ export class PortfolioComponent implements OnInit {
     this.sectorProfit.length=0;
     this.sectorDiv.length=0;
      
-    this.GetXirrReturn(this.folioId,1); 
+    this.GetXirrReturn(this.folioId,1);
   
   }
   
@@ -310,8 +310,8 @@ export class PortfolioComponent implements OnInit {
   {
     //console.log(e); 
     this._portfolio.UpdateTransaction(e.tranId) 
-    .subscribe(data=>{  
-      this.comment="Updated";
+    .subscribe(data=>{        
+      this.status ="Transaction Verified Successfully";
     });
     this.showdividend(e.eq.assetId,e.eq.equityName)
   }  
@@ -339,7 +339,7 @@ public sectorfolio()
 }
 NextInvest() 
 {
- console.log(this.selectedMonth);
+ //console.log(this.selectedMonth);
  var month = Number(this.selectedMonth.split('-')[0]);
  var year = Number(this.selectedMonth.split('-')[1]);
  if(month == 12)
@@ -352,10 +352,8 @@ NextInvest()
   month += 1;
  }
 
- this.selectedMonth = month.toString() +"-"+ year.toString();
- console.log(this.selectedMonth);
+ this.selectedMonth = month.toString() +"-"+ year.toString(); 
  this.getAssetInvestdetails(); 
-
 }
 public GetXirrReturn(folioId:number, AssetId:number)
 {
@@ -669,7 +667,7 @@ public GetXirrReturn(folioId:number, AssetId:number)
       {
         this.selectedAssetClass =1;
         this.filterPortfolio =  this.portfolio.filter((s: { equityType: number; }) => s.equityType==this.selectedAssetClass);     
-        console.log(this.filterPortfolio);  
+        //console.log(this.filterPortfolio);  
         this.GetXirrReturn(this.folioId,1);      
         this.CalculateNetInvst();
         this._portfolio.getAssetHistory(this.folioId,this.selectedAssetClass)
@@ -706,7 +704,7 @@ public GetXirrReturn(folioId:number, AssetId:number)
           
         this.selectedAssetClass =2;
           this.filterPortfolio =  this.portfolio.filter((s: { equityType: number; }) => s.equityType==this.selectedAssetClass);
-          console.log(this.filterPortfolio);  
+          //console.log(this.filterPortfolio);  
           for (var i = 0; i < this.filterPortfolio.length; i++){           
             
             this.eqInvstVal += this.filterPortfolio[i].qty*this.filterPortfolio[i].avgprice;
@@ -804,16 +802,20 @@ public GetXirrReturn(folioId:number, AssetId:number)
             });
         }
   } 
-  showdividend(e:string,eqtName:string)
+  showdividend(p:any)
   {
-    this.selectedEqt =eqtName;
-    this.selectedEqtID =e;
+   // p.eq.assetId,p.eq.equityName
+   debugger;
+    this.companyurl =p.eq.analysisurl;
+    //console.log(p);
+    this.selectedEqt =p.eq.equityName;
+    this.selectedEqtID =p.eq.assetId;
     this.divVal.length=0;
     this.divDt.length=0;
     this.eqtQty.length=0;
     let year:number=0;   
     //debugger;
-    this._portfolio.getDividend(e)
+    this._portfolio.getDividend(p.eq.assetId)
     .subscribe(data => { 
       this.share = data;      
       this.companyDividend=data.div;
@@ -836,7 +838,7 @@ public GetXirrReturn(folioId:number, AssetId:number)
       }); 
      });
     
-    this._portfolio.getYrlyEqtInvestment(this.folioId, e)
+    this._portfolio.getYrlyEqtInvestment(this.folioId, p.eq.assetId)
     .subscribe(data => { 
       
       this.eqtQty.length=0;      
@@ -848,7 +850,7 @@ public GetXirrReturn(folioId:number, AssetId:number)
         this.eqtTrandt.push( ss!=null?new Date(ss).getFullYear():new Date() );
       });      
      });
-     this._portfolio.getEqtTransaction(this.folioId, e)
+     this._portfolio.getEqtTransaction(this.folioId, p.eq.assetId)
      .subscribe(data => {
        this.eqtTransaction=data;
        this.totalShare=0;
@@ -859,14 +861,18 @@ public GetXirrReturn(folioId:number, AssetId:number)
        });
 
      (document.getElementById('sharedetails')as HTMLDivElement).style.display='block';        
-    this.shareName = e;
+    this.shareName = p.eq.assetId;
   }
+   
   showCompDividend(year:string) 
   {    
     this.compDivDetails.length=0; 
     if(this.selectedAssetClass==1)
     {
       debugger;
+      const keys = new Set();
+      const uniqueRows = [];
+
       this._portfolio.getCompDividend(year)
         .subscribe(data => { 
           const currentYear = new Date().getFullYear();  
@@ -874,22 +880,22 @@ public GetXirrReturn(folioId:number, AssetId:number)
         (document.getElementById('cmpDivDetails')as HTMLDivElement).style.display='block'; 
         data.forEach(element => {
           
-          element.eq.div.forEach(y=>{
+          element.eq.div.forEach(row=>{
           //  console.log(y);
-            const match = y.dt.match(new Date().getFullYear());
-            if(match!=null  && (y.creditType==10 ||y.creditType==11||y.creditType==12))
+            const match = row.dt.match(new Date().getFullYear());
+            if(match!=null  && (row.creditType==10 ||row.creditType==11||row.creditType==12))
             {
-            //  console.log(y.divValue);  
-            
+            //Add uniq dividend values to list           
+
               let a:compDivYear={  
-                div:y.divValue,
+                div:row.divValue,
                 livePrice:element.eq.livePrice,
-                dt:y.dt,
+                dt:row.dt,
                 compId:element.eq.assetId,
                 compName:element.eq.equityName
               };  
               this.yearlyDivDetails.push(a);
-              console.log(a);    
+              //console.log(a);   
             }            
           });
         });
@@ -918,7 +924,7 @@ public GetXirrReturn(folioId:number, AssetId:number)
   public showDividendByGroup() {
     this.showDiv = !this.showDiv;
     this.showCmp = !this.showDiv;
-  }
+  } 
 
   public showTrans() {
     this.show = !this.show;    
@@ -1057,14 +1063,16 @@ public rtnInvstmt: ChartDataSets[] = [
     if (e.event.type == "click") {
       const clickedIndex = e.active[0]?.index; 
       var lbl=e.active[0]._chart.getElementAtEvent(event)[0]._model.label;    
-      this.filterPortfolio =  this.portfolio.filter((s: { eq: any; sector: any;   })=> s.eq.sector==lbl);    
-      this.filterPortfolio.forEach((element: { dividend: number; profit: number; avgprice: number; qty: number; eq: { livePrice: number; }; }) => { 
-        
+      
+      this.filterPortfolio =  this.portfolio.filter((s: { eq: any; sector: any;   })=> s.eq.sector==lbl);      
+      this.filterPortfolio.forEach((element: { dividend: number; profit: number; avgprice: number; qty: number; eq: { livePrice: number; }; }) => {         
               this.sdividend += element.dividend;
               this.netReturn += element.profit;
               this.eqInvstVal += element.avgprice*element.qty;  
               this.eqCurrVal += element.eq.livePrice*element.qty;
       });
+
+      console.log(this.filterPortfolio);
     }
   }
   public historyClick (e: any): void{

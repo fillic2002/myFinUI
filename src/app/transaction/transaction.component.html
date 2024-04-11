@@ -48,93 +48,49 @@
     </div>
 </div>
   
-<div id="comment" class="comment">{{status}}</div> 
+ 
 <br>
 
-<ng-container *ngIf="show">
-<table style="background-color: beige;">
-    <tr >        
-        <td>
-            <span class="naming" >Asset Type:</span>
-                <select class="inputT" id="portfolio" (change)="changeAsset($event)">
-                <option value="1" >Shares</option>
-                <option value="2">Equity MF</option>
-                <option value="3">PF</option>
-                <option value="4">PPF</option>
-                <option value="5">Debt MF</option>           
-                <option value="8">Flat</option> 
-                <option value="12">Gold</option> 
-                <option value="7">Plot</option> 
-                <option value="6">Bank</option> 
-                </select>           
-         
-            <span class="naming">Option:</span>
-            <select id="option" class="inputT"  (change)="selectOption($event)"> 
-                <option value=1>Buy</option> 
-                <option value=2>Sell</option>
-            </select>
-        </td>        
-        <td *ngIf="isShown"> 
-            <span class="naming"  >Asset ID/Name:</span>
-            <div style="z-index: -1" *ngIf="showresult"> 
-                <div  id="result" *ngFor="let t of result">    
-                    <span (click)="getId(t.assetId)" class="dt">{{t.assetId}}</span>
-                    <span class="naming">{{t.equityName}}</span>                
-                </div>
-            </div>
-            <input *ngIf="isShown" id="txtName" class="inputT" type="text"  (keypress)="getasset($event)" value="{{companyid}}" >
-           <span class="naming"  >Date:</span>
-                <input class="inputT" id="txtDt" type="date" (change)="changeDate($event)"> 
-        </td>
-    </tr>
-    
-    <tr>
-        <td>
-            <span class="naming"  >Price:</span><input class="inputT" id="txtPrice"   type="text"> 
-            <span class="naming"  >Quantity:</span><input class="inputT" id="txtQty"  type="text"></td>
-        <td> 
-            <span class="naming"  >MarketCap:</span> <input class="inputT" id="txtMarketCap"  type="text">
-            <span class="naming"  >PB:</span><input class="inputT" id="txtPB"   type="text">
-            <input class="button1" type="button" value="Save" (click)="AddTransaction()"></td>
-    </tr>
-</table>
-</ng-container>
+ 
 
 <div (click)="showTrans(option)" class="dml">{{trnStatus}}</div><br>
 <table>
     <tr>
-        <td><div style="width: 700px;height: 350px;" >
-            
+        <td><div style="width: 700px;height: 350px;" >            
             <canvas baseChart 
-            [datasets]="invstShrDataSet"
-            [labels]="barChartLabels"
-            [options]="barChartOptions"
-            [plugins]="barChartPlugins"
-            [legend]="barChartLegend"
-            [colors]="barChartColors"
-            [chartType]="barChartType"
-            (chartClick)="chartClick($event)">            
+                [datasets]="invstShrDataSet"
+                [labels]="barChartLabels"
+                [options]="barChartOptions"
+                [plugins]="barChartPlugins"
+                [legend]="barChartLegend"
+                [colors]="barChartColors"
+                [chartType]="barChartType"
+                (chartClick)="chartClick($event)">            
             </canvas>                             
         </div></td>
         <td>
-            <div style="width: 600px;height: 250px; float: left; padding-left: 40px;" >
+            <div style="width: 730px;height: 320px; float: left; padding-left: 40px;" >
+                <canvas id="sectorWiseMonthlyInvst"
+                ></canvas>                            
+            </div>          
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"> <div style="width: 50%;  float: left; padding-left: 40px;  overflow: scroll;" >
+            
+            <div style="width: 600px;height: 350px; float: left; padding-left: 40px;" >
                 <canvas baseChart 
                 [datasets]="mnthInvstDataSet"
                 [labels]="mnthInvstlbl"
-                [options]="mnthInvstChartOptions"
+                [options]="mnthInvstChartOptions" 
                 [plugins]="mnthInvstChartPlugins"
                 [legend]="mnthInvstChartLegend"
                 [colors]="mnthInvstChartColors"
                 [chartType]="mnthInvstChartType"
                 (chartClick)="getMonthlyInvest($event)">
                 </canvas>                             
-            </div>          
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2"> <div style="width: 80%;  float: left; padding-left: 40px;  overflow: scroll;" >
-            <canvas id="sectorWiseMonthlyInvst"
-            ></canvas> </div>     
+            </div> 
+        </div>     
         </td>        
     </tr>
     <tr>
@@ -168,6 +124,51 @@
     </tr>
 </table>
 <div style="padding: 40px;"></div>
+
+    <table style="background-color: beige;">
+        <tr >        
+            <td>
+                <span class="naming" >Asset Type:</span>
+                    <select class="inputT" id="portfolio" (change)="changeAsset($event)">
+                    <option value="1" >Shares</option>
+                    <option value="2">Equity MF</option>
+                    <option value="3">PF</option>
+                    <option value="4">PPF</option>
+                    <option value="5">Debt MF</option>           
+                    <option value="8">Flat</option> 
+                    <option value="12">Gold</option> 
+                    <option value="7">Plot</option> 
+                    <option value="6">Bank</option> 
+                    </select>
+                <span class="naming">Option:</span>
+                <select id="option" class="inputT"  (change)="selectOption($event)"> 
+                    <option value=1>Buy</option> 
+                    <option value=2>Sell</option>
+                </select>
+            </td>        
+            <td *ngIf="isShown"> 
+                <span class="naming"  >Asset ID/Name:</span>
+                <div style="z-index: -1" *ngIf="showresult"> 
+                    <div  id="result" *ngFor="let t of result">    
+                        <span (click)="getId(t.assetId)" class="dt">{{t.assetId}}</span>
+                        <span class="naming">{{t.equityName}}</span>                
+                    </div>
+                </div>
+                <input *ngIf="isShown" id="txtName" class="inputT" type="text"  (keypress)="getasset($event)" value="{{companyid}}" >
+               <span class="naming"  >Date:</span>
+                    <input class="inputT" id="txtDt" type="date" (change)="changeDate($event)"> 
+            </td>
+         
+            <td>
+                <span class="naming"  >Price:</span><input class="inputT" id="txtPrice"   type="text"> 
+                <span class="naming"  >Quantity:</span><input class="inputT" id="txtQty"  type="text"></td>
+            <td> 
+                <span class="naming"  >MarketCap:</span> <input class="inputT" id="txtMarketCap"  type="text">
+                <span class="naming"  >PB:</span><input class="inputT" id="txtPB"   type="text">
+                <input class="button1" type="button" value="Save" (click)="AddTransaction()"></td>
+        </tr>
+    </table>
+    <div id="comment" class="comment">{{status}}</div> 
 <ng-container *ngIf="DetailSummary">
     <span class="naming" style="font-weight: 600;padding-right: 3px;">Asset ID/Name:</span>
     <input  id="txtCompName" [(ngModel)]="compName" class="inputT" type="text"  (keypress)="filterAsset($event)">    
@@ -175,33 +176,34 @@
 <table >
     <tr class="header1">
         <td (click)="sort('purchaseDt')" class="headerdt">Date of Purchase</td>
-        <td class="headername">Equity Name</td>
+        <td class="headeramt"> FolioID</td>
+        <td class="headername">Equity Name</td>        
         <td class="headeramt" (click)="sort('ID')"> ID</td>        
         <td class="headeramt">Quantity</td>
-        <td class="headeramt">Purchase Price</td>
+        <td class="headeramt">Purchase Price</td>        
         <td class="headeramt" (click)="sort('ia')">Invested amt</td>
         <td class="headeramt" (click)="sort('pb')">PB</td>
         <td class="headeramt" (click)="sort('mc')">MarketCap</td>
         <td class="headeramt">Transation Type</td>
         <td class="headeramt">verified</td>
         <td class="headeramt">Action</td>
-        <td class="headeramt">Option</td>
+        
     </tr>
 
  <tr class="header2" *ngFor="let t of filterPortfolio">  
         <td class="dt">
           {{t.tranDate|date}}
         </td>
-        <td class="naming" (click)="showdividend(t.equityId,t.equityName)">{{t.equity.symbol}}</td>
-        <td class="amt">{{t.equity.assetId}}</td>        
+        <td class="amt">{{t.portfolioId}}</td>
+        <td class="naming" (click)="AddTran(t)">{{t.equity.symbol}}</td>
+        <td class="amt" >{{t.equity.assetId}}</td>        
         <td class="amt">
             <div *ngIf="t.isEdit">
                 <input type="text" [(ngModel)]="t.qty">
             </div>
             <div *ngIf="!t.isEdit">
                 {{t.qty}}
-            </div>     
-          
+            </div>
         </td>
         <td class="amt">
             <div *ngIf="t.isEdit">
@@ -211,8 +213,9 @@
                 {{t.price|number : '1.2-2'}}
             </div>            
         </td>
-        <td class="amt">{{t.qty*t.price|number : '1.2-2'}}</td>
-        <td class="amt">
+        
+        <td class="amt" [ngStyle]="{'background-color': getBGColor(t.marketCap_Tran)}">{{t.qty*t.price|number : '1.2-2'}}</td>
+        <td class="amt" [ngStyle]="{'background-color': getBGColor(t.marketCap_Tran)}">
             <div *ngIf="t.isEdit">
                 <input type="text" [(ngModel)]="t.pB_Tran">
             </div>
@@ -220,7 +223,7 @@
                 {{t.pB_Tran|number : '1.2-2'}}
             </div>
         </td>
-        <td class="amt" [ngStyle]="{'background-color': getBGColor(t.marketCap)}">
+        <td class="amt" [ngStyle]="{'background-color': getBGColor(t.marketCap_Tran)}">
             <div *ngIf="t.isEdit">
                 <input type="text" [(ngModel)]="t.marketCap_Tran">
             </div>
@@ -232,10 +235,17 @@
         <td class="amt" style="text-align:center ;" [ngStyle]="{color: getTranTypeColor(t.verified)}">             
             {{t.verified}}
         </td>
-        <td (click)="deleterecord(t)" style="cursor: pointer" class="action" >Delete</td>
-        <td><button class="savebtn" (click)="editRow(t)">Edit</button>
-            <button class="savebtn" (click)="updateTransaction(t)">Save</button>
+        <td  style="cursor: pointer">      
+            
+            <span *ngIf="!t.isEdit">
+                <img style="padding: 5px;" src="../assets/edit.png" alt="Image" (click)="editRow(t)">                
+            </span>            
+            <span *ngIf="t.isEdit">                
+                <span class="savebtn" (click)="updateTransaction(t)">Save</span>
+            </span>
+            <img src="../assets/delete.png" alt="Image" (click)="deleterecord(t)">   
         </td>
+         
         
     </tr> 
 </table>
@@ -246,17 +256,20 @@
         <td>
             <div style="font-weight: 550;">Add PF Transaction</div>              
             
-            <span class="naming1">Date:</span><input id="txtDt" type="date" class="inputdt">
+            <span class="naming1">Date:</span><input id="txtPfDt" type="date" class="inputdt">
             <span class="naming1">Emp:</span><input id="txtEmp" class="inputT" type="text"> 
             <span class="naming1">Emplyr:</span><input id="txtEmplyr" class="inputT" type="text"> 
             <span class="naming1">Pension:</span><input id="txtPension" class="inputT" type="text"> 
             <span class="naming1">FolioId:</span><input id="txtFolio" class="inputT" type="text"> 
+            <span class="naming1">Account:</span>
+                <select class="dropDown"  id="actType">
+                    <option value="3">PF</option>                    
+                    <option value="4">PPF</option>                    
+                </select>
             <span class="naming1">Transaction Type:</span>
                 <select class="dropDown"  id="trnType">
                     <option [value]="item.id" *ngFor="let item of TypeOfTran" > {{item.name}}</option>                    
                 </select>
-            
-              
             <input class="button1" type="button" value="Save" (click)="AddPFTransaction()"> 
         </td>
     </tr></table>

@@ -5,15 +5,12 @@
           <span value="H" (click)="onSelect(option)" style="font-size: 22px;cursor: pointer;">my<span style="color: orange; ">f</span>in</span>
       </td>
       <td style="width: 70%;text-align: center;font-size: 20px; color: aliceblue;">
-          
-              
       </td>
       <td style="width: 15%;color:aliceblue;font-size: 20px; text-align: center;margin: 1px;">
         <div>  %</div>
         <div class="header4">Aset Return(xirr)</div>           
       </td>
-  </tr>
-  
+  </tr>  
 </table>
 <div>
   <span class="header4" style="font-size: 20px; " >Expense</span>
@@ -22,7 +19,7 @@
   </select>
   <span class="pipe" (click)="selectnext(option)">Admin</span>
 </div>
-<div style=" ">Add File
+<div >Add File
   <input type="file" (change)="onFileSelected($event)" />
 </div>
 <form (ngSubmit)="uploadFile()" #fileForm="ngForm">
@@ -54,24 +51,29 @@
   <span class="naming" style="width: 120px;">Desc:</span><input id="txtExpDesc" type="textArea" class="inputdt">
   <input class="savebtn" type="button" value="Save" (click)="AddExpense()"> 
 </div>
+
 <table style="width: 100%;">
   <tr class="header1">
      <td>FolioID</td>
      <td>Expense Category</td>
     <td>Description</td>
-    <td  style="width: 50%;">Details</td>
+    <td style="width: 50%;">Details</td>
     <td>AMT</td>  
     <td>Action</td>
   </tr>
   <tr class="header2" *ngFor="let item of monthlyExpense" >
-    <td  >{{item.folioId}}</td>
+    <td>{{item.folioId}}</td>
     <td> 
-    <select [(ngModel)]="selectedValues[item]" style="cursor: pointer; background-color: #eaea25de;"  id="txtType" (change)="changeAccount($event)">
-          <option [value]="item.expenseType" *ngFor="let item of expTypes" > {{item.expTypeDesc}}</option>                    
+      <select [(ngModel)]="item.expenseType" style="cursor: pointer; background-color: #eaea25de;"  id="txtType" (change)="changeAccount($event)">
+        <option [value]="item.expTypeId" *ngFor="let item of expTypes" > {{item.expTypeDesc}}</option>                    
       </select></td>
-    <td    (click)="CopyOver(item)">{{item.expenseType.expTypeDesc}}</td>
-    <td   style="width: 50%;height: 20px;">{{item.desc}}</td>
-    <td  >{{item.amt|number:'1.2-2'}}</td>  
-    <td (click)="deleterecord(item.expId)" style="cursor: pointer" class="action" >Delete</td>
+    <td (click)="CopyOver(item)">{{item.expenseType.expTypeDesc}}</td>
+    <td style="width: 50%;height: 20px;">{{item.desc}}</td>
+    <td>{{item.amt|number:'1.2-2'}}</td>  
+    <td>
+        <span class="action" (click)="deleterecord(item.expId)" >Delete</span>
+        <span (click)="UpdateExpense(item)"  class="action">Update</span> 
+       
+    </td>
   </tr>        
 </table>

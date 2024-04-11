@@ -9,7 +9,7 @@ import { debug } from 'console';
 @Injectable({
     providedIn: 'root'
 })
-export class SharesService {
+export class SharesService { 
    constructor(private client:HttpClient) { }
 
   getPortfolio(id:number):Observable<IPortfolio[]>{
@@ -82,7 +82,7 @@ export class SharesService {
     tranId:tranid  
     });
   }
-  UpdateTransactionNew(pb:any, dt:string, astId: string,price:number, folioId:number,id:string):Observable<boolean[]>{  
+  UpdateTransactionNew(pb:any, dt:string, astId: string,price:number, folioId:number,id:string,qty:number):Observable<boolean[]>{  
  
     return this.client.post<boolean[]>("http://localhost:59921/transaction/updateTransaction",{ 
       tranDate:new Date(Date.parse(dt)),   
@@ -90,10 +90,11 @@ export class SharesService {
       equity:{
         assetId: astId.toString()
       },
+      qty: parseFloat(qty.toString()),
       portfolioId:folioId,
       price: parseFloat(price.toString()),
       tranId:id,
-      verified:true
+      verified:true 
     });
   }
   postBankTransaction(salary:any,desc:string,txtDt:any,trnType:any,acctid:any,id:any):Observable<boolean[]>{
@@ -107,13 +108,13 @@ export class SharesService {
        AcctId:parseInt(acctid)
     })  
   }
-  postPFTransaction(txtDt:any,empInvst:string,folioId:any,trnType:any,pension:any,emplrInvst:any,actType:any):Observable<boolean[]>{
+  postPFTransaction(txtDt:any,empInvst:string,folioId:any,actType:any,pension:any,emplrInvst:any,trnType:any):Observable<boolean[]>{
     // console.log(id);
      return this.client.post<boolean[]>("http://localhost:59921/transaction/AddPFTransaction",{
        DateOfTransaction: new Date(Date.parse(txtDt)),
        InvestmentEmp:parseFloat(empInvst),
        Folioid:parseInt(folioId),
-       TypeOfTransaction:trnType,
+       TypeOfTransaction:parseInt(trnType),
        Pension:parseInt(pension),
        AccountType:parseInt(actType),
        InvestmentEmplr:parseInt(emplrInvst)
@@ -174,7 +175,8 @@ export class SharesService {
       livePrice:shareDtl.livePrice,
       sourceurl:shareDtl.sourceurl,
       divUrl:shareDtl.divUrl, 
-      sector:shareDtl.sector
+      sector:shareDtl.sector,
+      analysisurl:shareDtl.analysisurl
     }); 
   }
 
@@ -254,6 +256,8 @@ export class SharesService {
  getMonthlyExpense(folioID:number,my:string)
  { return this.client.get("http://localhost:59921/portfolio/GetMonthlyfolioExpense/"+folioID+"/"+my); }
  
+ 
+
  getBondDetails(folioID:number,my:string)
  { return this.client.get("http://localhost:59921/Bonds/GetBondsDetails"); }
  
@@ -272,21 +276,41 @@ export class SharesService {
  { 
   return this.client.post("http://localhost:59921/Bonds/UpdateBondDetails/",
   {
-   
 		couponRate:coupon,
     BondName:bondName,
-		BondId:bondId,
-		 //minInvst:,
-		dateOfMaturity:DOM,
-		 //firstIPDate:,
+		BondId:bondId,	
+		dateOfMaturity:DOM,	
 		LivePrice:CP,
-		 //YTM :,
-		faceValue:fv,
-		 //BondLink:,
-		intrestCycle:intrestPayCycle,
-		 //rating:,
-		 //symbol :,  
+		faceValue:fv,	
+		intrestCycle:intrestPayCycle,	
  }); 
+}
+updateBondPaymentDetails(item:any, validated:boolean)
+ { 
+  return this.client.post("http://localhost:59921/Bonds/UpdateBondIntrestPaymentDetails/",
+  {
+		intrestAmt:item.intrestAmt,
+    intrestPaymentDate:item.intrestPaymentDate,
+		BondDetail:{
+      bondId:item.bondDetail.bondId
+    },			
+		folioId:item.folioId,
+		validated:validated	,
+    bondTranId: item.bondTranId,
+    bondIntrstTranInd: item.bondIntrstTranInd
+ }); 
+}
+updateMonthlyExpense(exp:any){ 
+  debugger;
+  return this.client.post("http://localhost:59921/portfolio/AddExpense/",
+  {
+    expId:parseInt(exp.expId),
+		folioId:parseInt(exp.folioId),
+		dtOfTran: new Date(exp.dtOfTran),
+		amt:parseInt(exp.amt),
+		desc:exp.desc,		
+    expenseType:  parseInt(exp.expenseType)       
+  }); 
 }
 
 

@@ -1,156 +1,272 @@
 <!doctype html>
-<div>
-    <span value="H" (click)="onSelect(option)" style="font-size: 20px;cursor: pointer;">my<span style="color: orange; cursor: pointer;">f</span>in</span>
-    <span class="title" style="padding-left: 30%;padding-top: 10px;">Transaction Detail</span>
-    <span class="pipe" style="padding-left: 32%;" (click)="selectnext(option)">Bank Account Details</span>
+<table style="width: 100%; background-color: #000000d9;">
+    <tr>
+        <td style="color:aliceblue;vertical-align: top;">
+            <span value="H" (click)="onSelect(option)" style="font-size: 22px;cursor: pointer;">my<span style="color: orange; ">f</span>in</span>
+        </td>
+        <td style="width: 10%;color:aliceblue;font-size: 20px; text-align: center;margin: 1px;">          
+        </td>
+        <td style="width: 10%;color:aliceblue;font-size: 20px; text-align: center;margin: 1px;">            
+        </td>
+        <td style="width: 10%;color:aliceblue;font-size: 20px; text-align: center;margin: 1px;">            
+        </td>
+    </tr>     
+  </table>
+  
+<div style="text-align: center;">
+    <span class="title" style=" float:  left;">Transaction Detail</span>
+    <span class="pipe" (click)="toggleContainer(1)">Equity</span>
     <span class="pipe" > | </span>
-    <span class="pipe" (click)="selectnext(option)">Portfolio</span>
+    <span class="pipe" (click)="toggleContainer(2)">Bonds</span>
     <span class="pipe" > | </span>
-    <span class="pipe" (click)="selectnext(option)">Tax</span>
+    <span class="pipe" (click)="toggleContainer(3)">Immovable</span>
+    <span class="pipe" > | </span>
+    <span class="pipe" (click)="toggleContainer(4)">Expense</span>
+    <span class="pipe" > | </span>
+    <span class="pipe" (click)="toggleContainer(5)">Bank Account Details</span>
+    <span class="pipe" > | </span>
+    <span class="pipe" (click)="toggleContainer(6)">Portfolio</span>
+    <span class="pipe" > | </span>
+    <span class="pipe" (click)="toggleContainer(7)">Transaction</span>
     </div>
- <hr size="1"  color="lightgrey">  
+ 
 <select [(ngModel)]="selectedfolio" style="cursor: pointer; background-color: #eaea25de;"  id="txtFolio" >
     <option [value]="item.folioID" *ngFor="let item of folios" > {{item.folioName}}</option>                    
 </select>
 <table>
     <tr>
         <td>
-            <div style="font-weight: 550;">Add Transaction</div>
              
-            
-            <span class="naming">Date:</span><input id="txtDt" type="date" class="inputdt">
-            <span class="naming">Amount:</span><input id="txtAmt" class="inputT" type="text"> 
-            <span class="naming">Transaction Type:</span>
-                <select [(ngModel)]="tranType" style="cursor: pointer; background-color: #eaea25de;"  id="trnType" (change)="changeAccount($event)">
-                    <option [value]="item.name" *ngFor="let item of TypeOfTran" > {{item.name}}</option>                    
-                </select>
-            
-            <span class="naming">Description:</span>
-                <select [(ngModel)]="descType" style="cursor: pointer; background-color: #eaea25de;"  id="txtDesc" (change)="changeDesc($event)">
-                    <option [value]="item.name" *ngFor="let item of desc" > {{item.name}}</option>  
-                    
-                </select>             
-
-            <span class="naming">AcctId:</span>
-            <input id="txtAcctType" class="inputT" type="text">
-            <input class="savebtn" type="button" value="Save" (click)="AddTransaction()"> 
         </td>
     </tr>
     <tr>
         <td>
-            <div style="font-weight: 550;">Add New Account</div>             
             
-            <span class="naming">Date:</span><input id="txtDt" type="date" class="inputdt">
-             
-            <span class="naming">Account Type:</span>
-                <select [(ngModel)]="tranType" style="cursor: pointer; background-color: #eaea25de;"  id="txtType" (change)="changeAccount($event)">
-                    <option [value]="item.id" *ngFor="let item of ActType" > {{item.bankName}}-{{item.acctType}}</option>                    
-                </select>
-            
-            <span class="naming">Description:</span>
-            <select [(ngModel)]="descType" style="cursor: pointer; background-color: #eaea25de;"  id="txtDesc" (change)="changeDesc($event)">
-                <option [value]="item.id" *ngFor="let item of desc" > {{item.name}}</option>                
-            </select> 
-            <span class="naming">AcctType:</span><input id="txtAcctType" class="inputT" type="text">
-            <input class="savebtn" type="button" value="Save" (click)="AddNewAct()"> 
         </td>
     </tr>
     <tr>
         <td>
-            <div style="font-weight: 550;">Add/Update equity details</div>
-                     
-            <span class="naming" style="font-weight: 600;padding-right: 3px;">Asset ID/Name:</span>
-            <div style="z-index: -1" *ngIf="showresult"> 
-                <div  id="result" *ngFor="let t of result">    
-                    <span (click)="getId(t.id)" class="dt">{{t.id}}</span>
-                    <span class="naming">{{t.fullName}}</span>                
-                </div>
-            </div>
-            <span class="naming">Company Name:</span><input id="txtName" type="text" class="inputT">              
-            
-            <span class="naming">ISIN:</span>
-            <div style="z-index: 1" *ngIf="showresult"> 
-                <div  id="result" *ngFor="let t of result">    
-                    <span (click)="getId(t.id)" class="dt">{{t.id}}</span>
-                    <span class="naming">{{t.fullName}}</span>                
-                </div>
-            </div>
-            <input  id="txtISIN" class="inputT" type="text"  (keypress)="getasset($event)" value="{{companyid}}" >
-            <span class="naming">Symbol:</span><input name="symbol" id="symbol" class="inputT">
-            <span class="naming">Sector:</span><input id="txtSector" class="inputT" type="text">
-            <span class="naming">Description(MC):</span><input id="desc" class="inputT" type="text">
-            <span class="naming">Div Link(BSE):</span><input id="txtDivLink" class="inputT" type="text">
-            <span class="naming">AssetType:</span><input id="txtAsttype" class="inputT" type="text">
-            <input class="savebtn" type="button" value="Save" (click)="UpdateEquity()"> 
+             
         </td>
     </tr>
     
 </table>
 <div class="msg">{{response}}</div>
-<!--Adding Expense Type-->
-<div>
-    <div style="font-weight: 550;">Add Expense Type</div>
-    <span class="naming">Expense Type:</span><input class="inputT" [(ngModel)]="expType">
-    <input class="savebtn" type="button" value="Save" (click)="AddExpenseType()"> 
-</div>
-<!--Adding Expense-->
-<div>
-    <div style="font-weight: 550;">Add Expense</div>     
-    <span class="naming">Expense Type:</span>
-    <select [(ngModel)]="expType1" style="cursor: pointer; background-color: #eaea25de;"  id="txtType" (change)="changeAccount($event)">
-        <option [value]="item.expTypeId" *ngFor="let item of expTypes" > {{item.expTypeDesc}}</option>                    
-    </select>
-    <span class="naming">Amt:</span><input name="expamt" id="expamt" class="inputT">
-    <span class="naming">Date:</span><input id="txtExpDt" type="date" class="inputdt">
-    <span class="naming">Desc:</span><input id="txtExpDesc" type="textArea" class="inputdt">
-    <input class="savebtn" type="button" value="Save" (click)="AddExpense()"> 
-</div>
-<!--Adding Propert Transaction-->
-<div>
-    <div style="font-weight: 550;">Add Prooerty Transaction</div>
-    <span class="naming">Date:</span><input id="txtPropertyTranDt" type="date" class="inputdt">
-    <span class="naming">Amt:</span><input name="propertAmt" id="propertAmt" class="inputT">
-    <span class="naming">Transaction Type:</span>
-        <select  style="cursor: pointer; background-color: #eaea25de;"  id="prpTranType" >
-            <option value="1">Buy</option>
-            <option value="0">Sell</option>
-        </select>
-    <span class="naming">Accout Type:</span>
-        <select   style="cursor: pointer; background-color: #eaea25de;"  id="asstType" >
-            <option value="7">Plot</option>
-            <option value="8">Flat</option>
-            <option value="12">Gold</option>
-        </select>
-    <input class="savebtn" type="button" value="Save" (click)="AddPropertyTran()">
-</div>
-<!--Adding Bonds Transaction-->
-<div>
-    <div style="font-weight: 550;">Add Bond Transaction</div>
-    <span class="naming">BondId:</span><input id="bondId" class="inputT">
-    <span class="naming">Date:</span><input id="bondPurchaseDt" type="date" class="inputdt">
-    <span class="naming">Price:</span><input name="bondPurAmt" id="bondPurAmt" class="inputT">
-    <span class="naming">Qty:</span><input name="bondPurQty" id="bondPurQty" class="inputT">
-    <span class="naming">Transaction Type:</span>
-        <select  style="cursor: pointer; background-color: #eaea25de;"  id="bondTranType" >
-            <option value="1">Buy</option>
-            <option value="0">Sell</option>
-        </select>
-        
-    <input class="savebtn" type="button" value="Save" (click)="AddBondTran()">
-</div>
-<!--Adding Bonds Details-->
-<div>
-    <div style="font-weight: 550;">Add Bond Details</div>
-    <span class="naming">Bond Name:</span><input id="bondName" class="inputT">
-    <span class="naming">MinInvest:</span><input name="minInvst" id="minInvst" class="inputT">
-    <span class="naming">BondId:</span><input name="bondId" id="bondID" class="inputT">        
-    <span class="naming">CouponRate:</span><input name="coupon" id="couponrt" class="inputT">
-    <span class="naming">FaceValue:</span><input name="ytm" id="ytm" class="inputT">
-    <span class="naming">DateOfMaturity:</span><input id="dtOfMaturity" type="date" class="inputdt">
-    <input class="savebtn" type="button" value="Save" (click)="AddBondDetails()">
-</div>
  
-<div>
-    <app-equitysearch></app-equitysearch>
+ 
+ 
+ 
+ 
+<!-- Container 1 -->
+<div *ngIf="showContainer === 1">
+    
+    <table>
+        <tr>
+            <td style="width: 15%;"></td>            
+            <td>
+                <div style="background-color: lightgray; padding: 10px; font:550 14px bold, Open Sans, Arial, Helvetica, sans-serif" >Add/Update equity details</div>
+                <!-- Content for container 1 -->
+                <div class="boundary">                                
+                    <span class="naming" style="font-weight: 600;padding-right: 3px;">Asset ID/Name:</span>
+                    <div style="z-index: -1" *ngIf="showresult"> 
+                        <div  id="result" *ngFor="let t of result">    
+                            <span (click)="getId(t.id)" class="dt">{{t.id}}</span>
+                            <span class="naming">{{t.fullName}}</span>                
+                        </div>
+                    </div>
+                    <span class="naming">Company Name:</span><input id="txtName" type="text" class="inputT">              
+                    
+                    <span class="naming">ISIN:</span>
+                    <div style="z-index: 1" *ngIf="showresult"> 
+                        <div  id="result" *ngFor="let t of result">    
+                            <span (click)="getId(t.id)" class="dt">{{t.id}}</span>
+                            <span class="naming">{{t.fullName}}</span>                
+                        </div>
+                    </div>
+                    <input  id="txtISIN" class="inputT" type="text"  (keypress)="getasset($event)" value="{{companyid}}" >
+                    <span class="naming">Symbol:</span><input name="symbol" id="symbol" class="inputT">
+                    <span class="naming">Sector:</span><input id="txtSector" class="inputT" type="text">
+                    <span class="naming">Description(MC):</span><input id="desc" class="inputT" type="text">
+                    <span class="naming">Div Link(BSE):</span><input id="txtDivLink" class="inputT" type="text">
+                    <span class="naming">AssetType:</span><input id="txtAsttype" class="inputT" type="text">
+                    <input class="savebtn" type="button" value="Save" (click)="UpdateEquity()"> 
+                </div>
+                <app-equitysearch></app-equitysearch>    
+            </td>
+            <td style="width: 15%;"></td>            
+        </tr>
+    </table>     
+</div>
+ <!-- Container 2 -->
+<div *ngIf="showContainer === 2">
+    
+    <tabl>
+        <tr>
+            <td style="width: 15%;"></td>            
+            <td> <!--Adding Bonds Details-->    
+                <div style="background-color: lightgray; padding: 10px; font:550 14px bold, Open Sans, Arial, Helvetica, sans-serif" >Add Bond Details</div>
+                <div class="boundary">
+                     
+                    <span class="naming">Bond Name:</span><input id="bondName" class="inputT">
+                    <span class="naming">MinInvest:</span><input name="minInvst" id="minInvst" class="inputT">
+                    <span class="naming">BondId:</span><input name="bondId" id="bondID" class="inputT">        
+                    <span class="naming">CouponRate:</span><input name="coupon" id="couponrt" class="inputT">
+                    <span class="naming">FaceValue:</span><input name="ytm" id="ytm" class="inputT">
+                    <span class="naming">DateOfMaturity:</span><input id="dtOfMaturity" type="date" class="inputdt">
+                    <span class="naming">FreqOfIntstPayment:</span>
+                        <select   style="cursor: pointer; background-color: #eaea25de;"  id="asstType" >
+                            <option value="1">HalfYearly</option>
+                            <option value="2">Yearly</option>
+                            <option value="3">Quartely</option>
+                        </select>
+                    <input class="savebtn" type="button" value="Save" (click)="AddBondDetails()">
+                </div>
+                
+            </td>
+            <td style="width: 15%;"></td>
+        </tr>
+        <tr>
+            <td style="width: 15%;"></td>       
+            <td>
+                <div style="background-color: lightgray; padding: 10px; font:550 14px bold, Open Sans, Arial, Helvetica, sans-serif" >Add Bond Transaction</div>
+                <!--Adding Bonds Transaction-->
+                <div class="boundary">                    
+                    <span class="naming">BondId:</span><input id="bondId" class="inputT">
+                    <span class="naming">Date:</span><input id="bondPurchaseDt" type="date" class="inputdt">
+                    <span class="naming">Price:</span><input name="bondPurAmt" id="bondPurAmt" class="inputT">
+                    <span class="naming">Qty:</span><input name="bondPurQty" id="bondPurQty" class="inputT">
+                    <span class="naming">Transaction Type:</span>
+                        <select  style="cursor: pointer; background-color: #eaea25de;"  id="bondTranType" >
+                            <option value="1">Buy</option>
+                            <option value="0">Sell</option>
+                        </select>
+                        
+                    <input class="savebtn" type="button" value="Save" (click)="AddBondTran()">
+                </div>
+            </td>
+            <td style="width: 15%;"></td>
+        </tr>
+    </tabl>
+    
+    
+ 
 
+</div>
+ <!--Adding Propert Transaction-->
+<div *ngIf="showContainer === 3">
+    <table>
+        <tr>
+            <td style="width: 15%;"></td>
+            <td>
+                <div style="background-color: lightgray; padding: 10px; font:550 14px bold, Open Sans, Arial, Helvetica, sans-serif" >Add Property Transaction</div>
+                <div class="boundary">
+                    <span class="naming">Date:</span><input id="txtPropertyTranDt" type="date" class="inputdt">
+                    <span class="naming">Amt:</span><input name="propertAmt" id="propertAmt" class="inputT">
+                    <span class="naming">Transaction Type:</span>
+                        <select  style="cursor: pointer; background-color: #eaea25de;"  id="prpTranType" >
+                            <option value="1">Buy</option>
+                            <option value="0">Sell</option>
+                        </select>
+                    <span class="naming">Accout Type:</span>
+                        <select   style="cursor: pointer; background-color: #eaea25de;"  id="asstType" >
+                            <option value="7">Plot</option>
+                            <option value="8">Flat</option>
+                            <option value="12">Gold</option>
+                        </select>
+                    <input class="savebtn" type="button" value="Save" (click)="AddPropertyTran()">
+                </div>
+            </td>
+            <td style="width: 15%;"></td>
+        </tr>
+    </table>
+
+    
+    
+     
+     
+</div>
+
+<!-- Container 4 -->
+<div *ngIf="showContainer === 4">
+    
+    <table>
+        <tr>
+            <td style="width: 15%;"></td>
+            <td>  
+                <div style="background-color: lightgray; padding: 10px; font:550 14px bold, Open Sans, Arial, Helvetica, sans-serif" >Add Expense Type</div>
+                <!--Adding Expense Type-->
+                <div class="boundary">                    
+                    <span class="naming">Expense Type:</span><input class="inputT" [(ngModel)]="expType">
+                    <input class="savebtn" type="button" value="Save" (click)="AddExpenseType()"> 
+                </div>         
+                <!--Adding Expense-->
+                <div class="boundary">
+                    <div style="font-weight: 550;">Add Expense</div> 
+                    <span class="naming">Expense Type:</span>
+                    <select [(ngModel)]="expType1" style="cursor: pointer; background-color: #eaea25de;"  id="txtType" (change)="changeAccount($event)">
+                        <option [value]="item.expTypeId" *ngFor="let item of expTypes" > {{item.expTypeDesc}}</option>                    
+                    </select>
+                    <span class="naming">Amt:</span><input name="expamt" id="expamt" class="inputT">
+                    <span class="naming">Date:</span><input id="txtExpDt" type="date" class="inputdt">
+                    <span class="naming">Desc:</span><input id="txtExpDesc" type="textArea" class="inputdt">
+                    <input class="savebtn" type="button" value="Save" (click)="AddExpense()"> 
+                </div>
+            </td>
+            <td style="width: 15%;"></td>
+        </tr>
+    </table>
+     
+     
+</div>
+<!-- Container 5 -->
+<div *ngIf="showContainer === 5">
+    <h2>Container 5</h2>
+    <div>
+        <div style="font-weight: 550;">Add New Account</div>             
+                
+        <span class="naming">Date:</span><input id="txtDt" type="date" class="inputdt">
+        
+        <span class="naming">Account Type:</span>
+            <select [(ngModel)]="tranType" style="cursor: pointer; background-color: #eaea25de;"  id="txtType" (change)="changeAccount($event)">
+                <option [value]="item.id" *ngFor="let item of ActType" > {{item.bankName}}-{{item.acctType}}</option>                    
+            </select>
+        
+        <span class="naming">Description:</span>
+        <select [(ngModel)]="descType" style="cursor: pointer; background-color: #eaea25de;"  id="txtDesc" (change)="changeDesc($event)">
+            <option [value]="item.id" *ngFor="let item of desc" > {{item.name}}</option>                
+        </select> 
+        <span class="naming">AcctType:</span><input id="txtAcctType" class="inputT" type="text">
+        <input class="savebtn" type="button" value="Save" (click)="AddNewAct()"> 
+    </div>
+</div>
+<!-- Container 7 -->
+<div *ngIf="showContainer === 7">
+    <table>
+        <tr>
+            <td style="width: 15%;"></td>
+            <td>
+                <div style="background-color: lightgray; padding: 10px; font:550 14px bold, Open Sans, Arial, Helvetica, sans-serif" >Add Transaction Details</div>
+                <div class="boundary">
+                        <span class="naming">Date:</span><input id="txtDt" type="date" class="inputdt">
+                        <span class="naming">Amount:</span><input id="txtAmt" class="inputT" type="text"> 
+                        <span class="naming">Transaction Type:</span>
+                            <select [(ngModel)]="tranType" style="cursor: pointer; background-color: #eaea25de;"  id="trnType" (change)="changeAccount($event)">
+                                <option [value]="item.name" *ngFor="let item of TypeOfTran" > {{item.name}}</option>                    
+                            </select>
+                        
+                        <span class="naming">Description:</span>
+                            <select [(ngModel)]="descType" style="cursor: pointer; background-color: #eaea25de;"  id="txtDesc" (change)="changeDesc($event)">
+                                <option [value]="item.name" *ngFor="let item of desc" > {{item.name}}</option>  
+                                
+                            </select>             
+
+                        <span class="naming">AcctId:</span>
+                        <input id="txtAcctType" class="inputT" type="text">
+                        <input class="savebtn" type="button" value="Save" (click)="AddTransaction()"> 
+                </div>
+            </td>
+            <td style="width: 15%;"></td>
+        </tr>
+    </table>
+     
 </div>

@@ -5,17 +5,17 @@ html {
 
 .savebtn {
   background:#c4cad7a8;
-  height: 20px;
+  height: 30px;
   width: 90px;
   margin-left: 20px;
   border-radius: 4px;
   border-width: 1px;
-  color: rgba(80, 79, 79, 0.507);
+  color: rgba(80, 79, 79, 0.878);
   font-weight: bold;
   border: 1px solid grey;
 }
 .savebtn:hover {
-  color: rgb(17, 17, 16);
+  color: rgba(203, 89, 13, 0.658);
   font-weight: bold;
   cursor: pointer;
   box-shadow: 0 1px 16px 0 rgba(0, 0, 0, 0.24),
@@ -136,15 +136,25 @@ color: #2c5777;
   width: 110px;
 }
 .clickable{
-  cursor: pointer;
-  background-color: darkgoldenrod;
+  cursor: pointer; 
+}
+.clickable:hover{
+ 
+  color: green;
+}
+.tableCell {
+  width: 180px;
+  padding: 5px;
+  font-size: medium;
+  color: #3b3a3a;
+  border-bottom: 1px dotted #bfbfbf;
 }
 .naming {
   width: 180px;
   padding: 5px;
   font-size: medium;
   color: #3b3a3a;
-  border-bottom: 1px dotted #bfbfbf;
+  border-bottom: 0px dotted #bfbfbf;
 }
 .naming1 {
   width: 180px;
@@ -211,9 +221,8 @@ color: #2c5777;
   color: rgb(38, 24, 230);
 }
 .title {
-  font: 500 28px "bold", "Open Sans", Arial, Helvetica, sans-serif;
-  padding-left: 30%;
-  color: #d27c19;
+  font: 500 14px "bold", "Open Sans", Arial, Helvetica, sans-serif;
+  color: black;
 }
 td {
   vertical-align: middle;
@@ -278,11 +287,10 @@ body {
   vertical-align: bottom;
   font-size: 11px;
   font-weight: bold;
-  color: grey;
-  float: right;
+  color: black;  
 }
 .pipe:hover {
-  color: goldenrod;
+  color: green;
   cursor: pointer;
 }
 .dropDown {
@@ -370,9 +378,7 @@ body {
   overflow: auto; 
   border-radius: 10px;
 }
-.round{
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;border-radius: 10px;
-}
+ 
 .link{
   cursor: pointer; 
   
@@ -380,4 +386,13 @@ body {
 .link:hover{
     color: #1c54d6;
     font-weight: bold;
+}
+.container{
+  padding: 10px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  border-radius: 10px;
+}
+.sortable{
+  cursor: pointer;
+  
 }

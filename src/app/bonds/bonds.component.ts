@@ -4,14 +4,19 @@ import { Router } from '@angular/router';
 import { DateTime } from '@syncfusion/ej2-angular-charts';
 import { SharesService } from '../shares.service';
 
+
+ 
 @Component({
   selector: 'app-bonds',
   templateUrl: './bonds.component.html',
   styleUrls: ['./bonds.component.css']
 })
+
 export class BondsComponent implements OnInit {
 
   selectedfolio:number=0;
+  selectedMonth:number=0;
+
   bondDetails=[] as any[];
   bondHoldings=[] as any[];
   bondTransaction=[] as any[];
@@ -30,7 +35,7 @@ export class BondsComponent implements OnInit {
   intrest:string="";
   folios=[] as any;
   totalBondIntrest:number=0;
-  selectedYear:number=2023;
+  selectedYear:number=new Date().getFullYear();
   public show:boolean = false;
   public bondIntrest:boolean = false;  
   public bondMasterListFlag:boolean = false;
@@ -48,7 +53,7 @@ export class BondsComponent implements OnInit {
       });
      this.GetNetBondPurchsed();
      this.GetFolioDetails();
-     this.GetBondHoldings();
+     this.GetBondHoldings();     
      this.getYearlyBondIntrest();
      this.getBondIntrest(this.selectedYear.toString());
      this.getYearlyIntrest(new Date().getFullYear().toString());
@@ -60,7 +65,10 @@ export class BondsComponent implements OnInit {
         this.bondTransaction =data;
         this.filterTransaction =data;
         data.forEach(element => {
-          this.totalInvst += element.qty*element.invstPrice;           
+          if(new Date(element.bondDetail.dateOfMaturity) >= new Date())
+          {
+            this.totalInvst += element.qty*element.invstPrice;           
+          }
         });
       }); 
   }
@@ -71,7 +79,7 @@ export class BondsComponent implements OnInit {
       }); 
   }
   updateList(event: any,field:string,intrst:string, bondId:string,bondName:string,coupon:number,DOM:string,fv:number,CP:number) {
-    debugger;
+    
     const editField = event.target.textContent;    
     if(field=='id')
      bondId= editField;
@@ -111,7 +119,7 @@ export class BondsComponent implements OnInit {
    
    this.GetNetBondPurchsed(); 
   }
-  public getTranTypeColor(dateOfMaturity:Date):string
+  public getTranMaturityColor(dateOfMaturity:Date):string
   { 
     let currentDate:Date= new Date();
     let md:Date= new Date(dateOfMaturity.toString());
@@ -121,6 +129,13 @@ export class BondsComponent implements OnInit {
     else
       return 'black'
   }
+  public getTranTypeColor(x:any):string
+  {   
+    if(x=='1'|| x=="true")
+          return '#22a704';
+    else
+      return '#ff0000e0'
+  }  
   sort(e:string) {   
     //debugger;
     if(e=="liveprice")
@@ -201,6 +216,19 @@ export class BondsComponent implements OnInit {
          this.direction ="asc"; 
        }
     }
+    else if(e=="intrestPaymentDate")
+     { 
+       if(this.direction =="asc")
+       {        
+        this.filteredIntrest.sort((a,b)=>(a.intrestPaymentDate>b.intrestPaymentDate)?1:-1);       
+         this.direction ="desc";
+       }
+       else  
+       {
+        this.filteredIntrest.sort((a,b)=>(b.intrestPaymentDate>a.intrestPaymentDate)?1:-1);       
+         this.direction ="asc"; 
+       }
+    }
   }
   onChange(field:any,event:any)
   {
@@ -216,31 +244,35 @@ export class BondsComponent implements OnInit {
   {
     (document.getElementById('bondDetail')as HTMLDivElement).style.display='none';    
   }
-GetFolioDetails()
+ GetFolioDetails()
 {
   this._shrdServ.getAllfolio()
     .subscribe(data=>{
       this.folios =data;       
     }); 
-}
-changeFolio(e :any){ 
+ }
+ changeFolio(e :any){ 
   this.totalInvst=0;
   this.selectedfolio=e.target.value;  
   this.filterTransaction =  this.bondTransaction.filter((s: { folioId: number; }) => s.folioId==this.selectedfolio); 
   this.filterTransaction.forEach(element => {
-    this.totalInvst += element.qty*element.invstPrice;           
+    if(new Date(element.bondDetail.dateOfMaturity) >= new Date())
+    {
+      this.totalInvst += element.qty*element.invstPrice;           
+    }
   }); 
-  this.GetBondHoldings();
-  console.log(this.bondIntrestDetails);
-  this.filteredIntrest= this.bondIntrestDetails.filter((s: { folioId: number; })=>s.folioId==this.selectedfolio);
-  }
-  getBondDetail(bondId:any)
-  {
+  this.GetBondHoldings();  
+  this.filteredIntrest= this.bondIntrestDetails.filter((s: { folioId: number; intrestPaymentDate:string})=>s.folioId==this.selectedfolio && new Date(s.intrestPaymentDate).getMonth()+1==this.selectedMonth );
+
+ }
+ getBondDetail(bondId:any)
+ {
     this.totalInvst=0;
     this.filterTransaction =  this.bondTransaction.filter((s: {
         bondDetail: any; bondId: number; 
       }) => s.bondDetail.bondId==bondId);  
       this.filterTransaction.forEach(element => {
+        
         this.totalInvst += element.qty*element.invstPrice;           
       });
   }
@@ -256,12 +288,13 @@ changeFolio(e :any){
     }
   } 
   getBondIntrest(year:string)
-  {
+  {  
     this.totalBondIntrest=0;
     this._shrdServ.getBondIntrest(year)
         .subscribe(data => { 
         this.bondIntrestDetails =data;
         this.filteredIntrest = data;
+        
         (document.getElementById('cmpDivDetails')as HTMLDivElement).style.display='block'; 
         data.forEach(element => {
           this.totalBondIntrest+= element.amt;
@@ -272,10 +305,11 @@ changeFolio(e :any){
     (document.getElementById('bondId')as HTMLDivElement).value=bondId; 
   }
   getYearlyBondIntrest(){
-    this.totalBondIntrest=0;     
+    this.totalBondIntrest=0;
+
     this._shrdServ.getYearlyBondIntrest()
         .subscribe(data => {            
-          data.forEach(element => {
+          data.forEach(element => {          
           this.year.push(element.year);
           this.bondIntrestYearWise.push(element.intrest);
         });
@@ -296,6 +330,22 @@ changeFolio(e :any){
         this.response="New Transaction added to the database.";
     });
     this.router.navigateByUrl('/bonds');
+  }
+
+  Validated(item: any )
+  {    
+    this._shrdServ.updateBondPaymentDetails(item, true )
+    .subscribe(data =>{ 
+  
+      if(data==true)
+      {
+        this.trnStatus ="Transaction validated successfully for "+ item.bondDetail.bondId +" & amount:"+ item.intrestAmt+" !";
+        setTimeout(() => {
+          this.trnStatus ="";
+        }, 5000);        
+      }
+    });
+    this.ngOnInit();
   }
    
   //-------------------Bond Intrest -----------------------------------------
@@ -354,18 +404,26 @@ public getYearlyIntrest(year:string)
 }
 public monthSelected(e: any): void {   
   this.month.length=0;
+   
  this.bondIntrest = true; 
   this.totalBondIntrest =0;
   if (e.event.type == "click") {
     const clickedIndex = e.active[0]?.index; 
       var lbl=e.active[0]._chart.getElementAtEvent(event)[0]._model.label;          
-      this.selectedYear=lbl;
-      console.log(this.bondIntrestDetails);
-      this.filteredIntrest=this.bondIntrestDetails.filter((s: { intrestPaymentDate: string; })=>new Date(Date.parse(s.intrestPaymentDate)).getMonth()+1==parseInt( lbl));
+      //this.selectedYear=lbl;
+      this.selectedMonth = lbl; 
+      debugger;
+      this.filteredIntrest=this.bondIntrestDetails.filter((s: { intrestPaymentDate: string; folioId: number })=>new Date(Date.parse(s.intrestPaymentDate)).getMonth()+1==parseInt( lbl) );
+      if(this.selectedfolio>0)
+      {
+        this.filteredIntrest=this.bondIntrestDetails.filter((s: { folioId: number })=> s.folioId == this.selectedfolio );
+      }       
+
       this.filteredIntrest.forEach(element => {
-        this.totalBondIntrest+= element.amt;
+        this.totalBondIntrest+= element.intrestAmt;
       }); 
     }
   }
+  
 
 }

@@ -20,11 +20,11 @@ export class EquitysearchComponent implements OnInit {
   }
   public getId(e:any)
   {    
-   
     this.showresult =false;
     this.companyid=e;
     this.selectedvalue =this.result.filter(s=>s.assetId==e);    
-   // alert(e);
+    console.log(this.selectedvalue);
+    //alert(e);
   } 
   public getasset(e:any)
   {    

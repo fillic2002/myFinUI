@@ -22,6 +22,7 @@ import { ExpenseComponent } from './expense/expense.component';
 import "@angular/common/locales/global/en-IN";
 import { BondsComponent } from './bonds/bonds.component';
 import { EquitysearchComponent } from './common/equitysearch/equitysearch.component';
+import { AssetAnalyisComponent } from './asset-analyis/asset-analyis.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { EquitysearchComponent } from './common/equitysearch/equitysearch.compon
     ExpenseComponent,
     BondsComponent,
     EquitysearchComponent,
+    AssetAnalyisComponent,
     
   ],
   imports: [
