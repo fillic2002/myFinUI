@@ -3,9 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DateTime } from '@syncfusion/ej2-angular-charts';
 import { SharesService } from '../shares.service';
+import { CommonFunctions } from '../common/equitysearch/CommonFunctions';
 
 
- 
 @Component({
   selector: 'app-bonds',
   templateUrl: './bonds.component.html',
@@ -28,7 +28,9 @@ export class BondsComponent implements OnInit {
   public year=[] as any;
   public month=[] as any;
   response!: string;
-
+  public divBondTransaction:boolean = false;
+  showContainer: number = 1; 
+  
   totalInvst:number=0;
   direction:string="asc";
   bName:string="";
@@ -45,7 +47,7 @@ export class BondsComponent implements OnInit {
   public buttonName:any = 'Show'; 
   public trnStatus:string='Add >' 
 
-  constructor(private _shrdServ:SharesService,private router:Router) { }
+  constructor(private _shrdServ:SharesService,private router:Router,public commonFunctions: CommonFunctions) { }
   ngOnInit(): void {
      this._shrdServ.getBondDetails(this.selectedfolio,'0')
      .subscribe(data =>{ 
@@ -60,8 +62,9 @@ export class BondsComponent implements OnInit {
   }
   
   GetNetBondPurchsed(){
-    this._shrdServ.getBondTransaction(this.selectedfolio,this.selectedfolio.toString())
-      .subscribe(data =>{ 
+    this._shrdServ.getBondTransaction(this.selectedfolio)
+      .subscribe(data =>{  
+        //debugger;
         this.bondTransaction =data;
         this.filterTransaction =data;
         data.forEach(element => {
@@ -71,6 +74,8 @@ export class BondsComponent implements OnInit {
           }
         });
       }); 
+      
+      console.log(this.bondTransaction);
   }
   GetBondHoldings(){
     this._shrdServ.getBondHoldings(this.selectedfolio,this.selectedfolio)
@@ -78,24 +83,26 @@ export class BondsComponent implements OnInit {
         this.bondHoldings =data;               
       }); 
   }
-  updateList(event: any,field:string,intrst:string, bondId:string,bondName:string,coupon:number,DOM:string,fv:number,CP:number) {
-    
-    const editField = event.target.textContent;    
-    if(field=='id')
-     bondId= editField;
-    else if (field=='name')
-      bondName=editField; 
-    else if (field=='Intrest')
-      intrst=editField;
-    this._shrdServ.updateBondDetails(bondId,bondName,coupon,DOM,intrst,fv,CP)
+  toggleContainer(containerNumber: number): void {
+    this.showContainer = containerNumber;
+  }
+  updateBondDetails(bondObj: any) {
+    debugger;
+    if(this.intrest != null)
+      {
+        bondObj.intrestCycle = this.intrest;
+      }    
+    this._shrdServ.updateBondDetails( bondObj)
     .subscribe(data =>{ 
-       //console.log(data);
+       this.response ="Bond Detail updated successfully for::"+ bondObj.bondName;
     });
   }
-  public SearchBond(option:any){    
+  public SearchBond( bnd: any){  
+    debugger;
     this.bondMasterListFlag = true;
-    this.bondIntrest = false;
-    this._shrdServ.searchBond(this.bName)
+    //this.bondIntrest = false;
+
+    this._shrdServ.searchBond(bnd)
       .subscribe(data =>{ 
         this.bondDetails =data;        
       });
@@ -103,10 +110,7 @@ export class BondsComponent implements OnInit {
   public selectnext(option:any){    
     this.router.navigate(['/admin']);  
   }
-  public onSelect(option:any)
-  {    
-    this.router.navigate(['/']);
-  }
+  
   public deleterecord(bondId:any,purchaseDate:any,qty:any,ID:any)
   {
      
@@ -229,9 +233,23 @@ export class BondsComponent implements OnInit {
          this.direction ="asc"; 
        }
     }
+    else if(e=="trandt"){
+      if(this.direction =="asc")
+        {        
+         this.bondTransaction.sort((a,b)=>(a.purchaseDate>b.purchaseDate)?1:-1);       
+          this.direction ="desc";
+        }
+        else  
+        {
+         this.bondTransaction.sort((a,b)=>(b.purchaseDate>a.purchaseDate)?1:-1);       
+          this.direction ="asc"; 
+        }
+        console.log(this.bondTransaction);
+    }
   }
   onChange(field:any,event:any)
   {
+    //debugger;
     this.intrest = event.target.innerText;
    
   }
@@ -261,12 +279,14 @@ export class BondsComponent implements OnInit {
       this.totalInvst += element.qty*element.invstPrice;           
     }
   }); 
+  debugger;
   this.GetBondHoldings();  
-  this.filteredIntrest= this.bondIntrestDetails.filter((s: { folioId: number; intrestPaymentDate:string})=>s.folioId==this.selectedfolio && new Date(s.intrestPaymentDate).getMonth()+1==this.selectedMonth );
-
+  this.filteredIntrest= this.bondIntrestDetails.filter((s: { folioId: number; intrestPaymentDate:string})=>s.folioId==this.selectedfolio  );
+  
  }
  getBondDetail(bondId:any)
  {
+  debugger;
     this.totalInvst=0;
     this.filterTransaction =  this.bondTransaction.filter((s: {
         bondDetail: any; bondId: number; 
@@ -404,7 +424,7 @@ public getYearlyIntrest(year:string)
 }
 public monthSelected(e: any): void {   
   this.month.length=0;
-   
+   debugger;
  this.bondIntrest = true; 
   this.totalBondIntrest =0;
   if (e.event.type == "click") {
@@ -412,18 +432,22 @@ public monthSelected(e: any): void {
       var lbl=e.active[0]._chart.getElementAtEvent(event)[0]._model.label;          
       //this.selectedYear=lbl;
       this.selectedMonth = lbl; 
-      debugger;
-      this.filteredIntrest=this.bondIntrestDetails.filter((s: { intrestPaymentDate: string; folioId: number })=>new Date(Date.parse(s.intrestPaymentDate)).getMonth()+1==parseInt( lbl) );
+      //debugger;
+
+      
+      this.filteredIntrest = this.bondIntrestDetails.filter(item => {
+        return new Date(Date.parse(item.intrestPaymentDate)).getMonth() + 1 === parseInt(lbl) 
+    });
       if(this.selectedfolio>0)
       {
-        this.filteredIntrest=this.bondIntrestDetails.filter((s: { folioId: number })=> s.folioId == this.selectedfolio );
+        this.filteredIntrest=this.filteredIntrest.filter((s: { folioId: number })=> s.folioId == this.selectedfolio );
       }       
-
+      
       this.filteredIntrest.forEach(element => {
         this.totalBondIntrest+= element.intrestAmt;
       }); 
     }
-  }
+}
   
 
 }

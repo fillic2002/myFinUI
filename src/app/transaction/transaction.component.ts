@@ -9,6 +9,7 @@ import { divHistory } from '../portfolio/portfolio.component';
 import { IDividend } from '../ShareDetail';
 import { element } from 'protractor';
 import { Message } from '@angular/compiler/src/i18n/i18n_ast';
+import { Decipher } from 'crypto';
 
 @Component({
   selector: 'app-transaction',
@@ -66,6 +67,8 @@ export class TransactionComponent implements OnInit {
   public filterMonthlyInvst =[] as number[];
   public MonthlyInvst =[] as number[];
  
+  enlargedChartId: number | null = null;
+   
   invstmnt=[] as number[];
   intrest=[] as number[];
   //pfinvstmnt=[] as number[];
@@ -129,7 +132,7 @@ export class TransactionComponent implements OnInit {
       }
       this.eqtotal=to.toFixed(2);     
     }); 
-    //console.log(this.filterPortfolio);
+    
     this.getYearlyIvestment(0);
   }
 
@@ -182,9 +185,7 @@ getYearlyIvestment(folioId:number)
         
         this.addPfYear(element.year)
         this.pfinvstmnt.push(element.investment.toFixed(2));
-        this.proftPf.push(element.profitCurrentyear.toFixed(2));
-        console.log(folioId);
-        console.log(this.pfinvstmnt);
+        this.proftPf.push(element.profitCurrentyear.toFixed(2));        
 
       }else if(element.assettype==4) //ppf
       {
@@ -290,7 +291,7 @@ drawChartSectorWiseInvst(sectordata:any[])
         const xAxisValue = stacedData.labels[clickedElementIndex];
         var dt= xAxisValue.split('-');
         this.filterPortfolio=this.equitytransaction.filter(x=>x.equity.sector===label && new Date(x.tranDate).getFullYear() == dt[0] && new Date(x.tranDate).getMonth()==dt[1]-1);
-        console.log(xAxisValue);
+        //console.log(xAxisValue);
       }
     }
   }
@@ -307,8 +308,7 @@ drawChartSectorWiseInvst(sectordata:any[])
 }
  
 getMonthlyInvestment(folioId:any)
-  {
-    
+  {    
     this.filterMonthlyInvst.length=0;    
     this.MonthlyInvst.length=0;
 
@@ -330,7 +330,7 @@ monthlyInvest(data:any[])
        this.month.push(element.month+"-"+element.year);  
      }
      if(element.assetId==1){
-      console.log(element);
+     // console.log(element);
        this.monthlyInvstShr.push(element.invested.toFixed(1))
        this.sectorInvstMonth.push(element.month);
      }else if(element.assetId==2){
@@ -416,10 +416,11 @@ selected(){
  
   }
 changeFolio(e :any) {
-    this.status="";    
+    debugger;
+    this.status="";   
     this.selectedfolio=e.target.value;    
     //console.log(this.selectedfolio);
-   
+    
     this.getYearlyIvestment(this.selectedfolio);    
     this.getMonthlyInvestment(this.selectedfolio);    
 
@@ -456,6 +457,7 @@ changeFolio(e :any) {
     .subscribe(data =>{       
       this.PFAcctDetails=data;
       data.forEach(element=>{
+        console.log("PF::"+element.year);
       this.addYear(element.year);         
       if(element.typeOfTransaction=="int")
         { 
@@ -472,13 +474,13 @@ changeFolio(e :any) {
     });    
 }
 private addYear(yr:number)
-  {    
-    if(this.year===0)
+  { 
+  if(this.year.length===0 && yr >= 2016)
     {
       this.year.push(yr);
     }else{
       var found=this.year.indexOf(yr);
-      if(found < 0)
+      if(found < 0 && yr >= 2016)
       {
         this.year.push(yr);
       }   
@@ -486,7 +488,7 @@ private addYear(yr:number)
   }
   private addPfYear(yr:number)
   {    
-    if(this.pfyear===0)
+    if(this.pfyear.length===0)
     {
       this.pfyear.push(yr);
     }else{
@@ -688,7 +690,13 @@ changeAsset(e:any)
    // this.pb_tran =pb;
      
   //}
-  
+  enlargeChart(chartId: number) {
+    this.enlargedChartId = this.enlargedChartId === chartId ? null : chartId;
+  }
+  isEnlarged(chartId: number): boolean {
+    return this.enlargedChartId === chartId;
+  }
+
   AddTran(tran:any)
   {
     (document.getElementById('txtName')as  HTMLInputElement).value =  tran.equity.assetId;
@@ -1010,22 +1018,25 @@ public chartClick(e: any): void {
    } 
   }
   AddPFTransaction():void{
-  
+  debugger;
     var empInvst =(document.getElementById('txtEmp')as  HTMLInputElement).value;    
     var txtPfDt = (document.getElementById('txtPfDt') as  HTMLInputElement).value;    
     var emplrInvst = (document.getElementById('txtEmplyr')as HTMLInputElement).value;    
     var pension = (document.getElementById('txtPension')as HTMLInputElement).value;    
     var trnType = (document.getElementById('trnType')as HTMLSelectElement).value;    
-    var folioId = (document.getElementById('txtFolio')as HTMLInputElement).value;    
+    var folioId = (document.getElementById('txtFolio')as HTMLInputElement).value;
     var actType = (document.getElementById('actType')as HTMLSelectElement).value;    
-    //var AccountType = 3;
+    //var AccountType = 3; 
     
     //var desc = (document.getElementById('txtDesc')as HTMLInputElement).value;   
     //debugger;
     //console.log(tranType);
-    this._eqTransaction.postPFTransaction(txtPfDt,empInvst,folioId,actType,pension,emplrInvst,trnType)
+    this._eqTransaction.postPFTransaction(txtPfDt,empInvst,this.selectedfolio,actType,pension,emplrInvst,trnType)
       .subscribe(data => {
-      console.log("New Transaction added to the database.");
+        this.status="New Transaction added to the database.";
+        setTimeout(() => {
+          this.status ="";
+        }, 5000);        
     });
    }
   MovePFDetails(tran:any)

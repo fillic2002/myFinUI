@@ -2,7 +2,7 @@
 <table style="width: 100%; background-color: #000000d9;">
     <tr>
         <td style="color:aliceblue;vertical-align: top;">
-            <span value="H" (click)="onSelect(option)" style="font-size: 22px;cursor: pointer;">my<span style="color: orange; ">f</span>in</span>
+            <span value="H" (click)="commonFunctions.onSelect(option)" style="font-size: 22px;cursor: pointer;">my<span style="color: orange; ">f</span>in</span>
         </td>
         <td style="width: 10%;color:aliceblue;font-size: 20px; text-align: center;margin: 1px;">          
         </td>
@@ -28,7 +28,7 @@
     <span class="pipe" (click)="toggleContainer(6)">Portfolio</span>
     <span class="pipe" > | </span>
     <span class="pipe" (click)="toggleContainer(7)">Transaction</span>
-    </div>
+</div>
  
 <select [(ngModel)]="selectedfolio" style="cursor: pointer; background-color: #eaea25de;"  id="txtFolio" >
     <option [value]="item.folioID" *ngFor="let item of folios" > {{item.folioName}}</option>                    
@@ -55,8 +55,6 @@
  
  
  
- 
- 
 <!-- Container 1 -->
 <div *ngIf="showContainer === 1">
     
@@ -64,34 +62,53 @@
         <tr>
             <td style="width: 15%;"></td>            
             <td>
-                <div style="background-color: lightgray; padding: 10px; font:550 14px bold, Open Sans, Arial, Helvetica, sans-serif" >Add/Update equity details</div>
+                <div class="boundaryHeader" >Add/Update equity details</div>
                 <!-- Content for container 1 -->
-                <div class="boundary">                                
-                    <span class="naming" style="font-weight: 600;padding-right: 3px;">Asset ID/Name:</span>
+                <table class="boundary"> 
+                    <tr>
+                        <td>
+                            <span class="naming">Company Name:</span>
+                            <input id="txtAssetName" type="text" class="inputT"></td>
+                        <td><span class="naming">ISIN:</span>
+                            <div style="z-index: 1" *ngIf="showresult"> 
+                            <div  id="result" *ngFor="let t of result">    
+                                <span (click)="getId(t.id)" class="dt">{{t.id}}</span>
+                                <span class="naming">{{t.fullName}}</span>                
+                            </div>
+                        </div><input  id="txtISIN" class="inputT" type="text"  (keypress)="getasset($event)" value="{{companyid}}" ></td>
+                         
+                        <td><span class="naming">Symbol:</span><input name="symbol" id="symbol" class="inputT"></td>
+                        <td><span class="naming">Sector:</span><input id="txtSector" class="inputT" type="text"></td>
+                        <td><span class="naming">Description(MC):</span><input id="desc" class="inputT" type="text"></td>
+                    </tr>
+                    <tr>
+                        <td><span class="naming">Div Link(BSE):</span><input id="txtDivLink" class="inputT" type="text"></td>
+                        <td><span class="naming">AssetType:</span><input id="txtAsttype" class="inputT" type="text"></td>
+                        <td> </td>
+                        <td></td>
+                        <td><input class="savebtn" type="button" value="Save" (click)="UpdateEquity()"> </td>
+                        
+                    </tr>                          
                     <div style="z-index: -1" *ngIf="showresult"> 
                         <div  id="result" *ngFor="let t of result">    
                             <span (click)="getId(t.id)" class="dt">{{t.id}}</span>
                             <span class="naming">{{t.fullName}}</span>                
                         </div>
                     </div>
-                    <span class="naming">Company Name:</span><input id="txtName" type="text" class="inputT">              
+                                 
                     
-                    <span class="naming">ISIN:</span>
-                    <div style="z-index: 1" *ngIf="showresult"> 
-                        <div  id="result" *ngFor="let t of result">    
-                            <span (click)="getId(t.id)" class="dt">{{t.id}}</span>
-                            <span class="naming">{{t.fullName}}</span>                
-                        </div>
-                    </div>
-                    <input  id="txtISIN" class="inputT" type="text"  (keypress)="getasset($event)" value="{{companyid}}" >
-                    <span class="naming">Symbol:</span><input name="symbol" id="symbol" class="inputT">
-                    <span class="naming">Sector:</span><input id="txtSector" class="inputT" type="text">
-                    <span class="naming">Description(MC):</span><input id="desc" class="inputT" type="text">
-                    <span class="naming">Div Link(BSE):</span><input id="txtDivLink" class="inputT" type="text">
-                    <span class="naming">AssetType:</span><input id="txtAsttype" class="inputT" type="text">
-                    <input class="savebtn" type="button" value="Save" (click)="UpdateEquity()"> 
-                </div>
+                    
+                     
+                     
+                     
+                     
+                    
+                     
+                     
+                     
+                </table>
                 <app-equitysearch></app-equitysearch>    
+                 
             </td>
             <td style="width: 15%;"></td>            
         </tr>
@@ -100,7 +117,7 @@
  <!-- Container 2 -->
 <div *ngIf="showContainer === 2">
     
-    <tabl>
+    <table>
         <tr>
             <td style="width: 15%;"></td>            
             <td> <!--Adding Bonds Details-->    
@@ -146,11 +163,8 @@
             </td>
             <td style="width: 15%;"></td>
         </tr>
-    </tabl>
+    </table>
     
-    
- 
-
 </div>
  <!--Adding Propert Transaction-->
 <div *ngIf="showContainer === 3">

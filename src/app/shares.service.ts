@@ -5,13 +5,20 @@ import { IPortfolio, ITransaction,IDashboard,IFolio,IBankAcDetail, IShareDetail,
 import { __core_private_testing_placeholder__ } from '@angular/core/testing';
 import * as _ from 'lodash';
 import { debug } from 'console';
+import { BehaviorSubject } from 'rxjs';
+import { DateTime } from '@syncfusion/ej2-angular-charts';
 
 @Injectable({
     providedIn: 'root'
 })
 export class SharesService { 
    constructor(private client:HttpClient) { }
-
+   private dataSource = new BehaviorSubject<string>('Initial data');
+   currentData = this.dataSource.asObservable();
+   
+   changeData(data: string) {
+    this.dataSource.next(data);
+  }
   getPortfolio(id:number):Observable<IPortfolio[]>{
     return this.client.get<IPortfolio[]>("http://localhost:59921/portfolio/Getfolio/"+id)  
   }
@@ -58,7 +65,7 @@ export class SharesService {
     return this.client.get<IAssetHistory[]>("http://localhost:59921/portfolio/getAssetsHistory/");
   } 
   postTransaction(price:any,name:any,qty:any,dt:any,folioId: any,option:any,assetType:any,pb:any,mv:any, ver:any):Observable<any>{   
-   debugger;
+   
     return this.client.post("http://localhost:59921/transaction/postTransaction",{ 
     price: parseFloat(price),
     equity:{
@@ -130,6 +137,7 @@ export class SharesService {
         }
      });  
    }
+ 
   postBondDetails(bondName:string,bondID:string,coupon:string,facevalue:string,minInvst:string,dom:string)
   {
     return this.client.post<boolean[]>("http://localhost:59921/Bonds/AddBond",{
@@ -165,9 +173,23 @@ export class SharesService {
       transactionDate:new Date(Date.parse(dt))      
     })  
   }
+  addEquity(shareDtl: any)
+  {
+    return this.client.post("http://localhost:59921/Shares/addEquity",{
+      assetId:shareDtl.assetId,
+      symbol:shareDtl.symbol,
+      equityName:shareDtl.equityName,
+      livePrice:shareDtl.livePrice,
+      sourceurl:shareDtl.sourceurl,
+      divUrl:shareDtl.divUrl, 
+      sector:shareDtl.sector,
+      analysisurl:shareDtl.analysisurl,
+      assetType:shareDtl.assetType
+    }); 
+  }
   postEquityUpdate(shareDtl: any)
   {
-    
+ 
     return this.client.post("http://localhost:59921/Shares/updateequity",{
       assetId:shareDtl.assetId,
       symbol:shareDtl.symbol,
@@ -261,28 +283,30 @@ export class SharesService {
  getBondDetails(folioID:number,my:string)
  { return this.client.get("http://localhost:59921/Bonds/GetBondsDetails"); }
  
- getBondTransaction(folioID:number,my:string)
+ getBondTransaction(folioID:number)
  { return this.client.get("http://localhost:59921/Bonds/GetBondTrasaction/"+folioID); }
  getBondHoldings(folioID:number,my:string)
  { return this.client.get("http://localhost:59921/Bonds/GetBondHolding/"+folioID); }
- searchBond(searchString:string)
+ searchBond(bondObj:any)
  { 
   return this.client.post("http://localhost:59921/Bonds/SearchBond/",
     {
-      BondName:searchString
+      BondName: bondObj.bondDetail.bondName,
+      BondId: bondObj.bondDetail.bondId
     }); 
-  }
- updateBondDetails(bondId:string,bondName:string,coupon:number,DOM:string,intrestPayCycle:string,fv:number,CP:number)
+ }
+ updateBondDetails(bondObj:any)
+  //bondId:string,bondName:string,coupon:number,DOM:string,intrestPayCycle:string,fv:number,CP:number)
  { 
   return this.client.post("http://localhost:59921/Bonds/UpdateBondDetails/",
   {
-		couponRate:coupon,
-    BondName:bondName,
-		BondId:bondId,	
-		dateOfMaturity:DOM,	
-		LivePrice:CP,
-		faceValue:fv,	
-		intrestCycle:intrestPayCycle,	
+		couponRate:bondObj.couponRate,
+    BondName:bondObj.bondName,
+		BondId:bondObj.bondId,	
+		dateOfMaturity:bondObj.dateOfMaturity,	
+		LivePrice: bondObj.livePrice,
+		faceValue:bondObj.faceValue,	
+		intrestCycle:bondObj.intrestCycle,	
  }); 
 }
 updateBondPaymentDetails(item:any, validated:boolean)
@@ -301,7 +325,7 @@ updateBondPaymentDetails(item:any, validated:boolean)
  }); 
 }
 updateMonthlyExpense(exp:any){ 
-  debugger;
+ 
   return this.client.post("http://localhost:59921/portfolio/AddExpense/",
   {
     expId:parseInt(exp.expId),
@@ -322,7 +346,49 @@ updateMonthlyExpense(exp:any){
  
  getExpenseType()
  {return this.client.get("http://localhost:59921/portfolio/GetExpenseType/");}
+ 
+ getAnalysiss()
+ {return this.client.get("http://localhost:59921/Analysis/getAnalysis/");}
 
+ getAnalysis(eqtId: string)
+ {return this.client.get("http://localhost:59921/Analysis/getAnalysis/"+eqtId);}
+
+ AddAlertType(alrtType:string)
+ {
+   return this.client.post("http://localhost:59921/Alert/addalert/",
+   {
+    AlertName: alrtType
+   });
+  }
+  UpdateAnalysis(id:number, notes:string,astId: string)
+  {
+    return this.client.post("http://localhost:59921/Analysis/Updateanalysis/",
+    {
+      equity: {
+        assetId:  astId
+      },        
+      notes: [
+        {
+          analysisID: id,
+          content: notes          
+      }]
+    });
+  }
+  AddAnalysis(dt:Date, year:number,notes:string,selectedReportType:number, astId: string)
+  {
+    return this.client.post("http://localhost:59921/Analysis/addanalysis/",
+    {
+      equity: {
+        assetId:  astId
+      },      
+      revwType:1,  
+      yr:parseInt(year),
+      notes: [{
+        content: notes,
+        dtUpdated: new Date(dt) 
+      }]
+    });
+  }
  AddExpenseType(expType:string)
  {
    return this.client.post("http://localhost:59921/portfolio/AddExpenseType/",
@@ -334,7 +400,7 @@ updateMonthlyExpense(exp:any){
  {
    return this.client.post("http://localhost:59921/portfolio/AddExpense/",
    {
-    desc: expdesc,
+    desc: expdesc, 
     folioId:parseInt(portfolioId),
     dtOfTran:new Date( dt),
     amt: parseInt(amount),

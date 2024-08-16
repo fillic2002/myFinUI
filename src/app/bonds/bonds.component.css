@@ -20,4 +20,8 @@
     text-align: center;
     cursor: pointer;
   }
- 
+ .centerDiv{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+ }

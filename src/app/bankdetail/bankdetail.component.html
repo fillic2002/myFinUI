@@ -21,19 +21,13 @@
     </tr>
      
   </table>
-  <span class="header4" style="font-size: 20px; "  >Bank Account Details</span>
-  <span style="margin-left: 18%;"> 
-    <select [(ngModel)]="selectedfolio" (change)="changeFolio($event)" style="cursor: pointer; background-color: #eaea25de;"  id="txtFolio" >
+  <span class="header4" style="font-size: 20px; ">Bank Account Details</span>
+  <span style="margin-left: 10%;">
+    <select [(ngModel)]="selectedfolio" (change)="ChangeAccount($event)" class="dropDown" id="txtFolio" >
         <option value="0">All</option>
         <option [value]="item.folioID" *ngFor="let item of folios" > {{item.folioName}}</option>                    
    </select> 
-   <span>
-    <select style="cursor: pointer; background-color: #eaea25de;"  id="portfolio" (change)="ChangeAccount($event)">
-        <option value="0">Account</option>    
-        <option value="2">Renuka</option>
-        <option value="3">Fillic</option>    
-    </select>
-</span> 
+    
   </span> 
    
  

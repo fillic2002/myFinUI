@@ -8,7 +8,7 @@ import { SharesService } from 'src/app/shares.service';
 })
 export class EquitysearchComponent implements OnInit {
 
-  constructor(private _eqTransaction:SharesService) { }
+  constructor(private _sharedService:SharesService) { }
   showresult: boolean = false ;  
   public companyid: string="";
   public result=[] as any;
@@ -18,12 +18,15 @@ export class EquitysearchComponent implements OnInit {
 
 
   }
+   
+
   public getId(e:any)
   {    
     this.showresult =false;
     this.companyid=e;
     this.selectedvalue =this.result.filter(s=>s.assetId==e);    
-    console.log(this.selectedvalue);
+    this._sharedService.changeData(this.selectedvalue);
+  //  console.log(this.selectedvalue);
     //alert(e);
   } 
   public getasset(e:any)
@@ -31,17 +34,16 @@ export class EquitysearchComponent implements OnInit {
     if(e.target.value.length>2)
     {    
       this.showresult =true;
-      this._eqTransaction.getShare(e.target.value)
+      this._sharedService.getShare(e.target.value)
       .subscribe(data =>{
         this.result = data;
       });
     }
   }
   UpdateEquity()
-  {
-    
-    console.log(this.selectedvalue);
-    this._eqTransaction.postEquityUpdate(this.selectedvalue[0])
+  {    
+   // console.log(this.selectedvalue);
+    this._sharedService.postEquityUpdate(this.selectedvalue[0])
       .subscribe(data =>{
         
       });

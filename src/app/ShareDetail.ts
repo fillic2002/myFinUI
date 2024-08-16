@@ -7,6 +7,7 @@ export interface IShareDetail
     desc:string
     divLink:string
     sector:string
+    assetType:number
 }
 export interface IPortfolio
 {

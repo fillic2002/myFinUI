@@ -35,6 +35,7 @@ export class BankdetailComponent implements OnInit {
   public show:boolean = false;
   public buttonName:any = 'Show';
   public editField:string='';
+  folios=[] as any;
 
   public tAmt:number=0;
   public tRoi:number=0;
@@ -78,8 +79,16 @@ export class BankdetailComponent implements OnInit {
       this.at=this.cash+this.pf+this.ppf;
       this.filterAcct = this.accDetail;
     });
-    
+    this.GetFolioDetails();
   }
+  GetFolioDetails()
+  {
+    this._acct.getAllfolio()
+      .subscribe(data=>{
+        this.folios =data;
+       
+      }); 
+   }
   AddTransaction():void  {    
     this._acct.postAcTransaction(
      this.tUserid,

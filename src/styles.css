@@ -111,7 +111,7 @@ color: #2c5777;
   text-align: center;
   height: 25px;
   font: 300 14px sans-serif;
-  color: #FFA500;
+  color: #d96100;
 }
 
 .cellrow {
@@ -127,6 +127,10 @@ color: #2c5777;
   width: 190px;
   font: 14px Arial;
 }
+.headername2 {
+  width: 230px;
+  font: 14px Roboto;
+}
 .headernameDiv {
   display: inline-block;
   width: 100px;
@@ -135,13 +139,7 @@ color: #2c5777;
 .headerdt {
   width: 110px;
 }
-.clickable{
-  cursor: pointer; 
-}
-.clickable:hover{
  
-  color: green;
-}
 .tableCell {
   width: 180px;
   padding: 5px;
@@ -155,6 +153,7 @@ color: #2c5777;
   font-size: medium;
   color: #3b3a3a;
   border-bottom: 0px dotted #bfbfbf;
+  font-family: Roboto;
 }
 .naming1 {
   width: 180px;
@@ -168,7 +167,7 @@ color: #2c5777;
   height: 30px;
   color: #3b3a3ac7;
   text-align: right;
-  font: 560 14px Helvetica, sans-serif;
+  font: 550 16px Roboto;
   padding-right: 6px;
   border-bottom: 1px dotted #bfbfbf;
 }
@@ -285,9 +284,9 @@ body {
   margin-right: 5px;
   font-family: Roboto, "Helvetica Neue", sans-serif;
   vertical-align: bottom;
-  font-size: 11px;
-  font-weight: bold;
-  color: black;  
+  font-size: 16px;
+  
+  color: grey;  
 }
 .pipe:hover {
   color: green;
@@ -307,7 +306,7 @@ body {
 .inputT {
   font-size: medium;
   background-color: palegoldenrod;
-  width: 100px;
+  width: 130px;
   border-radius: 5px;
   height: 25px;
   border: 1px dotted #696969;
@@ -330,16 +329,23 @@ body {
   background-color: palegoldenrod;
   width: 700px;
 }
-.inputDt {
-  font-weight: 7px;
+.txtComment{
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: larger;
+  background-color: palegoldenrod;
+}
+.inputDt {  
   border: 1px dotted;
   background-color: palegoldenrod;
   width: 120px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 24px; 
+  color: #333; 
 }
 .msg{
   font-weight: 10px;
   display: inline-block;
-  width: 100px;
+  width: 300px;
   text-align: center;
   color: green;
 }
@@ -393,6 +399,32 @@ body {
   border-radius: 10px;
 }
 .sortable{
-  cursor: pointer;
+  cursor: pointer;  
+}
+.clickable{
+  cursor: pointer; 
+}
+.clickable:hover{ 
+  color: blue;
+  cursor: pointer; 
+}
+.editableField:hover{
+  border: 1px solid black;
+  cursor: pointer; 
+}
+.boundary {
+  border: 1px solid #ccc;
   
+  margin-bottom: 10px;
+  font:  -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"
+}
+.boundaryHeader{
+  background-color: lightgray; 
+  padding: 10px; 
+  font:550 16px bold, Open Sans, Arial, Helvetica, sans-serif;
+}
+.centerDiv{
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

@@ -1,0 +1,174 @@
+<div style="height: 220%;"> 
+    <table style="width: 100%; background-color: #000000d9;">
+      <tr>
+          <td style="color:aliceblue;vertical-align: top;">
+              <span value="H" (click)="commonFunctions.onSelect(option)" style="font-size: 22px;cursor: pointer;">my<span style="color: orange; ">f</span>in</span>
+          </td>
+          <td style="width: 70%;text-align: center;font-size: 20px; color: aliceblue;">
+              <!--<span class="title" style="padding-left: 30%;" (click)="onClick($event)">Dashboard</span>-->
+                  
+          </td>
+          <td style="width: 15%;color:aliceblue;font-size: 20px; text-align: center;margin: 1px;">
+            <div> {{totalInvst|number:'1.2-2'}}</div>
+            <div class="header4"></div>           
+          </td>
+      </tr>
+      
+    </table>
+    <div style="text-align: center; ">
+      
+        <span class="pipe" (click)="toggleContainer(1)">Analysis</span>
+        <span class="pipe" > | </span>
+        <span class="pipe" (click)="toggleContainer(2)">New Alert</span>
+        <span class="pipe" > | </span>
+        <span class="pipe" (click)="toggleContainer(3)">Bond Holdings</span>
+        <span class="pipe" > | </span>
+        <span class="pipe" (click)="toggleContainer(4)">Existing Alert</span>
+        <span class="pipe" > | </span>
+        <span class="pipe" ><a href="https://www.screener.in/actions/bonus/?o=-1">Bonus</a></span>
+        <span class="pipe" > | </span>
+        <span class="pipe" ><a href="https://www.screener.in/actions/right/?o=-1">Right Issue</a></span>
+        <span class="pipe" > | </span>
+        <span class="pipe" ><a href="https://www.screener.in/actions/split/?o=-1">Split</a></span>
+        <span class="pipe" > | </span>
+        <span class="pipe" ><a href="https://www.screener.in/actions/buyback/?o=-1">Buy Back</a></span>
+        <span class="pipe" > | </span>
+         
+      </div>
+      <div>{{response}}</div>
+      
+      
+    <div *ngIf="showContainer === 1" style="padding-top: 25px;">
+        <div class="centerDiv">
+            <eqt-search></eqt-search>
+            <div   style="padding-top: 20px;">
+                <input type="button" id="Search" value="Submit" (click)="SeachAnalysis()">
+              </div>
+        </div>
+        <div class="centerDiv">
+            <div style="width: 520px;height:275px;float: left;" >
+                <canvas baseChart
+                    [datasets]="EquityInvstmt"
+                    [labels]="eqtyHistorylbl"
+                    [options]="eqtChartOptions"
+                    [plugins]="eqtChartPlugins"
+                    [legend]="eqtChartLegend"
+                    [colors]="eqtChartColors"
+                    [chartType]="eqtChartType">
+                </canvas>
+            </div> 
+            <div style="width: 520px;height:275px; float: right;" >
+                <canvas baseChart
+                    [datasets]="DivReturn"
+                    [labels]="eqtyHstryDiv"
+                    [options]="divChartOptions"
+                    [plugins]="divChartPlugins"
+                    [legend]="divChartLegend"
+                    [colors]="divChartColors"
+                    [chartType]="divChartType">
+                </canvas>
+            </div>
+             
+        </div>       
+         <div class="header2,centerDiv" style="color: darkcyan; font-weight: bolder;font-size: larger; width: 80%;padding-left: 10%;">{{selectedEquity[0].equityName}}</div>
+        <div class="centerDiv" style="width: 80%;padding-left: 10%;" *ngFor="let note of listOfAnalysis.notes">
+            <span style="width: 10%;"class="dt" >{{note.dtUpdated| date:'dd-MM-yyyy':'UTC'}}</span>
+            <span style="width: 90%;" contenteditable="true" (blur)="onChange($event)" (keydown.Tab)="updateList($event,note)" class="naming">{{note.content}}</span>
+        </div>
+        
+    </div>
+    <div  *ngIf="showContainer === 2" class="centerDiv" style="padding-top: 25px;"> 
+        <table class="boundary" >
+            <tr class="boundaryHeader">
+                <td colspan="4">Add Analysis::</td>
+            </tr> 
+            <tr>
+                <td  colspan="4">
+                    <eqt-search></eqt-search>
+                    <span><input id="txtPfDt" type="date" class="inputdt"></span>
+                    <select id="itemsDropdown" (change)="onItemChange($event)">
+                        <option *ngFor="let item of reportType" [value]="reportType.key">{{ item.value }}</option>
+                        </select>
+                        <select id="yrDropdwn" (change)="onItemChange($event)">
+                            <option *ngFor="let item of yr" [value]="item">{{item}}</option>
+                        </select>
+                </td>
+            </tr>
+            <tr class="boundary">
+                <td  > </td>
+                <td> </td>
+                <td  ></td>
+                <td> <textarea class="txtComment" id="commentBox" [(ngModel)]="comment" name="comment" rows="3" cols="50">
+                       </textarea> 
+                    <input class="savebtn" type="button" value="Save" (click)="AddAnalysis()">
+                </td>
+            </tr>
+        </table>
+        
+
+        </div>
+        <div class="centerDiv">
+        <table>
+            <tr>
+                <td class="header1">Date</td>
+                <td class="header1">Report</td>
+                <td class="header1">Year</td>
+                <td class="header1">Comment</td>
+                <td class="header1">Action</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td> </td>
+                  <td  class="reviewyr"> </td>
+                <td></td>
+                    
+            </tr>
+        </table>
+      </div>
+
+      <div *ngIf="showContainer === 2" style="align-items: center;display: grid;">
+        <table>
+            <tr>
+                <td style="width: 15%;"></td>            
+                <td> <!--Adding Alert Type -->    
+                    <div style="background-color: lightgray; padding: 10px; font:550 14px bold, Open Sans, Arial, Helvetica, sans-serif" >Add Alert Type</div>
+                    <div class="boundary">                         
+                        <span class="naming">Alert Name:</span><input id="alertType" class="inputT">                        
+                        <input class="savebtn" type="button" value="Save" (click)="AddAlertType()">
+                    </div>
+                    
+                </td>
+                <td style="width: 15%;"></td>
+            </tr>
+           
+        </table>
+        <table>
+            <tr>
+                <td style="width: 15%;"></td>            
+                <td> <!--Adding Alert Type -->    
+                    <div style="background-color: lightgray; padding: 10px; font:550 14px bold, Open Sans, Arial, Helvetica, sans-serif" >Add Alert</div>
+                    <div class="boundary" *ngIf="isShown">                         
+                        <span class="naming">CompanyId:</span><input id="alertType" class="inputT">
+                        <span class="naming">Asset ID/Name:</span>
+                            <div style="z-index: -1" *ngIf="showresult"> 
+                                <div  id="result" *ngFor="let t of result">    
+                                    <span (click)="getId(t.assetId)" class="dt">{{t.assetId}}</span>
+                                    <span class="naming">{{t.equityName}}</span>                
+                                </div>
+                            </div>
+                        <input *ngIf="isShown" id="txtName" class="inputT" type="text"  (keypress)="getasset($event)" value="{{companyid}}" >    
+                        <span class="naming">AlertType:</span><input id="alertType" class="inputT">
+                        <select class="dropDown"  id="alertType">
+                            <option [value]="item.id" *ngFor="let item of alertType" > {{item.name}}</option>                    
+                        </select>
+                        <input class="savebtn" type="button" value="Save" (click)="AddAlert()">
+                    </div>
+                     
+                </td>
+                <td style="width: 15%;"></td>
+            </tr>
+           
+        </table>
+
+      </div>
+     

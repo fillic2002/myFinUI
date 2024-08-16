@@ -135,43 +135,45 @@
         </tr>
     </table>
     <br>
-<table *ngIf="isShown">
-    <thead>
-    <tr class="header1" >    
-        <td (click)="sort('name')" class="headername ">Equity Name<div>{{sharecount}}</div></td>
-        <td (click)="sort('pb')" class="headeramt sortable">PB</td>    
-        <td (click)="sort('marketcap')" class="headeramt sortable">MarketCap</td>    
-        <td class="headeramt">Live Price</td>    
-        <td class="headeramt">Qty</td>
-        <td class="headeramt">Avg Price</td>
-        <td (click)="sort('Investment')" class="headeramt sortable">Net Invst<div>{{eqInvstVal|number:'1.2-2'}}</div></td>     
-        <td (click)="sort('Gain')" class="headeramt sortable">Gain<div>{{netReturn|number:'1.2-2'}}</div></td>
-        <td (click)="sort('Return')" class="headeramt sortable">Return<span class="headerSmall"> (xirr)</span></td>
-        <td (click)="sort('Dividend')" class="headeramt sortable">Dividend<div>{{sdividend|number:'1.2-2'}}</div></td>
-        <td (click)="sort('Divyield')" class="headeramt sortable">Retrun + Div<span class="headerSmall"> (xirr)</span></td>
-        <td class="headeramt">AmtTotal</td>
-    </tr>
-    </thead> 
-    <tr class="header2" *ngFor ="let p of filterPortfolio">    
-        <!--<div class="amt">{{p.trasactionId}}</div>-->         
-        <td class="naming link" id="{{p.eq.assetId}}" (click)="showdividend(p)">{{p.eq.symbol}}<div id="{{p.eq.assetId}}" ng-show=""></div></td>
-        <td class="amt">{{p.eq.pb|number:'1.2-2'}}</td>        
-        <td class="amt">{{p.eq.marketCap|number:'1.2-2'}}</td>        
-        <td class="amt">{{p.eq.livePrice|number:'1.2-2'}}</td>        
-        <td class="amt">{{p.qty.toFixed(0)}}</td>
-        <td class="amt">{{p.avgprice|number : '1.2-2'}}</td>
-        <td class="amt">{{p.qty*p.avgprice|number:'1.2-2'}}</td>         
-        <td class="amt" [ngStyle]="{color: getTrColor(p.profit),'font-weight':'bold'}">{{p.profit|number:'1.2-2'}}</td>        
-        <td class="amt" [ngStyle]="{color: getTrColor(p.percentage),'font-weight':'bold'}">{{p.percentage|number:'1.2-2'}}%</td>
-        <td class="amt">{{p.dividend.toFixed(2)}}</td>
-        <td class="amt" [ngStyle]="{color: getTrColor(p.divReturnXirr),'font-weight':'bold'}">{{p.divReturnXirr.toFixed(2)}}%</td>
-        <td><input type="checkbox">{{p.eq.livePrice*p.qty|number:'1.2-2'}}</td>
-    </tr>
-</table>
+    <div class="centerDiv">
+        <table *ngIf="isShown"  >
+            <thead>
+            <tr class="header1" >    
+                <td (click)="sort('name')" class="headername ">Equity Name<div>{{sharecount}}</div></td>
+                <td (click)="sort('pb')" class="headeramt sortable">PB</td>    
+                <td (click)="sort('marketcap')" class="headeramt sortable">MarketCap</td>    
+                <td class="headeramt">Live Price</td>    
+                <td class="headeramt">Qty</td>
+                <td class="headeramt">Avg Price</td>
+                <td (click)="sort('Investment')" class="headeramt sortable">Net Invst<div>{{eqInvstVal|number:'1.2-2'}}</div></td>     
+                <td (click)="sort('Gain')" class="headeramt sortable">Gain<div>{{netReturn|number:'1.2-2'}}</div></td>
+                <td (click)="sort('Return')" class="headeramt sortable">Return<span class="headerSmall"> (xirr)</span></td>
+                <td (click)="sort('Dividend')" class="headeramt sortable">Dividend<div>{{sdividend|number:'1.2-2'}}</div></td>
+                <td (click)="sort('Divyield')" class="headeramt sortable">Retrun + Div<span class="headerSmall"> (xirr)</span></td>
+                <td class="headeramt clickable" (click)="sort('amttotal')">AmtTotal</td>
+            </tr>
+            </thead> 
+            <tr class="header2" *ngFor ="let p of filterPortfolio">    
+                <!--<div class="amt">{{p.trasactionId}}</div>-->         
+                <td class="naming link" id="{{p.eq.assetId}}" (click)="showdividend(p)">{{p.eq.symbol}}<div id="{{p.eq.assetId}}" ng-show=""></div></td>
+                <td class="amt">{{p.eq.pb|number:'1.2-2'}}</td>        
+                <td class="amt">{{p.eq.marketCap|number:'1.2-2'}}</td>        
+                <td class="amt">{{p.eq.livePrice|number:'1.2-2'}}</td>        
+                <td class="amt">{{p.qty.toFixed(0)}}</td>
+                <td class="amt">{{p.avgprice|number : '1.2-2'}}</td>
+                <td class="amt">{{p.qty*p.avgprice|number:'1.2-2'}}</td>         
+                <td class="amt" [ngStyle]="{color: getTrColor(p.profit),'font-weight':'bold'}">{{p.profit|number:'1.2-2'}}</td>        
+                <td class="amt" [ngStyle]="{color: getTrColor(p.percentage),'font-weight':'bold'}">{{p.percentage|number:'1.2-2'}}%</td>
+                <td class="amt">{{p.dividend.toFixed(2)}}</td>
+                <td class="amt" [ngStyle]="{color: getTrColor(p.divReturnXirr),'font-weight':'bold'}">{{p.divReturnXirr.toFixed(2)}}%</td>
+                <td class="amt"><input style="text-align: left;" type="checkbox">{{p.eq.livePrice*p.qty|number:'1.2-2'}}</td>
+            </tr>
+        </table>
+    </div>
 <div class="header4">
-    <span class="clickable" (click)="PreviousInvest()"> <= </span>
+    <span style="font-size: large;" class="clickable" (click)="NextInvest(-1)"> <<  </span>
     <span >Total Investment in {{selectedMonth}}</span>          
-    <span class="clickable" (click)="NextInvest()"> => Next</span>
+    <span class="clickable" (click)="NextInvest(1)"> >>  </span>
 </div> 
 <div style=" display: flex;justify-content: center;">
     <table> 
@@ -271,60 +273,42 @@
 
 <div id="cmpDivDetails" class="popup" style="display: none;">
     
-    <div class="popupCloseButton"><span (click)="hideShareDetails()">X</span></div>
+    <div class="popupCloseButton">
+        <span (click)="hideShareDetails()">X</span></div>
     <div class="header3">Dividend Details (Current year)</div>
-    <span> 
+    <div> 
         <input (click)="selectDivType('companywise')" type="radio" id="cmpdiv" name="equity" value="companywise" checked> <label  >Company Wise</label>
         <input (click)="selectDivType('datewise')" type="radio" id="datediv" name="equity" value="datewise"> <label  >Datewise</label>        
-      </span>
+    </div>
     <ng-container *ngIf="showCmp" style="float: right;">
-    <table>
-        <tr class="header1">
-            <td class="headername">Eqt Name</td>
-            <td class="headeramt">EqtId</td>
-            <td class="headeramt">Dividend Declared</td>
-            <td (click)="sort('qty')" class="headeramt">qty</td>
-            <td (click)="sort('netDiv')" class="headeramt">Net Dividend Amt</td>
-            <td (click)="sort('DivReturn')" class="headeramt">DivReturn</td>
-            <td class="headeramt">livePrice</td>
-        </tr>
-       
-      <tr class="header2" *ngFor="let item of compDivDetails" >
-        <td class="name">{{item.eq.symbol}}</td>
-        <td  class="amt">{{item.eq.assetId}}</td>
-        <td  class="amt">{{item.dividend/item.qty}}</td>
-        <td  class="amt">{{item.qty}}</td>
-        <td  class="amt">{{(item.dividend).toFixed(2)}}</td>
-        <td  class="amt">{{(item.dividend*100/(item.eq.livePrice*item.qty)).toFixed(2)|number:'1.2-2'}}</td>    
-        <td  class="amt">{{item.eq.livePrice}}</td>
-      </tr> 
-    </table>
+        <div class="centerDiv">
+            <table>
+                <tr class="header1">
+                    <td class="headername">Eqt Name</td>
+                    <td class="headeramt">EqtId</td>                    
+                    <td (click)="sort('netDiv')" class="headeramt">Net Dividend Amt</td>                    
+                    <td class="headeramt">Avg Pur. Price</td>
+                    <td (click)="sort('DivReturn')" class="headeramt">DivReturn</td>
+                </tr>
+            
+            <tr class="header2" *ngFor="let item of compDivDetails" >
+                <td class="name">{{item.compName}}</td>
+                <td  class="amt">{{item.compId}}</td>                                
+                <td class="amt">{{item.div.toFixed(2)}}</td>                
+                <td class="amt">{{item.avgPrice|number:'1.2-2'}}</td>
+                <td class="amt">{{(item.div*100/item.avgPrice).toFixed(2)}}%</td>   
+            </tr> 
+            </table></div>
     </ng-container>
-    <table>
-        <tr class="header1">
-            <td (click)="sort('intrestPaymentDate')" class="headername">Intest Credit Date</td>            
-            <td class="headername">Bond Name</td>
-            <td class="headeramt">BondId</td>
-            <td class="headeramt">Intrest Credited <span>{{totalBondIntrest|number:'1.2-2'}}</span></td>            
-            <td class="headeramt">livePrice</td>
-        </tr>
-       
-        <tr class="header2" *ngFor="let item of bondIntrestDetails" >
-            <td class="dt">{{item.intrestPaymentDate|date}}</td>        
-            <td class="name">{{item.bondDetail.bondName}}</td>
-            <td class="amt">{{item.bondDetail.bondId}}</td>
-            <td class="amt">{{item.amt.toFixed(2)}}</td>        
-            <td class="amt">{{item.bondDetail.livePrice}}</td>
-        </tr> 
-    </table>
-    <ng-container *ngIf="showDiv" style="float: right;">
+    
+    <ng-container *ngIf="showDiv" class="centerDiv" style="float: right;">
      <table>
         <tr class="header1">
             <td (click)="sort('divPaymentDate')" class="headername">Dividend Credit Date</td>            
             <td class="headername">Company Name</td>
             <td class="headeramt">CompanyID</td>
             <td class="headeramt">Dividend Credited <span>{{totalBondIntrest|number:'1.2-2'}}</span></td>            
-            <td class="headeramt">livePrice</td>
+            <td class="headeramt">Avg Purchase Price</td>
             <td class="headeramt">Div %</td>
         </tr>
        
@@ -333,8 +317,8 @@
             <td class="name">{{item.compName}}</td>
             <td class="amt">{{item.compId}}</td>
             <td class="amt">{{item.div.toFixed(2)}}</td>        
-            <td class="amt">{{item.livePrice}}</td>
-            <td class="amt">{{(item.div*100/item.livePrice).toFixed(2)}}%</td>
+            <td class="amt">{{item.avgPrice|number:'1.2-2'}}</td>
+            <td class="amt">{{(item.div*100/item.avgPrice).toFixed(2)}}%</td>
         </tr> 
     </table>
   </ng-container>

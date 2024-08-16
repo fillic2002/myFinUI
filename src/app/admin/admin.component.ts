@@ -4,12 +4,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { IAcctType, IShareDetail } from '../ShareDetail';
 import { Console } from 'console';
 import { EquitysearchComponent } from '../common/equitysearch/equitysearch.component';
+import { CommonFunctions } from '../common/equitysearch/CommonFunctions';
 
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.css']
-})
+}) 
 export class AdminComponent implements OnInit {
   TypeOfTran = [
     { id: 1, name: 'Deposit'},
@@ -26,7 +27,7 @@ export class AdminComponent implements OnInit {
       { id: 9, name: 'Loan Intrest' },
       { id: 99, name: 'Others' }
     ]; 
-  constructor(private _eqTransaction:SharesService,private router:Router) { }
+  constructor(private _eqTransaction:SharesService,private router:Router,public commonFunctions: CommonFunctions) { }
   selectedTranType: any;
   selectedDesc:any;  
   ActType=[] as IAcctType[];
@@ -36,25 +37,24 @@ export class AdminComponent implements OnInit {
   name:string='';
   shrdetail!: IShareDetail;
   response!: string;
-  expType!:string; 
+  expType!:string;
   expTypes=[] as any;
-  folios=[] as any;
-  folioId:number=1;
+  folios=[] as any; 
+  folioId:number=1; 
   public selectedfolio!: number;
   public expType1!: number;
-  showContainer: number = 1; 
+  showContainer: number = 1;
   
-  ngOnInit(): void {
+  ngOnInit(): void { 
     this.GetExpenseType();
-    this.GetFolioDetails();
-
+    this.GetFolioDetails(); 
   } 
   changeAccount(event:any){
     this.selectedTranType = event.target.value;
     this.response="";
   }
   changeDesc(event:any){    
-    this.selectedDesc = event.target.value;
+    this.selectedDesc = event.target.value; 
     this.response="";
   }   
   public selectnext(option:any)
@@ -76,7 +76,7 @@ export class AdminComponent implements OnInit {
   });
   }
   AddBondDetails(){
-  debugger;
+   
     var bondName =(document.getElementById('bondName')as  HTMLInputElement).value;
     var minInvst = (document.getElementById('minInvst') as  HTMLInputElement).value;    
     var bondID = (document.getElementById('bondID')as HTMLInputElement).value;    
@@ -122,10 +122,7 @@ export class AdminComponent implements OnInit {
     });
   }
 
-  public onSelect(option:any)
-  {    
-    this.router.navigate(['/']);
-  }
+  
   AddNewAct():void{   
 //    var salary =document.getElementById('txtAmt');
  //   var txtDt =document.getElementById('txtDt').value;
@@ -157,22 +154,23 @@ export class AdminComponent implements OnInit {
     (document.getElementById("txtName") as HTMLInputElement).value = re.fullName;     
        
   }
+  
   UpdateEquity()
   {
-    //debugger;
-    
-    var shr:IShareDetail =<IShareDetail>
-    <unknown>{
+     
+     this.shrdetail={
       desc: (document.getElementById("desc") as HTMLInputElement).value,
       divLink: (document.getElementById("txtDivLink") as HTMLInputElement).value,
-      id: (document.getElementById("txtISIN") as HTMLInputElement).value,
+      assetId: (document.getElementById("txtISIN") as HTMLInputElement).value,
       sector: (document.getElementById("txtSector") as HTMLInputElement).value,
-      shortName: (document.getElementById("symbol") as HTMLInputElement).value,
-      fullName: (document.getElementById("txtName") as HTMLInputElement).value
+      equityName: (document.getElementById("txtAssetName") as HTMLInputElement).value,
+      symbol:(document.getElementById("symbol") as HTMLInputElement).value,
+      livePrice:0, assetType:1 
+     }    
       
-    };    
+        
       
-    this._eqTransaction.postEquityUpdate(shr)
+    this._eqTransaction.addEquity(this.shrdetail)
       .subscribe(data =>{
          
         if(data==true)
@@ -206,6 +204,7 @@ export class AdminComponent implements OnInit {
       else{this.response="Expense Added Successfully."; }
         
     });
+    
     this.GetExpenseType();
   }
 
@@ -217,13 +216,13 @@ export class AdminComponent implements OnInit {
       //console.log(this.expTypes);
     });
   }
-GetFolioDetails()
-{
-  this._eqTransaction.getAllfolio()
-    .subscribe(data=>{
-      this.folios =data;
-      console.log(data);
-    }); 
-}
+  GetFolioDetails()
+  {
+    this._eqTransaction.getAllfolio()
+      .subscribe(data=>{
+        this.folios =data;
+        console.log(data);
+      }); 
+   }
  
 }

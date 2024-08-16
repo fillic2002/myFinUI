@@ -337,19 +337,44 @@ public sectorfolio()
    
    
 }
-NextInvest() 
+
+ 
+
+NextInvest(m: number ) 
 {
  //console.log(this.selectedMonth);
+ //debugger;
  var month = Number(this.selectedMonth.split('-')[0]);
  var year = Number(this.selectedMonth.split('-')[1]);
  if(month == 12)
  {
-  month = 1;
-  year = year+1; 
+  if(m>=0)
+    {
+      month = 1;
+      year = year+1;     
+    }  
+  else
+    {
+      month = 11;      
+    }
  }
  else
- {
-  month += 1;
+ { 
+  if(m>=0)
+  {
+    month += 1;
+  }
+  else
+  {
+    if(month>=2)
+      month -= 1;
+    else
+      {
+        month=12;
+        year -=1;
+      }
+  }
+
  }
 
  this.selectedMonth = month.toString() +"-"+ year.toString(); 
@@ -406,7 +431,7 @@ public GetXirrReturn(folioId:number, AssetId:number)
   }
       
   sort(e:string) {      
-     
+     //debugger;
     if(e=="divPaymentDate")
     {
       if(this.direction =="asc") 
@@ -420,6 +445,7 @@ public GetXirrReturn(folioId:number, AssetId:number)
         this.direction ="asc";
       }
     }
+    
  
     if(e=="intrestPaymentDate")
       { 
@@ -434,7 +460,7 @@ public GetXirrReturn(folioId:number, AssetId:number)
           this.direction ="asc";
         } 
     }  
-    if(e=="total")
+    else if(e=="total")
       { 
         if(this.direction =="asc")
         {      
@@ -447,8 +473,21 @@ public GetXirrReturn(folioId:number, AssetId:number)
           this.direction ="asc";
         }
     } 
+    else if(e=="amttotal")
+      { 
+        if(this.direction =="asc")
+        {      
+          this.filterPortfolio.sort((a: {eq:{ livePrice: number;}; qty: number; },b:{eq: { livePrice: number;}; qty: number; })=>(a.eq.livePrice*a.qty>b.eq.livePrice*b.qty)?1:-1);       
+          this.direction ="desc";
+        }
+        else 
+        {
+          this.filterPortfolio.sort((a: {eq:{ livePrice: number;}; qty: number; },b:{eq:{ livePrice: number;}; qty: number; })=>(b.eq.livePrice*b.qty>a.eq.livePrice*a.qty)?1:-1);       
+          this.direction ="asc";
+        }
+    } 
      
-    if(e=="dtpurchase")
+    else if(e=="dtpurchase")
       {       
         if(this.direction =="asc")
         {       
@@ -461,7 +500,7 @@ public GetXirrReturn(folioId:number, AssetId:number)
           this.direction ="asc";
         }
     } 
-    if(e=="current")
+    else if(e=="current")
       {
         if(this.direction =="asc")
         {
@@ -805,7 +844,7 @@ public GetXirrReturn(folioId:number, AssetId:number)
   showdividend(p:any)
   {
    // p.eq.assetId,p.eq.equityName
-   debugger;
+   //debugger;
     this.companyurl =p.eq.analysisurl;
     //console.log(p);
     this.selectedEqt =p.eq.equityName;
@@ -866,36 +905,54 @@ public GetXirrReturn(folioId:number, AssetId:number)
    
   showCompDividend(year:string) 
   {    
-    this.compDivDetails.length=0; 
+    this.compDivDetails.length=0;
+    this.yearlyDivDetails.length=0;
+
     if(this.selectedAssetClass==1)
     {
-      debugger;
+     
       const keys = new Set();
       const uniqueRows = [];
-
+       
       this._portfolio.getCompDividend(year)
         .subscribe(data => { 
           const currentYear = new Date().getFullYear();  
-        this.compDivDetails=data;
+        //this.compDivDetails=data;
         (document.getElementById('cmpDivDetails')as HTMLDivElement).style.display='block'; 
-        data.forEach(element => {
+        data.forEach(element => { 
           
           element.eq.div.forEach(row=>{
-          //  console.log(y);
-            const match = row.dt.match(new Date().getFullYear());
+       //debugger;
+            const match = row.dt.match(year);
             if(match!=null  && (row.creditType==10 ||row.creditType==11||row.creditType==12))
-            {
+            { 
             //Add uniq dividend values to list           
+              
 
               let a:compDivYear={  
                 div:row.divValue,
                 livePrice:element.eq.livePrice,
+                avgPrice:element.avgprice,
                 dt:row.dt,
                 compId:element.eq.assetId,
-                compName:element.eq.equityName
+                compName:element.eq.equityName 
               };  
-              this.yearlyDivDetails.push(a);
-              //console.log(a);   
+               
+              const exists = this.yearlyDivDetails.some(obj => obj.dt === row.dt && obj.compId===element.eq.assetId);              
+              if(!exists)
+              {
+                this.yearlyDivDetails.push(a);               
+              }
+              //company wise collection
+               const compExist =this.compDivDetails.some(obj => obj.compId===element.eq.assetId);
+               if(!compExist)
+               {
+                this.compDivDetails.push(a);                          
+               }else {
+                var item = this.compDivDetails.find(obj => obj.compId === element.eq.assetId);
+                console.log(element.eq.equityName+"::"+item.div+"," + row.divValue);
+                item.div += Number(row.divValue);                
+               }
             }            
           });
         });
@@ -913,7 +970,7 @@ public GetXirrReturn(folioId:number, AssetId:number)
         });*/
         this.router.navigate(['/bonds']);
     }
-
+    this.yearlyDivDetails.sort((a, b) => a.name.localeCompare(b.equityName));
   }
 
   hideShareDetails()
@@ -1070,9 +1127,7 @@ public rtnInvstmt: ChartDataSets[] = [
               this.netReturn += element.profit;
               this.eqInvstVal += element.avgprice*element.qty;  
               this.eqCurrVal += element.eq.livePrice*element.qty;
-      });
-
-      console.log(this.filterPortfolio);
+      });      
     }
   }
   public historyClick (e: any): void{

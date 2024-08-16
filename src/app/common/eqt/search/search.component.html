@@ -1,0 +1,8 @@
+<span class="naming">Asset ID/Name:</span>
+<div style="z-index: -1" *ngIf="showresult"> 
+    <div style="height: 25px;" class="clickable" id="result" *ngFor="let t of result">    
+        <span (click)="getId(t.assetId)" class="dt">{{t.assetId}}</span>
+        <span class="naming">{{t.equityName}}</span>                
+    </div>
+</div>
+<input *ngIf="isShown" id="txtName" class="inputT" type="text"  (keypress)="getasset($event)" value="{{companyid}}" >

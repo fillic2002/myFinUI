@@ -10,6 +10,7 @@ import { TaxcompuComponent } from './taxcompu/taxcompu.component';
 import { AdminComponent } from './admin/admin.component';
 import { ExpenseComponent } from './expense/expense.component';
 import { BondsComponent } from './bonds/bonds.component';
+import { AlertComponent } from './alert/alert.component';
 
 const routes: Routes = [
   {path:'', component:OptionComponent},
@@ -22,6 +23,7 @@ const routes: Routes = [
   {path:'admin',component:AdminComponent},
   {path:'expense',component:ExpenseComponent},  
   {path:'bonds',component:BondsComponent},
+  {path:'alert',component:AlertComponent},
 ];
  
 @NgModule({
