@@ -58,7 +58,7 @@
 <div (click)="showTrans(option)" class="dml">{{trnStatus}}</div><br>
 <table>
     <tr>
-        <td><div style="width: 800px;height: 400px;" >            
+        <td><div style="width: 630px;height: 350px;" >            
             <canvas baseChart 
                 [datasets]="invstShrDataSet"
                 [labels]="barChartLabels"
@@ -67,11 +67,11 @@
                 [legend]="barChartLegend"
                 [colors]="barChartColors"
                 [chartType]="barChartType"
-                (chartClick)="chartClick($event)">            
+                (chartClick)="getSectorInvst($event)">            
             </canvas>                             
         </div></td>
         <td>
-            <div style="width: 800px;height: 360px; float: left; padding-left: 40px;" >
+            <div style="width: 800px;height: 430px; float: left; padding-left: 40px;" >
                 <canvas id="sectorWiseMonthlyInvst"
                 ></canvas>                            
             </div>          
@@ -80,7 +80,7 @@
     <tr>
         <td colspan="2"> <div style="width: 50%;  float: left; padding-left: 40px;  overflow: scroll;" >
             
-            <div style="width: 700px;height: 350px; float: left; padding-left: 40px;" >
+            <div *ngIf="isMonthlyInvstVisble" style="width: 650px;height: 350px; float: left; padding-left: 40px;" >
                 <canvas baseChart 
                 [datasets]="mnthInvstDataSet"
                 [labels]="mnthInvstlbl"
@@ -97,13 +97,13 @@
     </tr>
     <tr>
         <td>
-            <div style="width: 550px;height: 250px; float: left; padding-left: 40px;" >
-                <canvas baseChart 
+            <div *ngIf="isPfVisble" style="width: 550px;height: 250px; float: left; padding-left: 40px;" >
+            <canvas baseChart 
                 [datasets]="pfDataSet"
                 [labels]="pfChartLabels"
                 [options]="pfChartOptions"
                 [plugins]="pfChartPlugins"
-                [legend]="pfChartLegend"
+                [legend]="pfChartLegend" 
                 [colors]="pfChartColors"
                 [chartType]="pfChartType"
                 (chartClick)="getPFDetail($event)">
@@ -112,7 +112,7 @@
 
         </td>
         <td> 
-          <div style="width: 550px;height: 250px; float: left; padding-left: 40px;" >
+          <div *ngIf="isPpfVisble" style="width: 550px;height: 250px; float: left; padding-left: 40px;" >
             <canvas baseChart 
             [datasets]="ppfDataSet"
             [labels]="ChartLabels"
@@ -157,7 +157,7 @@
                     </div>
                 </div>
                 <input *ngIf="isShown" id="txtName" class="inputT" type="text"  (keypress)="getasset($event)" value="{{companyid}}" >
-               <span class="naming"  >Date:</span>
+               <span class="naming">Date:</span>
                     <input class="inputT" id="txtDt" type="date" (change)="changeDate($event)"> 
             </td>
          
@@ -174,7 +174,7 @@
 <ng-container *ngIf="DetailSummary">
     <span class="naming" style="font-weight: 600;padding-right: 3px;">Asset ID/Name:</span>
     <input  id="txtCompName" [(ngModel)]="compName" class="inputT" type="text"  (keypress)="filterAsset($event)">    
-    <div class="name">{{msg}}</div>
+    <div style="float: right; color: #28a745;" class="name">{{msg}}</div>
 <table >
     <tr class="header1">
         <td (click)="sort('purchaseDt')" class="headerdt">Date of Purchase</td>
@@ -183,7 +183,7 @@
         <td class="headeramt" (click)="sort('ID')"> ID</td>        
         <td class="headeramt">Quantity</td>
         <td class="headeramt">Purchase Price</td>        
-        <td class="headeramt" (click)="sort('ia')">Invested amt</td>
+        <td class="headeramt" (click)="sort('ia')">Invested amt<div>{{total_invst|number : '1.2-2'}}</div></td>
         <td class="headeramt" (click)="sort('pb')">PB</td>
         <td class="headeramt" (click)="sort('mc')">MarketCap</td>
         <td class="headeramt">Transation Type</td>
@@ -193,10 +193,22 @@
     </tr>
 
  <tr class="header2" *ngFor="let t of filterPortfolio">  
-        <td class="dt">
-          {{t.tranDate|date}}
+        <td class="dt">          
+          <div *ngIf="t.isEdit">
+            <input type="date" [(ngModel)]="t.tranDate">
+            </div>
+            <div *ngIf="!t.isEdit">
+                {{t.tranDate|date}}
+          </div>
         </td>
-        <td class="amt">{{t.portfolioId}}</td>
+        <td class="amt">            
+          <div *ngIf="t.isEdit">
+            <input type="text" [(ngModel)]="t.portfolioId">
+            </div>
+            <div *ngIf="!t.isEdit">
+                {{t.portfolioId}}
+          </div>
+        </td>
         <td class="naming" (click)="AddTran(t)">{{t.equity.symbol}}</td>
         <td class="amt" >{{t.equity.assetId}}</td>        
         <td class="amt">
@@ -216,7 +228,7 @@
             </div>            
         </td>
         
-        <td class="amt" [ngStyle]="{'background-color': getBGColor(t.marketCap_Tran)}">{{t.qty*t.price|number : '1.2-2'}}</td>
+        <td class="amt"  >{{t.qty*t.price|number : '1.2-2'}}</td>
         <td class="amt" [ngStyle]="{'background-color': getBGColor(t.marketCap_Tran)}">
             <div *ngIf="t.isEdit">
                 <input type="text" [(ngModel)]="t.pB_Tran">

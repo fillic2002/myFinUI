@@ -11,6 +11,7 @@ import { AdminComponent } from './admin/admin.component';
 import { ExpenseComponent } from './expense/expense.component';
 import { BondsComponent } from './bonds/bonds.component';
 import { AlertComponent } from './alert/alert.component';
+import { LandComponent } from './land/land.component';
 
 const routes: Routes = [
   {path:'', component:OptionComponent},
@@ -24,6 +25,7 @@ const routes: Routes = [
   {path:'expense',component:ExpenseComponent},  
   {path:'bonds',component:BondsComponent},
   {path:'alert',component:AlertComponent},
+  {path:'land',component:LandComponent},
 ];
  
 @NgModule({

@@ -181,7 +181,10 @@
             <td class="headeramt">Date</td>
             <td class="headername">Eqt Name</td>
             <td class="headeramt">Qty</td>
-            <td class="headeramt">Price</td>
+            <td class="headeramt">Pur Price</td>
+            <td class="headeramt">Cur Price</td>
+            <td class="headeramt">Appreciation</td>
+            
             <td (click)="sort('total')" class="headeramt">Total <div>{{invstTotal|number:'1.2-2'}}</div></td> 
             <td class="headeramt">PB</td>          
             <td class="headeramt">Market Cap</td>
@@ -192,6 +195,8 @@
             <td class="name" (click)="showdividend(p.equity.assetId,p.equity.equityName)">{{p.equity.equityName}}</td>  
             <td class="amt">{{p.qty.toFixed(0)}}</td> 
             <td class="amt">{{p.price.toFixed(1)}}</td>
+            <td class="amt">{{p.equity.livePrice}}</td>
+            <td class="amt">{{(p.equity.livePrice-p.price)*100/p.price|number:'1.2-2'}}%</td>
             <td class="amt">{{(p.price*p.qty).toFixed(0)|number:'1.2-2'}}</td>
             <td class="amt">{{p.pB_Tran.toFixed(2)}}</td>
             <td class="amt">{{p.marketCap_Tran.toFixed(1)|number:'1.2-2'}}</td>
@@ -199,7 +204,7 @@
         </tr>
     </table>
 </div>
-
+~
 <!--POP UP-->
  
 <table id="sharedetails" class="popup" style="display: none;" >    
@@ -207,7 +212,7 @@
         <td>
     <table style="width: 100%;">
         <tr  >
-            <td><a [href]="companyurl" style="width: 15%;color:#FFA500; font-size: 20px;" >{{selectedEqt}} ({{selectedEqtID}})</a></td>
+            <td><a [href]="companyurl" class="compName" >{{selectedEqt}} ({{selectedEqtID}})</a></td>
             <td> <span class="popupCloseButton" (click)="hideShareDetails()">X</span></td>
         </tr>
     </table>
@@ -238,6 +243,28 @@
         </div>
     </div>     
      <div>{{status}}</div>
+     <div *ngIf="analysisObj"> 
+        <!-- Loop through Dividends -->
+        <!--<h3>Dividends</h3>
+         <ul>
+          <li *ngFor="let dividend of analysisObj.equity.div">
+            Date: {{ dividend.dt | date: 'longDate' }},
+            Dividend Value: {{ dividend.divValue }},
+            Credit Type: {{ dividend.creditType }}
+          </li>
+        </ul>-->
+      
+        <!-- Loop through Notes -->
+        <h3>Analysis</h3>
+        <ul>
+          <li *ngFor="let note of analysisObj.notes">             
+            
+             <div class="dt"> {{ note.dtUpdated | date }}</div> 
+           <span class="comment" >{{ note.content }} </span> 
+          </li>
+        </ul>
+      </div>
+     
     <div>
         <table>
             <tr class="header1">
@@ -275,7 +302,7 @@
     
     <div class="popupCloseButton">
         <span (click)="hideShareDetails()">X</span></div>
-    <div class="header3">Dividend Details (Current year)</div>
+    <div class="header3">Dividend Details - {{divYear}}</div>
     <div> 
         <input (click)="selectDivType('companywise')" type="radio" id="cmpdiv" name="equity" value="companywise" checked> <label  >Company Wise</label>
         <input (click)="selectDivType('datewise')" type="radio" id="datediv" name="equity" value="datewise"> <label  >Datewise</label>        
@@ -304,16 +331,16 @@
     <ng-container *ngIf="showDiv" class="centerDiv" style="float: right;">
      <table>
         <tr class="header1">
-            <td (click)="sort('divPaymentDate')" class="headername">Dividend Credit Date</td>            
+            <!--<td (click)="sort('divPaymentDate')" class="headername">Dividend Credit Date</td>-->
             <td class="headername">Company Name</td>
             <td class="headeramt">CompanyID</td>
             <td class="headeramt">Dividend Credited <span>{{totalBondIntrest|number:'1.2-2'}}</span></td>            
             <td class="headeramt">Avg Purchase Price</td>
-            <td class="headeramt">Div %</td>
+            <td (click)="sort('divper')" class="headeramt">Div %</td>
         </tr>
        
         <tr class="header2" *ngFor="let item of yearlyDivDetails" >
-            <td class="dt">{{item.dt|date}}</td>        
+            <!--<td class="dt">{{item.dt|date}}</td>        --> 
             <td class="name">{{item.compName}}</td>
             <td class="amt">{{item.compId}}</td>
             <td class="amt">{{item.div.toFixed(2)}}</td>        

@@ -25,6 +25,7 @@ import { EquitysearchComponent } from './common/equitysearch/equitysearch.compon
 import { AssetAnalyisComponent } from './asset-analyis/asset-analyis.component';
 import { AlertComponent } from './alert/alert.component';
 import { SearchComponent } from './common/eqt/search/search.component';
+import { LandComponent } from './land/land.component';
 
 
 @NgModule({
@@ -46,6 +47,7 @@ import { SearchComponent } from './common/eqt/search/search.component';
     AssetAnalyisComponent,
     AlertComponent,
     SearchComponent,
+    LandComponent,
     
   ],
   imports: [

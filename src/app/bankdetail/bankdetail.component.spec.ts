@@ -9,7 +9,7 @@ describe('BankdetailComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ BankdetailComponent ]
     })
-    .compileComponents();    
+    .compileComponents();
   }); 
 
   beforeEach(() => {
@@ -18,7 +18,7 @@ describe('BankdetailComponent', () => {
     fixture.detectChanges(); 
   });
   it('should create', () => {
-    expect(component).toBeTruthy(); 
+    expect(component).toBeTruthy();
 
   });  
 });

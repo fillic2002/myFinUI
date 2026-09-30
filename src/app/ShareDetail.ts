@@ -106,6 +106,7 @@ export interface IAssetReturn
     return:number,
     dividend:number,
     xirr:number
+    netInvstmnt:number
 }
 export interface IPfAcct
 {
@@ -137,5 +138,3 @@ export interface IAsset
     MarketCap:number,
     freefloat :number,
 }
-
-     

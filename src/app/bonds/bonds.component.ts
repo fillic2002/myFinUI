@@ -49,6 +49,11 @@ export class BondsComponent implements OnInit {
 
   constructor(private _shrdServ:SharesService,private router:Router,public commonFunctions: CommonFunctions) { }
   ngOnInit(): void {
+    this.monthlyBondIntrst.length=0;
+    this.bondIntrestYearWise.length=0;
+    this.year.length=0;
+    this.month.length=0;
+
      this._shrdServ.getBondDetails(this.selectedfolio,'0')
      .subscribe(data =>{ 
         this.bondDetails=data;
@@ -59,23 +64,26 @@ export class BondsComponent implements OnInit {
      this.getYearlyBondIntrest();
      this.getBondIntrest(this.selectedYear.toString());
      this.getYearlyIntrest(new Date().getFullYear().toString());
-  }
+  } 
   
   GetNetBondPurchsed(){
     this._shrdServ.getBondTransaction(this.selectedfolio)
       .subscribe(data =>{  
         //debugger;
         this.bondTransaction =data;
-        this.filterTransaction =data;
+        this.filterTransaction =data; 
         data.forEach(element => {
           if(new Date(element.bondDetail.dateOfMaturity) >= new Date())
           {
-            this.totalInvst += element.qty*element.invstPrice;           
+            if(element.tranType==1)
+              this.totalInvst += element.qty*element.invstPrice;           
+            else
+              this.totalInvst -= element.qty*element.invstPrice;           
           }
         });
       }); 
       
-      console.log(this.bondTransaction);
+      console.log(this.bondTransaction); 
   }
   GetBondHoldings(){
     this._shrdServ.getBondHoldings(this.selectedfolio,this.selectedfolio)
@@ -87,25 +95,26 @@ export class BondsComponent implements OnInit {
     this.showContainer = containerNumber;
   }
   updateBondDetails(bondObj: any) {
-    debugger;
+    //debugger;
     if(this.intrest != null)
-      {
+      { 
         bondObj.intrestCycle = this.intrest;
-      }    
+      }
     this._shrdServ.updateBondDetails( bondObj)
     .subscribe(data =>{ 
        this.response ="Bond Detail updated successfully for::"+ bondObj.bondName;
     });
   }
-  public SearchBond( bnd: any){  
-    debugger;
+  public SearchBond( e: any){  
+    //debugger;
+    if(e.target.value.length>2)
+      { 
+        this._shrdServ.searchBond(e.target.value)
+          .subscribe(data =>{ 
+            this.bondDetails =data;        
+        });
+      }
     this.bondMasterListFlag = true;
-    //this.bondIntrest = false;
-
-    this._shrdServ.searchBond(bnd)
-      .subscribe(data =>{ 
-        this.bondDetails =data;        
-      });
   } 
   public selectnext(option:any){    
     this.router.navigate(['/admin']);  
@@ -123,13 +132,23 @@ export class BondsComponent implements OnInit {
    
    this.GetNetBondPurchsed(); 
   }
+   
+  public getBackgroundColor(dateOfMaturity:Date):string
+  {
+    let currentDate:Date= new Date();
+    let md:Date= new Date(dateOfMaturity.toString());
+
+    if( md<currentDate)
+          return 'green';
+    
+  }
   public getTranMaturityColor(dateOfMaturity:Date):string
   { 
     let currentDate:Date= new Date();
     let md:Date= new Date(dateOfMaturity.toString());
 
     if( md<currentDate)
-          return 'red';
+          return 'white';
     else
       return 'black'
   }
@@ -142,6 +161,7 @@ export class BondsComponent implements OnInit {
   }  
   sort(e:string) {   
     //debugger;
+
     if(e=="liveprice")
       { 
         if(this.direction =="asc")
@@ -154,7 +174,20 @@ export class BondsComponent implements OnInit {
           this.bondDetails.sort((a: { livePrice: number; },b: { livePrice: number; })=>b.livePrice-a.livePrice);     
           this.direction ="asc";
         }
-     }
+     } 
+     else if(e=="maturityFltr")
+     { 
+       if(this.direction =="asc")
+       {        
+        this.filterTransaction.sort((a,b)=>(a.bondDetail.dateOfMaturity>b.bondDetail.dateOfMaturity)?1:-1);       
+         this.direction ="desc";
+       }
+       else  
+       {
+        this.filterTransaction.sort((a,b)=>(b.bondDetail.dateOfMaturity>a.bondDetail.dateOfMaturity)?1:-1);       
+         this.direction ="asc"; 
+       }
+    }
      else if(e=="ytm")
      { 
        if(this.direction =="asc")
@@ -279,14 +312,14 @@ export class BondsComponent implements OnInit {
       this.totalInvst += element.qty*element.invstPrice;           
     }
   }); 
-  debugger;
+  
   this.GetBondHoldings();  
   this.filteredIntrest= this.bondIntrestDetails.filter((s: { folioId: number; intrestPaymentDate:string})=>s.folioId==this.selectedfolio  );
   
  }
  getBondDetail(bondId:any)
  {
-  debugger;
+  
     this.totalInvst=0;
     this.filterTransaction =  this.bondTransaction.filter((s: {
         bondDetail: any; bondId: number; 
@@ -350,6 +383,7 @@ export class BondsComponent implements OnInit {
         this.response="New Transaction added to the database.";
     });
     this.router.navigateByUrl('/bonds');
+    this.ngOnInit();
   }
 
   Validated(item: any )
@@ -424,7 +458,7 @@ public getYearlyIntrest(year:string)
 }
 public monthSelected(e: any): void {   
   this.month.length=0;
-   debugger;
+   
  this.bondIntrest = true; 
   this.totalBondIntrest =0;
   if (e.event.type == "click") {

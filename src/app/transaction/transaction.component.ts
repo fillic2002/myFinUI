@@ -19,9 +19,11 @@ import { Decipher } from 'crypto';
 export class TransactionComponent implements OnInit {
   TypeOfTran = [
     { id: 3, name: 'Deposit'},
-    { id: 6, name: 'Intrest'}]; 
+    { id: 6, name: 'Intrest'}];
 
-   
+  public isPfVisble= true;
+  public isPpfVisble= true;
+  public isMonthlyInvstVisble= true;
   public portfolio =[] as any;
   public PFAcctDetails =[] as any;
   public filterPortfolio =[] as any;
@@ -104,6 +106,7 @@ export class TransactionComponent implements OnInit {
   datas=[] as any[];
   compName:string='';
   pb_tran:number =0;
+  total_invst:number =0;
   msg:string ='';
   uniqueSectorNames: Set<string> = new Set<string>();
 
@@ -181,9 +184,8 @@ getYearlyIvestment(folioId:number)
         this.invstBonds.push(element.investment.toFixed(2));
         this.proftBonds.push(element.profitCurrentyear.toFixed(2));
       }else if(element.assettype==3) //pf
-      {
-        
-        this.addPfYear(element.year)
+      {         
+        this.addPfYear(element.year) 
         this.pfinvstmnt.push(element.investment.toFixed(2));
         this.proftPf.push(element.profitCurrentyear.toFixed(2));        
 
@@ -213,33 +215,7 @@ getYearlyIvestment(folioId:number)
   }); 
 }
 
-/*getPf_PPFInvestment()
-{
-  this.pfintrest.length=0;
-  this.pfinvstmnt.length=0;
-  this.year=0;
-  this._eqTransaction.getPFAcDetails('0', 3)
-    .subscribe(data =>{       
-      this.PFAcctDetails=data;       
-      data.forEach(element=>{
-        //console.log(element);
-        this.addYear(element.year);         
-        if(element.typeOfTransaction=="int") 
-          { 
-            var inv:number=0;
-            inv= element.investmentEmplr+element.investmentEmp;     
-            
-            this.pfintrest.push(inv);   
-        }else if(element.typeOfTransaction=="deposit")
-          {
-            var inv:number=0;
-            inv= element.investmentEmplr+element.investmentEmp;     
-            this.pfinvstmnt.push(inv);        
-          }
-        });       
-    });
-     
-}*/
+ 
  
 getSectorWiseInvestment(data:any[]) {
 
@@ -268,18 +244,21 @@ drawChartSectorWiseInvst(sectordata:any[])
   const filterData=sectordata.filter(item=> item.assetId===1); 
   const ctx = document.getElementById('sectorWiseMonthlyInvst').getContext('2d');
   const stacedData=this.getSectorWiseInvestment(filterData)
-  
+   
   const myChart = new Chart(ctx, {
   type: 'line',
   data: stacedData,
   options: {
-    responsive: true,
+    responsive: true, 
     scales: {
       x: { stacked: true },
-      y: { stacked: true,beginAtZero:true }
+      y: { stacked: true,beginAtZero:true } 
     },
     onClick:(event,elements)=>{
-  
+      this.isMonthlyInvstVisble =false; 
+      this.isPfVisble =false;
+      this.isPpfVisble =false;
+
       if (elements.length > 0) {
         var activePoint = myChart.getElementAtEvent(event)[0];
         var data = activePoint._chart.data;
@@ -291,7 +270,12 @@ drawChartSectorWiseInvst(sectordata:any[])
         const xAxisValue = stacedData.labels[clickedElementIndex];
         var dt= xAxisValue.split('-');
         this.filterPortfolio=this.equitytransaction.filter(x=>x.equity.sector===label && new Date(x.tranDate).getFullYear() == dt[0] && new Date(x.tranDate).getMonth()==dt[1]-1);
-        //console.log(xAxisValue);
+        
+        this.total_invst=0;
+        this.filterPortfolio.forEach(item => {
+          this.total_invst+= item.price*item.qty;
+        });
+
       }
     }
   }
@@ -369,7 +353,7 @@ GetFolioDetails()
     var dt =(document.getElementById('txtDt') as HTMLInputElement).value;
     this.qty=this.qty.replace(',','');
     var mv = (document.getElementById('txtMarketCap') as HTMLInputElement).value;    
-    debugger;
+    //debugger;
     if(this.selectedfolio == 0) 
       return;
     this._eqTransaction.postTransaction(price,this.assetId,this.qty,dt,this.selectedfolio,this.purchaseOption,this.assetType,PB,mv,0) 
@@ -397,7 +381,7 @@ hideShareDetails()
   document.getElementById('status').style.display='none';
 } 
 public onSelect(option:any)
-  {    
+  {
     this.router.navigate(['/']);
   }
   public selectnext(option:any)
@@ -416,7 +400,7 @@ selected(){
  
   }
 changeFolio(e :any) {
-    debugger;
+    //debugger;
     this.status="";   
     this.selectedfolio=e.target.value;    
     //console.log(this.selectedfolio);
@@ -454,12 +438,12 @@ changeFolio(e :any) {
     //this.year=0;
     // This function only update PPF values
     this._eqTransaction.getPFAcDetails(this.selectedfolio, 4)
-    .subscribe(data =>{       
-      this.PFAcctDetails=data;
+    .subscribe(data =>{  
+      this.PFAcctDetails=data; 
       data.forEach(element=>{
-        console.log("PF::"+element.year);
-      this.addYear(element.year);         
-      if(element.typeOfTransaction=="int")
+         
+      this.addYear(element.year);
+      if(element.typeOfTransaction=="int") 
         { 
           var inv:number=0;
           inv= element.InvestmentEmplr+element.investmentEmp;   
@@ -673,7 +657,9 @@ changeAsset(e:any)
   }
  updateTransaction( t:any)
   { 
-    this._eqTransaction.UpdateTransactionNew(t.pB_Tran,t.tranDate,t.equity.assetId,t.price, t.portfolioId,t.tranId, t.qty)
+    debugger;
+    (t);
+    this._eqTransaction.UpdateTransactionNew(t.marketCap_Tran, t.pB_Tran,t.tranDate,t.equity.assetId,t.price, t.portfolioId,t.tranId, t.qty)
       .subscribe(data =>{
       
         this.msg="Trasnsaction for "+ t.equity.equityName + " has been updated "+ data ;
@@ -684,12 +670,7 @@ changeAsset(e:any)
   {  
     item.isEdit = true;
   }
-  //onChange(event:any,pb:number, dt:Date, astId:string)
-  //{
-  //  debugger;
-   // this.pb_tran =pb;
-     
-  //}
+  
   enlargeChart(chartId: number) {
     this.enlargedChartId = this.enlargedChartId === chartId ? null : chartId;
   }
@@ -800,13 +781,13 @@ changeAsset(e:any)
   public barChartLegend = true;
   public barChartPlugins = [];
   public barChartColors: Color[] = [
-    { backgroundColor: '#97CEEC' },
-    { backgroundColor: '#009150' },
-    { backgroundColor: 'lightblue' },
+    { backgroundColor: '#6b8ca9' },
+    { backgroundColor: '#009150' }, 
+    { backgroundColor: '#01717e' },
     { backgroundColor: '#00b38a' },
-    { backgroundColor: '#BBBFD2' },
+    { backgroundColor: '#85b0c4' },
     { backgroundColor: '#33cc99' },
-    { backgroundColor: '#B5E1E1' },
+    { backgroundColor: '#015d87' },
     { backgroundColor: '#addfad' }, 
                
   ]
@@ -868,8 +849,7 @@ public mnthInvstDataSet: ChartDataSets[] = [
   { data:this.monthlyInvstShr, label: 'Shares',stack:'inv' },
   { data:this.monthlyInvstEqtMF, label: 'EqtMF',stack:'inv' },
   { data:this.monthlyInvstDebtMF, label: 'DebtMF',stack:'inv'}, 
-  //{ data:this.monthlyInvstPF, label: 'PF',stack:'inv' },
-  //{ data:this.monthlyInvstPPF, label: 'PPF',stack:'inv' } 
+  
 ]; 
 
  //--------------------PF Investment -----------------------
@@ -948,19 +928,20 @@ public invstDataset:ChartDataSets[] = [
   { data:this.datas }    
 ]; 
 //------------------------------------------------------------
-public chartClick(e: any): void {
-  
  
+public getSectorInvst(e: any): void { 
+ 
+
   if (e.active.length > 0) {
     this.DetailSummary = true;
     const chart = e.active[0]._chart;
     const activePoints = chart.getElementAtEvent(e.event); 
-    
+     
     if ( activePoints.length > 0) { 
       const clickedElementIndex = activePoints[0]._index;
       const label = chart.data.labels[clickedElementIndex];
       const typeOfinvst =activePoints[0]._view.datasetLabel;      
-      
+     
       if(typeOfinvst=="Debt MF")  
       {
         this.filterPortfolio =  this.equitytransaction.filter(s => new Date(s.tranDate).getFullYear()==label && s.equity.assetType == 5);
@@ -969,6 +950,7 @@ public chartClick(e: any): void {
       if(typeOfinvst=='Shares')
       {       
         this.filterPortfolio =  this.equitytransaction.filter(s => new Date(s.tranDate).getFullYear()==label && s.equity.assetType == 1);
+        console.log(this.filterPortfolio);
       }
       if(typeOfinvst=="Eqty MF")
       {
@@ -999,6 +981,7 @@ public chartClick(e: any): void {
  
  public getMonthlyInvest(e: any)
  {
+  debugger;
    if (e.active.length > 0) {  
     const chart = e.active[0]._chart;
     const activePoints = chart.getElementAtEvent(e.event); 
@@ -1014,11 +997,14 @@ public chartClick(e: any): void {
         
         this.filterPortfolio=this.equitytransaction.filter(s => new Date(s.tranDate).getFullYear()==label.split('-')[1] 
                     && new Date(s.tranDate).getMonth()+1 == label.split('-')[0] );
+      
       }
+      
+
    } 
   }
   AddPFTransaction():void{
-  debugger;
+  //debugger;
     var empInvst =(document.getElementById('txtEmp')as  HTMLInputElement).value;    
     var txtPfDt = (document.getElementById('txtPfDt') as  HTMLInputElement).value;    
     var emplrInvst = (document.getElementById('txtEmplyr')as HTMLInputElement).value;    

@@ -70,12 +70,12 @@ color: #2c5777;
   font-size: 12px;
   cursor: pointer;
 }
-.shatusContent {
+/*.shatusContent {
   font: 500 18px Helvetica, sans-serif;
   padding-left: 100px;
   color: grey;
-}
-.shatusContent2 {
+}*/
+.statusContent2 {
   font: 500 24px Helvetica, sans-serif;
   text-align: center;
   padding: 5px;
@@ -90,7 +90,7 @@ color: #2c5777;
 .header1 {
   background: #505f82;
   color: white;
-  font: 14px Helvetica, sans-serif;
+  font: 14px  Roboto, "Helvetica Neue", sans-serif;
   text-align: center;
   height: 30px;
   vertical-align:middle;
@@ -116,7 +116,6 @@ color: #2c5777;
 
 .cellrow {
   background-color: rgb(197, 196, 196);
-
   border-collapse: collapse;
 }
 .headeramt {

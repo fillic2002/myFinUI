@@ -16,7 +16,7 @@ describe('PortfolioComponent', () => {
     fixture = TestBed.createComponent(PortfolioComponent);
     component = fixture.componentInstance;
     fixture.detectChanges(); 
-  });
+  }); 
      
   it('should create', () => {
     expect(component).toBeTruthy();

@@ -10,16 +10,16 @@ describe('AdminComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ AdminComponent ]
     })
-    .compileComponents();
-  });
+    .compileComponents(); 
+  });  
 
-  beforeEach(() => {
+  beforeEach(() => { 
     fixture = TestBed.createComponent(AdminComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  });
+  }); 
 
-  it('should create', () => {
+  it('should create', () => { 
     expect(component).toBeTruthy();
   });
 });

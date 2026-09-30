@@ -18,7 +18,8 @@ export class OptionComponent implements OnInit {
     {"name":"Bonds","id":8},
     {"name":"Expense","id":7},
     {"name":"Admin","id":6},
-    {"name":"Analysis","id":9}    
+    {"name":"Analysis","id":9},
+    {"name":"land","id":10}
   ]
   constructor(private  router:Router) {
     
@@ -39,5 +40,6 @@ export class OptionComponent implements OnInit {
     if(option.id==7){this.router.navigate(['/expense'])}
     if(option.id==8){this.router.navigate(['/bonds'])}
     if(option.id==9){this.router.navigate(['/alert'])}
+    if(option.id==10){this.router.navigate(['/land'])}
   }
 }

@@ -11,15 +11,15 @@ describe('SearchComponent', () => {
       declarations: [ SearchComponent ]
     })
     .compileComponents();
-  });
+  }); 
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SearchComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    fixture.detectChanges(); 
   });
-
+ 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    expect(component).toBeTruthy(); 
+  }); 
 });

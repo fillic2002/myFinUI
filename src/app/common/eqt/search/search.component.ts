@@ -15,7 +15,7 @@ export class SearchComponent implements OnInit {
   constructor(private _sharedService:SharesService) { }
 
   ngOnInit(): void {
-  }
+  } 
   public getasset(e:any)
     {    
       if(e.target.value.length>2)
@@ -23,7 +23,7 @@ export class SearchComponent implements OnInit {
         this.showresult =true;
         this._sharedService.getShare(e.target.value)
         .subscribe(data =>{
-          this.result = data;
+          this.result = data; 
         });
       }
     }

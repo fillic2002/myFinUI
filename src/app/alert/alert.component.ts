@@ -58,7 +58,7 @@ export class AlertComponent implements OnInit {
   }
   GetAnalysis()
   {
-    debugger;
+    //debugger;
     this._sharedService.getAnalysis(this.selectedEquity[0].assetId).subscribe(data=>{
       this.listOfAnalysis=data; 
       console.log(data);  
@@ -91,7 +91,7 @@ export class AlertComponent implements OnInit {
      });
   } 
   updateList(event: any,note: any) {
-   debugger;
+   //debugger;
     this.note = event.target.textContent;    
     //var astId = this.listOfAnalysis.find(a=>a.equity.equityName===asstName);
     this._sharedService.UpdateAnalysis(note.analysisID, this.note,this.selectedEquity[0].assetId )
@@ -134,7 +134,7 @@ export class AlertComponent implements OnInit {
        this.response="New Analysis added to the database for ::"+ this.selectedEquity[0].equityName; 
     }); 
     setTimeout(() => {
-      this.response ="";
+      this.response =""; 
     }, 5000); 
   } 
   public getId(e:any)
@@ -174,7 +174,7 @@ export class AlertComponent implements OnInit {
     responsive: true,
     title: {
       display: true,
-      text: "Dividend Paid"
+      
     }
   };
   public eqtyHstryDiv: Label[] = this.divDt; 
@@ -193,7 +193,7 @@ export class AlertComponent implements OnInit {
     responsive: true,
     title: { 
       display: true,
-      text: "Investment over Time"
+       
     }
   };
   public eqtyHistorylbl: Label[] = this.eqtTrandt; 
@@ -204,7 +204,7 @@ export class AlertComponent implements OnInit {
     { backgroundColor: '#08b100db' },     
   ]
   public EquityInvstmt:ChartDataSets[] = [
-    { data:this.eqtQty, label: 'No Of Shares',stack:'a' }    
+    { data:this.eqtQty, label: 'Share Purchased over time',stack:'a' }    
   ];
 
 }

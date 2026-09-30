@@ -19,11 +19,8 @@ export class AdminComponent implements OnInit {
       { id: 1, name: 'Salary'},
       { id: 2, name: 'Rent' },
       { id: 3, name: 'School Fee' },      
-      { id: 4, name: 'Internet' },
-      { id: 5, name: 'PF-Deposit' }, 
-      { id: 6, name: 'PF-Int' },
-      { id: 7, name: 'PPF-Deposit' },
-      { id: 8, name: 'PPF-Int' },
+      { id: 4, name: 'Internet' },      
+      
       { id: 9, name: 'Loan Intrest' },
       { id: 99, name: 'Others' }
     ]; 
@@ -71,9 +68,9 @@ export class AdminComponent implements OnInit {
     var trnType = (document.getElementById('prpTranType')as HTMLSelectElement).value;    
     
     this._eqTransaction.postPropertyTransaction(amt,txtDt,trnType,asstType,this.selectedfolio)
-    .subscribe(data => {
-    this.response="New Property Transaction added to the database.";
-  });
+      .subscribe(data => {
+      this.response="New Property Transaction added to the database.";
+    });
   }
   AddBondDetails(){
    
@@ -90,7 +87,7 @@ export class AdminComponent implements OnInit {
     }); 
   }
   toggleContainer(containerNumber: number): void {
-    this.showContainer = containerNumber;
+    this.showContainer = containerNumber; 
   }
   AddBondTran()  
   {
@@ -171,11 +168,14 @@ export class AdminComponent implements OnInit {
         
       
     this._eqTransaction.addEquity(this.shrdetail)
-      .subscribe(data =>{
+      .subscribe(data =>{ 
          
         if(data==true)
-        {
+        { 
           this.response ="Data Added Successfully";
+          setTimeout(() => {
+            this.response ="";
+          }, 5000);  
         }
         //console.log(data);   
       });

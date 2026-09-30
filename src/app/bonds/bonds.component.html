@@ -33,12 +33,44 @@
     <option [value]="item.folioID" *ngFor="let item of folios" > {{item.folioName}}</option>                    
   </select>
 </span> 
-<span><span>Bond name/ID: </span>
-  <input type="text" name="bname" [(ngModel)]="bName" (keypress)="SearchBond()">
+<span>
+  <span>Bond name/ID: </span>
+  <input type="text" name="bname" [(ngModel)]="bName" (keypress)="SearchBond($event)">
 </span>
 <span class="header4" style="font:14px bold;float: right;margin-right:1%;" (click)="selectnext(option)">Admin</span>
 <span style="padding-left: 20%;">Selected Year:{{selectedYear}}</span>
 </div>
+<ng-container *ngIf="bondMasterListFlag"> 
+  <div class="msg">{{response}}</div>
+  <table>
+    <tr class="header1">
+      <td (click)="sort('updatedon')" class="headername">Updated On</td>  
+      <td class="headername">BondID</td>
+      <td class="headername">BondName</td>
+      <td class="headername">Series</td>
+      <td class="headername">CouponRate</td>
+      <td (click)="sort('liveprice')"  class="headername">LivePrice</td>
+      <td class="headername">FaceValue</td>
+      <td (click)="sort('ytm')" class="headername">YTM</td>
+      <td class="headername">IntrestCycle</td>  
+      <td (click)="sort('maturity')" class="headername">Maturity</td>      
+      <td class="headername">Action</td>
+    </tr>
+    <tr class="header2" *ngFor="let item of bondDetails"> 
+      <td  class="dt">{{item.updateDate|date}}</td>  
+      <td  class="naming" (click)="moveId(item.bondId)">{{item.bondId}}</td>
+      <td  class="naming" contenteditable="true" (keydown.Tab)="updateBondDetails($event,'name',item.intrestCycle,item.bondId,item.bondName,item.couponRate,item.dateOfMaturity,item.faceValue,item.livePrice)" >{{item.bondName}}</td>
+      <td  class="amt">{{item.symbol}}</td>
+      <td  class="amt">{{item.couponRate|number:'1.2-2'}}</td>
+      <td  class="amt">{{item.livePrice|number:'1.2-2'}}</td>
+      <td  class="amt">{{item.faceValue|number:'1.2-2'}}</td>
+      <td  class="amt">{{item.ytm|number:'1.2-2'}}</td>
+      <td  class="naming editableField" contenteditable="true"  (blur)="onChange('amt',$event)">{{item.intrestCycle}}</td>  
+      <td  class="dt"  >{{item.dateOfMaturity|date}}</td>     
+      <td> <span class="clickable"  (click)="deleterecord(item.expId)" >Delete </span> <span class="clickable" (click)="updateBondDetails(item)"> Save</span></td> 
+    </tr>   
+  </table>
+</ng-container>
 <!-- 
 <table style="width: 100%">
   <tr>
@@ -186,7 +218,7 @@
         </div>
       </ng-container>
       <ng-container *ngIf="bondIntrest"> 
-       
+        
       </ng-container>
   </div> 
 <!-- Bond Holdings-->
@@ -202,14 +234,14 @@
         <td class="headername">BondID</td>   
         <td class="headername">Investment<div>{{totalInvst|number:'1.2-2'}}</div></td>   
         <td class="headername">IntrestCycle</td>
-        <td class="headername" (click)="sort('maturityDate')">Maturity</td> 
+        <td class="headername clickable" (click)="sort('maturityDate')">Maturity</td> 
       </tr>
       <tr class="header2" *ngFor="let item of bondHoldings">      
         <td  class="naming" (click)="getBondDetail(item.bondDetail.bondId)">{{item.bondDetail.bondName}}</td>
         <td  class="naming clickable" (click)="SearchBond(item)">{{item.bondDetail.bondId}}</td>  
         <td  class="naming">{{item.investment|number:'1.2-2'}}</td>
         <td  class="naming">{{item.bondDetail.intrestCycle}}</td>
-        <td  class="dt" [ngStyle]="{color: getTranMaturityColor(item.bondDetail.dateOfMaturity|date)}">{{item.bondDetail.dateOfMaturity|date}}</td>     
+        <td  class="dt" [ngStyle]="{color: getTranMaturityColor(item.bondDetail.dateOfMaturity|date),backgroundColor:getBackgroundColor(item.bondDetail.dateOfMaturity|date)}">{{item.bondDetail.dateOfMaturity|date}}</td>     
       </tr>
     </table>
   </div>
@@ -240,37 +272,7 @@
 </div> 
  
 
-<ng-container *ngIf="bondMasterListFlag"> 
-  <div class="msg">{{response}}</div>
-<table>
-  <tr class="header1">
-    <td (click)="sort('updatedon')" class="headername">Updated On</td>  
-    <td class="headername">BondID</td>
-    <td class="headername">BondName</td>
-    <td class="headername">Series</td>
-    <td class="headername">CouponRate</td>
-    <td (click)="sort('liveprice')"  class="headername">LivePrice</td>
-    <td class="headername">FaceValue</td>
-    <td (click)="sort('ytm')" class="headername">YTM</td>
-    <td class="headername">IntrestCycle</td>  
-    <td (click)="sort('maturity')" class="headername">Maturity</td>      
-    <td class="headername">Action</td>
-  </tr>
-  <tr class="header2" *ngFor="let item of bondDetails"> 
-    <td  class="dt">{{item.updateDate|date}}</td>  
-    <td  class="naming" (click)="moveId(item.bondId)">{{item.bondId}}</td>
-    <td  class="naming" contenteditable="true" (keydown.Tab)="updateBondDetails($event,'name',item.intrestCycle,item.bondId,item.bondName,item.couponRate,item.dateOfMaturity,item.faceValue,item.livePrice)" >{{item.bondName}}</td>
-    <td  class="amt">{{item.symbol}}</td>
-    <td  class="amt">{{item.couponRate|number:'1.2-2'}}</td>
-    <td  class="amt">{{item.livePrice|number:'1.2-2'}}</td>
-    <td  class="amt">{{item.faceValue|number:'1.2-2'}}</td>
-    <td  class="amt">{{item.ytm|number:'1.2-2'}}</td>
-    <td  class="naming editableField" contenteditable="true"  (blur)="onChange('amt',$event)">{{item.intrestCycle}}</td>  
-    <td  class="dt"  >{{item.dateOfMaturity|date}}</td>     
-    <td> <span class="clickable"  (click)="deleterecord(item.expId)" >Delete </span> <span class="clickable" (click)="updateBondDetails(item)"> Save</span></td> 
-  </tr>   
-</table>
-</ng-container>
+ 
 <div id="bondDetail" class="popup" style="display: none;">  
   <div class="popupCloseButton"><span (click)="hideBondDetails()">X</span></div>  
 </div>
@@ -286,16 +288,15 @@
         <td class="headername">BondID</td>
         <td class="headername">BondName</td>     
         <td class="headername">Investment</td>
-        <td (click)="sort('maturity')" class="headername">Maturity</td>      
+        <td (click)="sort('maturityFltr')" class="headername, clickable">Maturity</td>      
         <td class="headername">Action</td>
       </tr>
       <tr class="header2" *ngFor="let item of filterTransaction"> 
         <td  class="dt">{{item.purchaseDate|date}}</td>  
         <td  class="naming" (click)="moveId(item.bondId)">{{item.bondDetail.bondId}}</td>
-        <td  class="naming" contenteditable="true" (keydown.Tab)="updateBondDetails($event,'name',item.intrestCycle,item.bondId,item.bondName,item.couponRate,item.dateOfMaturity,item.faceValue,item.livePrice)" >{{item.bondDetail.bondName}}</td>
-         
+        <td  class="naming" contenteditable="true" (keydown.Tab)="updateBondDetails($event,'name',item.intrestCycle,item.bondId,item.bondName,item.couponRate,item.dateOfMaturity,item.faceValue,item.livePrice)" >{{item.bondDetail.bondName}}</td>         
         <td  class="naming" (click)="moveId(item.bondId)">{{item.qty*item.invstPrice|number:'1.2-2'}}</td>
-           <td  class="dt"  >{{item.bondDetail.dateOfMaturity|date}}</td>     
+        <td  class="dt" [ngStyle]="{color: getTranMaturityColor(item.bondDetail.dateOfMaturity|date),backgroundColor:getBackgroundColor(item.bondDetail.dateOfMaturity|date)}">{{item.bondDetail.dateOfMaturity|date}}</td>     
         <td> <span class="clickable"  (click)="deleterecord(item.expId)" >Delete </span> <span class="clickable" (click)="updateBondDetails(item)"> Save</span></td> 
       </tr> 
     </table>
